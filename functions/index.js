@@ -45,15 +45,36 @@ exports.decrementUserCount = functions.firestore
 exports.incrementDeviceCount = functions.firestore
   .document('devices/{deviceId}')
   .onCreate((snap, context) => {
-    return db.collection('infos').doc('devices').update(
-      'counter', admin.firestore.FieldValue.increment(1)
-    )
+    snap.ref.update({ createdAt: new Date() })
+      .then(() => {
+        return db.collection('infos').doc('devices').update(
+          'counter', admin.firestore.FieldValue.increment(1)
+        )
+      })
   })
 
 exports.decrementDeviceCount = functions.firestore
   .document('devices/{deviceId}')
   .onDelete((snap, context) => {
     return db.collection('infos').doc('devices').update(
+      'counter', admin.firestore.FieldValue.increment(-1)
+    )
+  })
+exports.incrementBeaconCount = functions.firestore
+  .document('beacons/{beaconId}')
+  .onCreate((snap, context) => {
+    snap.ref.update({ createdAt: new Date() })
+      .then(() => {
+        return db.collection('infos').doc('beacons').update(
+          'counter', admin.firestore.FieldValue.increment(1)
+        )
+      })
+  })
+
+exports.decrementBeaconCount = functions.firestore
+  .document('beacons/{beaconId}')
+  .onDelete((snap, context) => {
+    return db.collection('infos').doc('beacons').update(
       'counter', admin.firestore.FieldValue.increment(-1)
     )
   })
@@ -64,4 +85,8 @@ db.collection('infos').doc('users').get()
 db.collection('infos').doc('devices').get()
   .then(s => {
     if (!s.exists) db.collection('infos').doc('devices').set({ counter: 0 })
+  })
+db.collection('infos').doc('beacons').get()
+  .then(s => {
+    if (!s.exists) db.collection('infos').doc('beacons').set({ counter: 0 })
   })
