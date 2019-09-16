@@ -39,7 +39,7 @@ app.get('/users', async (req, res) => {
   res.send(r)
 })
 
-app.get('/search', async (req, res) => {
+app.get('/users/search', async (req, res) => {
   const s = await db.collection('users').where('email', '>=', req.query.search).limit(3).get()
 
   const items = []
@@ -59,6 +59,46 @@ app.patch('/user/:uid/level', async (req, res) => {
   await db.collection('users').doc(uid).update(claims)
 
   res.status(200).end()
+})
+
+app.get('/devices', async (req, res) => {
+  let { offset, limit, order, sort, search } = req.query
+  offset = Number(offset)
+  limit = Number(limit)
+  const r = {
+    items: [],
+    totalCount: 0
+  }
+  let s = null
+  if (search) {
+    s = await db.collection('devices').where('name', '==', search).get()
+    r.totalCount = s.size
+  } else {
+    const t = await db.collection('infos').doc('devices').get()
+    r.totalCount = t.data().counter
+    s = await db.collection('devices').orderBy(order, sort).offset(offset).limit(limit).get()
+  }
+
+  s.forEach(v => {
+    const item = v.data()
+    item.id = v.id
+    r.items.push(item)
+  })
+  res.send(r)
+})
+
+app.get('/devices/search', async (req, res) => {
+  const s = await db.collection('devices').where('name', '>=', req.query.search).limit(3).get()
+
+  const items = []
+  s.forEach(v => {
+    items.push(v.data().email)
+  })
+  res.send(items)
+})
+
+app.put('/device/:id', async (req, res) => {
+  await db.collection('devices').doc(req.params.id).set(req.body)
 })
 
 app.use(require('../middlewares/error'))

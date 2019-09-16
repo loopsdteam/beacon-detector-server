@@ -5,19 +5,19 @@
         dark
         color="teal"
       >
-        <v-toolbar-title>회원 관리</v-toolbar-title>
+        <v-toolbar-title>Device management</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-autocomplete
-          v-model="email"
+          v-model="name"
           :loading="loadingSearch"
-          :items="emails"
+          :items="names"
           :search-input.sync="search"
           cache-items
           class="mx-4"
           flat
           hide-no-data
           hide-details
-          label="이메일을 입력하세요"
+          label="Name"
           solo-inverted
           clearable
         ></v-autocomplete>
@@ -43,13 +43,13 @@
               <v-flex
                 v-else
                 v-for="item in props.items"
-                :key="item.email"
+                :key="item.name"
                 xs12
                 sm6
                 md4
                 lg3
               >
-                <user-card :item="item"></user-card>
+                <device-card :item="item"></device-card>
               </v-flex>
             </v-layout>
           </template>
@@ -62,10 +62,10 @@
 
 <script>
 import _ from 'lodash'
-import UserCard from '@/components/userCard'
+import DeviceCard from '@/components/deviceCard'
 
 export default {
-  components: { UserCard },
+  components: { DeviceCard },
   data () {
     return {
       headers: [
@@ -74,7 +74,7 @@ export default {
           value: 'uid'
         },
         // uid, email, displayName, emailVerified, photoURL, disabled, level
-        { text: 'email', value: 'email' },
+        { text: 'name', value: 'name' },
         { text: 'displayName', value: 'displayName' },
         { text: 'photoURL', value: 'photoURL' },
         { text: 'level', value: 'level' }
@@ -83,12 +83,12 @@ export default {
       totalCount: 0,
       loading: false,
       options: {
-        sortBy: ['email'],
+        sortBy: ['name'],
         sortDesc: [false]
       },
       search: '',
-      emails: [],
-      email: null,
+      names: [],
+      name: null,
       loadingSearch: false
     }
   },
@@ -100,16 +100,16 @@ export default {
       deep: true
     },
     search (val) {
-      val && val !== this.email && this.searchEmails(val)
+      val && val !== this.name && this.searchNames(val)
     },
-    email (n, o) {
+    name (n, o) {
       if (n !== o) this.list()
     }
   },
   methods: {
     list () {
       this.loading = true
-      this.$axios.get('/admin/users', {
+      this.$axios.get('/admin/devices', {
         params: {
           offset: this.options.page > 0 ? (this.options.page - 1) * this.options.itemsPerPage : 0,
           limit: this.options.itemsPerPage,
@@ -121,6 +121,7 @@ export default {
         .then(({ data }) => {
           this.totalCount = data.totalCount
           this.items = data.items
+          console.log(this.items)
         })
         .catch(e => {
           this.$toasted.global.error(e.message)
@@ -133,11 +134,11 @@ export default {
       function (val) {
         this.loadingSearch = true
 
-        this.$axios.get('/admin/users/search', {
+        this.$axios.get('/admin/devices/search', {
           params: { search: this.search }
         })
           .then(({ data }) => {
-            this.emails = data
+            this.names = data
           })
           .catch(e => {
             this.$toasted.global.error(e.message)

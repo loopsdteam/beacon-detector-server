@@ -35,7 +35,22 @@
   <v-container grid-list-md>
     <v-layout row wrap align-center justify-center>
       <v-flex xs12 sm5 class="hidden-xs-only">
-        <v-img src="https://cfl.dropboxstatic.com/static/images/empty_states/sign-in-boulder@2x-vfl87XcA-.png"></v-img>
+        <v-card color="transparent" flat>
+          <v-parallax
+            dark
+            src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg"
+            height="400"
+          >
+            <v-layout
+              align-center
+              column
+              justify-center
+            >
+              <h1 class="display-1 font-weight-thin mb-3">beacon-detect.web.app</h1>
+              <h4 class="subheading">Beacon ERP System</h4>
+            </v-layout>
+          </v-parallax>
+        </v-card>
 
       </v-flex>
       <v-flex xs12 sm5>
