@@ -5,19 +5,19 @@
         dark
         color="teal"
       >
-        <v-toolbar-title>Device management</v-toolbar-title>
+        <v-toolbar-title>Beacon management</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-autocomplete
-          v-model="name"
+          v-model="address"
           :loading="loadingSearch"
-          :items="names"
+          :items="addresses"
           :search-input.sync="search"
           cache-items
           class="mx-4"
           flat
           hide-no-data
           hide-details
-          label="Name"
+          label="Address"
           solo-inverted
           clearable
         ></v-autocomplete>
@@ -26,7 +26,7 @@
         </v-btn>
       </v-toolbar>
       <v-card-text>
-        <v-data-iterator
+        <!-- <v-data-iterator
           :items="items"
           :options.sync="options"
           :server-items-length="totalCount"
@@ -53,7 +53,23 @@
             </v-row>
           </template>
 
-        </v-data-iterator>
+        </v-data-iterator> -->
+        <v-data-table
+          :headers="headers"
+          :items="items"
+          :items-per-page="5"
+          :options.sync="options"
+          class="elevation-1"
+        >
+          <template v-slot:item.createdAt="{ item }">
+            <!-- <v-chip :color="getColor(item.calories)" dark>{{ item.calories }}</v-chip> -->
+            {{ new Date(item.createdAt).toLocaleString() }}
+          </template>
+          <template v-slot:item.updatedAt="{ item }">
+            <!-- <v-chip :color="getColor(item.calories)" dark>{{ item.calories }}</v-chip> -->
+            {{ new Date(item.updatedAt).toLocaleString() }}
+          </template>
+        </v-data-table>
       </v-card-text>
     </v-card>
   </v-container>
@@ -61,33 +77,31 @@
 
 <script>
 import _ from 'lodash'
-import DeviceCard from '@/components/deviceCard'
+// import DeviceCard from '@/components/deviceCard'
 
 export default {
-  components: { DeviceCard },
+  // components: { DeviceCard },
   data () {
     return {
       headers: [
-        {
-          text: 'uid',
-          value: 'uid'
-        },
         // uid, email, displayName, emailVerified, photoURL, disabled, level
-        { text: 'name', value: 'name' },
-        { text: 'displayName', value: 'displayName' },
-        { text: 'photoURL', value: 'photoURL' },
-        { text: 'level', value: 'level' }
+        { text: 'createdAt', value: 'createdAt' },
+        { text: 'updatedAt', value: 'updatedAt' },
+        { text: 'deviceId', value: 'deviceId' },
+        { text: 'address', value: 'address' },
+        { text: 'uuid', value: 'uuid' },
+        { text: 'rssi', value: 'rssi' }
       ],
       items: [],
       totalCount: 0,
       loading: false,
       options: {
-        sortBy: ['name'],
+        sortBy: ['address'],
         sortDesc: [false]
       },
       search: '',
-      names: [],
-      name: null,
+      addresses: [],
+      address: null,
       loadingSearch: false
     }
   },
@@ -99,7 +113,7 @@ export default {
       deep: true
     },
     search (val) {
-      val && val !== this.name && this.searchNames(val)
+      val && val !== this.address && this.searchAddresses(val)
     },
     name (n, o) {
       if (n !== o) this.list()
@@ -108,7 +122,7 @@ export default {
   methods: {
     list () {
       this.loading = true
-      this.$axios.get('/admin/devices', {
+      this.$axios.get('/data/beacons', {
         params: {
           offset: this.options.page > 0 ? (this.options.page - 1) * this.options.itemsPerPage : 0,
           limit: this.options.itemsPerPage,
@@ -118,9 +132,9 @@ export default {
         }
       })
         .then(({ data }) => {
+          console.log(data)
           this.totalCount = data.totalCount
           this.items = data.items
-          console.log(this.items)
         })
         .catch(e => {
           this.$toasted.global.error(e.message)
@@ -129,11 +143,11 @@ export default {
           this.loading = false
         })
     },
-    searchNames: _.debounce(
+    searchAddresses: _.debounce(
       function (val) {
         this.loadingSearch = true
 
-        this.$axios.get('/admin/devices/search', {
+        this.$axios.get('/data/beacons/search', {
           params: { search: this.search }
         })
           .then(({ data }) => {
@@ -151,7 +165,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

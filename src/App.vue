@@ -148,6 +148,17 @@ export default {
               to: '/admin/users'
             }
           ]
+        },
+        {
+          icon: 'mdi-alert-box',
+          title: 'Data',
+          active: false,
+          subItems: [
+            {
+              title: 'data',
+              to: '/data/beacons'
+            }
+          ]
         }
       ]
     }

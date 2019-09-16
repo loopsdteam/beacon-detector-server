@@ -14,15 +14,15 @@ const adminCheck = (to, form, next) => {
   }
   next()
 }
-// const userCheck = (to, form, next) => {
-//   if (!store.state.user) {
-//     if (to.path !== '/sign') return next('/sign')
-//   } else {
-//     if (!store.state.user.emailVerified) return next('/userProfile')
-//     if (store.state.claims.level > 1) throw Error('사용자만 들어갈 수 있습니다')
-//   }
-//   next()
-// }
+const userCheck = (to, form, next) => {
+  if (!store.state.user) {
+    if (to.path !== '/sign') return next('/sign')
+  } else {
+    if (!store.state.user.emailVerified) return next('/userProfile')
+    if (store.state.claims.level > 1) throw Error('사용자만 들어갈 수 있습니다')
+  }
+  next()
+}
 const guestCheck = (to, form, next) => {
   if (!store.state.user) {
     if (to.path !== '/sign') return next('/sign')
@@ -61,6 +61,11 @@ const router = new Router({
       path: '/admin/devices',
       component: () => import('./views/admin/devices'),
       beforeEnter: adminCheck
+    },
+    {
+      path: '/data/beacons',
+      component: () => import('./views/data/beacons'),
+      beforeEnter: userCheck
     },
     {
       path: '/userProfile',

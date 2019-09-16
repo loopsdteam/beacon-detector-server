@@ -82,6 +82,8 @@ app.get('/devices', async (req, res) => {
   s.forEach(v => {
     const item = v.data()
     item.id = v.id
+    item.createdAt = item.createdAt.toDate()
+    item.updatedAt = item.updatedAt.toDate()
     r.items.push(item)
   })
   res.send(r)

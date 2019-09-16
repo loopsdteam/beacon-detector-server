@@ -10,6 +10,22 @@
           {{ item.version }}
         </v-list-item-content>
       </v-list-item>
+      <v-list-item>
+        <v-list-item-content>
+          CreatedAt:
+        </v-list-item-content>
+        <v-list-item-content class="align-end">
+          {{ new Date(item.createdAt).toLocaleString() }}
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item>
+        <v-list-item-content>
+          UpdatedAt:
+        </v-list-item-content>
+        <v-list-item-content class="align-end">
+          {{ new Date(item.updatedAt).toLocaleString() }}
+        </v-list-item-content>
+      </v-list-item>
     </v-list>
     <v-card-text>
       <v-form>
