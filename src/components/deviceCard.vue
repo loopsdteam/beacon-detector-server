@@ -13,9 +13,9 @@
     </v-list>
     <v-card-text>
       <v-form>
-        <v-text-field label="Name" v-model="item.name"></v-text-field>
+        <v-text-field label="Name" v-model="form.name"></v-text-field>
         <v-switch
-          v-model="item.ota"
+          v-model="form.ota"
           label="OTA"
         ></v-switch>
       </v-form>
@@ -32,13 +32,20 @@ export default {
   props: ['item'],
   data () {
     return {
-      loading: false
+      loading: false,
+      form: {
+        name: '',
+        ota: false
+      }
     }
+  },
+  mounted () {
+    Object.assign(this.form, this.item)
   },
   methods: {
     update () {
       this.loading = true
-      this.$axios.put(`/admin/device/${this.item.id}`, this.item)
+      this.$axios.put(`/admin/device/${this.item.id}`, this.form)
         .catch(e => {
           this.$toasted.global.error(e.message)
         })

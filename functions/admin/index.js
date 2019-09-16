@@ -99,6 +99,7 @@ app.get('/devices/search', async (req, res) => {
 
 app.put('/device/:id', async (req, res) => {
   await db.collection('devices').doc(req.params.id).set(req.body)
+  res.status(200).end()
 })
 
 app.use(require('../middlewares/error'))

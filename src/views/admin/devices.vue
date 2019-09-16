@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-md>
+  <v-container fluid>
     <v-card>
       <v-toolbar
         dark
@@ -25,7 +25,7 @@
           <v-icon>mdi-refresh</v-icon>
         </v-btn>
       </v-toolbar>
-      <v-container grid-list-md fluid>
+      <v-card-text>
         <v-data-iterator
           :items="items"
           :options.sync="options"
@@ -34,28 +34,27 @@
           :loading="loading"
         >
           <template v-slot:default="props">
-            <v-layout row wrap>
-              <v-flex xs12 v-if="loading" class="text-center">
+            <v-row>
+              <v-col cols="12" v-if="loading" class="text-center">
                 <v-progress-circular indeterminate></v-progress-circular>
                 <p>데이터 로딩중</p>
 
-              </v-flex>
-              <v-flex
+              </v-col>
+              <v-col cols="12"
                 v-else
                 v-for="item in props.items"
                 :key="item.name"
-                xs12
-                sm6
-                md4
-                lg3
+                sm="6"
+                md="4"
+                lg="3"
               >
                 <device-card :item="item"></device-card>
-              </v-flex>
-            </v-layout>
+              </v-col>
+            </v-row>
           </template>
 
         </v-data-iterator>
-      </v-container>
+      </v-card-text>
     </v-card>
   </v-container>
 </template>

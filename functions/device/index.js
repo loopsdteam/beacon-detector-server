@@ -21,7 +21,7 @@ app.post('/', async (req, res) => {
   const sd = s.data()
   sd.id = id
   if (sd.ota) {
-    await db.collection('devices').doc(id).set({ ota: false })
+    await db.collection('devices').doc(id).update({ ota: false })
     return res.send(sd)
   }
   res.send(sd)
