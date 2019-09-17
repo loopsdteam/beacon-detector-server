@@ -1,9 +1,22 @@
 const app = require('express')()
 const cors = require('cors')
 const admin = require('firebase-admin')
+// const mongoose = require('mongoose')
 require('express-async-errors')
 
 const db = admin.firestore()
+// mongoose.connect('mongodb+srv://beacon-detect:O7VYm3zM4b483kpk@clustersd-prgy7.mongodb.net/beacon-detect', {
+//   useNewUrlParser: true,
+//   useCreateIndex: true,
+//   useFindAndModify: false,
+//   useUnifiedTopology: true
+// }, (err) => {
+//   if (!err) {
+//     console.log('MongoDB Connection Succeeded.')
+//   } else {
+//     console.log('Error in DB connection: ' + err)
+//   }
+// })
 
 app.use(cors({ origin: true }))
 

@@ -43,7 +43,7 @@
               <v-col cols="12"
                 v-else
                 v-for="item in props.items"
-                :key="item.name"
+                :key="item._id"
                 sm="6"
                 md="4"
                 lg="3"
@@ -108,19 +108,18 @@ export default {
   methods: {
     list () {
       this.loading = true
-      this.$axios.get('/admin/devices', {
+      this.$axios.get('/device/detectors', {
         params: {
           offset: this.options.page > 0 ? (this.options.page - 1) * this.options.itemsPerPage : 0,
           limit: this.options.itemsPerPage,
           order: this.options.sortBy[0],
-          sort: this.options.sortDesc[0] ? 'desc' : 'asc',
+          sort: this.options.sortDesc[0] ? '-1' : '1',
           search: this.email
         }
       })
         .then(({ data }) => {
           this.totalCount = data.totalCount
           this.items = data.items
-          console.log(this.items)
         })
         .catch(e => {
           this.$toasted.global.error(e.message)

@@ -61,14 +61,8 @@
           :options.sync="options"
           class="elevation-1"
         >
-          <template v-slot:item.createdAt="{ item }">
-            <!-- <v-chip :color="getColor(item.calories)" dark>{{ item.calories }}</v-chip> -->
-            {{ new Date(item.createdAt).toLocaleString() }}
-          </template>
-          <template v-slot:item.updatedAt="{ item }">
-            <!-- <v-chip :color="getColor(item.calories)" dark>{{ item.calories }}</v-chip> -->
-            {{ new Date(item.updatedAt).toLocaleString() }}
-          </template>
+          <!-- <template v-slot:item.createdAt="{ item }">
+          </template> -->
         </v-data-table>
       </v-card-text>
     </v-card>
@@ -87,10 +81,17 @@ export default {
         // uid, email, displayName, emailVerified, photoURL, disabled, level
         { text: 'createdAt', value: 'createdAt' },
         { text: 'updatedAt', value: 'updatedAt' },
-        { text: 'deviceId', value: 'deviceId' },
         { text: 'address', value: 'address' },
         { text: 'uuid', value: 'uuid' },
-        { text: 'rssi', value: 'rssi' }
+        { text: 'startTime', value: 'startTime' },
+        { text: 'endTime', value: 'endTime' },
+        { text: 'count', value: 'count' },
+        { text: 'rssi', value: 'rssi' },
+        { text: 'txPower', value: 'txPower' },
+        { text: 'major', value: 'major' },
+        { text: 'minor', value: 'minor' },
+        { text: '_deviceId', value: '_deviceId' },
+        { text: 'name', value: 'name' }
       ],
       items: [],
       totalCount: 0,
@@ -122,12 +123,12 @@ export default {
   methods: {
     list () {
       this.loading = true
-      this.$axios.get('/data/beacons', {
+      this.$axios.get('/device/beacons', {
         params: {
           offset: this.options.page > 0 ? (this.options.page - 1) * this.options.itemsPerPage : 0,
           limit: this.options.itemsPerPage,
           order: this.options.sortBy[0],
-          sort: this.options.sortDesc[0] ? 'desc' : 'asc',
+          sort: this.options.sortDesc[0] ? '-1' : '1',
           search: this.email
         }
       })

@@ -1,6 +1,6 @@
 <template>
   <v-card :loading="loading">
-    <v-subheader>{{ item.id }}</v-subheader>
+    <v-subheader>{{ item._id }}</v-subheader>
     <v-list>
       <v-list-item>
         <v-list-item-content>
@@ -61,7 +61,7 @@ export default {
   methods: {
     update () {
       this.loading = true
-      this.$axios.put(`/admin/device/${this.item.id}`, this.form)
+      this.$axios.put(`/device/detector/${this.item._id}`, this.form)
         .catch(e => {
           this.$toasted.global.error(e.message)
         })
