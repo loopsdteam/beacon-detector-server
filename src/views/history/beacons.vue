@@ -5,7 +5,7 @@
         dark
         color="teal"
       >
-        <v-toolbar-title>Beacon list</v-toolbar-title>
+        <v-toolbar-title>Beacon history</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-autocomplete
           v-model="searchModel"
@@ -62,8 +62,8 @@
           :items="items"
           :items-per-page="5"
           :options.sync="options"
-          class="elevation-1"
           :loading="loading"
+          class="elevation-1"
         >
           <!-- <template v-slot:item.createdAt="{ item }">
           </template> -->
@@ -127,7 +127,7 @@ export default {
   methods: {
     list () {
       this.loading = true
-      this.$axios.get('/device/beacons', {
+      this.$axios.get('/device/beacon-logs', {
         params: {
           offset: this.options.page > 0 ? (this.options.page - 1) * this.options.itemsPerPage : 0,
           limit: this.options.itemsPerPage,
@@ -151,7 +151,7 @@ export default {
       function (val) {
         this.searchLoading = true
 
-        this.$axios.get('/device/beacons/search', {
+        this.$axios.get('/device/beacon-logs/search', {
           params: { search: this.search }
         })
           .then(({ data }) => {

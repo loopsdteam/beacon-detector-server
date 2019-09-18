@@ -165,13 +165,13 @@ export default {
           title: 'History',
           active: false,
           subItems: [
+            // {
+            //   title: 'devices',
+            //   to: '/history/devices'
+            // },
             {
-              title: 'devices',
-              to: '/data/devices'
-            },
-            {
-              title: 'data',
-              to: '/data/beacons'
+              title: 'Beacons',
+              to: '/history/beacons'
             }
           ]
         }

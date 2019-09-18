@@ -68,6 +68,11 @@ const router = new Router({
       beforeEnter: userCheck
     },
     {
+      path: '/history/beacons',
+      component: () => import('./views/history/beacons'),
+      beforeEnter: userCheck
+    },
+    {
       path: '/userProfile',
       component: () => import('./views/userProfile.vue'),
       beforeEnter: (to, from, next) => {

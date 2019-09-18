@@ -5,6 +5,7 @@ require('express-async-errors')
 const db = require('../lib/db')
 const Scanner = require('../models/scanners')
 const Beacon = require('../models/beacons')
+const BeaconLog = require('../models/beaconLogs')
 
 db.connect(() => {
   console.log('callback')
@@ -29,6 +30,9 @@ app.post('/', async (req, res) => {
   })
   try {
     await Beacon.insertMany(data.beacons)
+  } catch (e) {}
+  try {
+    await BeaconLog.insertMany(data.beacons)
   } catch (e) {}
 
   res.send(result)
@@ -65,6 +69,11 @@ app.put('/scanner/:_id', async (req, res) => {
   res.status(200).end()
 })
 
+app.get('/scanners/search', async (req, res) => {
+  const items = await Scanner.find().where('name').regex(req.query.search).limit(2)
+  res.send(items)
+})
+
 app.get('/beacons', async (req, res) => {
   let { offset, limit, order, sort, search } = req.query
   offset = Number(offset)
@@ -90,12 +99,37 @@ app.get('/beacons', async (req, res) => {
   res.send(result)
 })
 
-app.get('/scanners/search', async (req, res) => {
-  const items = await Scanner.find().where('name').regex(req.query.search).limit(2)
+app.get('/beacons/search', async (req, res) => {
+  const items = await Beacon.find().where('address').regex(req.query.search).limit(2)
   res.send(items)
 })
 
-app.get('/beacons/search', async (req, res) => {
+app.get('/beacon-logs', async (req, res) => {
+  let { offset, limit, order, sort, search } = req.query
+  offset = Number(offset)
+  limit = Number(limit)
+  sort = Number(sort)
+  if (!search) search = ''
+  const result = {
+    items: [],
+    totalCount: 0
+  }
+  const s = {}
+  s[order] = sort
+
+  result.totalCount = await BeaconLog.countDocuments()
+    .where('address').regex(search)
+
+  result.items = await BeaconLog.find()
+    .where('address').regex(search)
+    .sort(s)
+    .skip(offset)
+    .limit(limit)
+
+  res.send(result)
+})
+
+app.get('/beacon-logs/search', async (req, res) => {
   const items = await Beacon.find().where('address').regex(req.query.search).limit(2)
   res.send(items)
 })
