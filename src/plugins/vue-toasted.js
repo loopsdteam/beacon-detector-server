@@ -10,7 +10,7 @@ Vue.use(Toasted, {
 Vue.toasted.register('notice', (payload) => {
   return payload
 }, {
-  icon: 'mdi-notifications',
+  icon: 'mdi-bell',
   position: 'bottom-right',
   duration: 5000,
   className: 'subheading',
