@@ -151,7 +151,7 @@ export default {
       function (val) {
         this.searchLoading = true
 
-        this.$axios.get('/device/beacon-logs/search', {
+        this.$axios.get('/device/beacons/search', {
           params: { search: this.search }
         })
           .then(({ data }) => {

@@ -129,11 +129,6 @@ app.get('/beacon-logs', async (req, res) => {
   res.send(result)
 })
 
-app.get('/beacon-logs/search', async (req, res) => {
-  const items = await Beacon.find().where('address').regex(req.query.search).limit(2)
-  res.send(items)
-})
-
 // app.post('/', async (req, res) => {
 //   const data = req.body
 //   if (!data.device) return res.status(400).end()
