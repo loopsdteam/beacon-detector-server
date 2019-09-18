@@ -55,7 +55,9 @@
                 size="32"
                 color="grey lighten-4"
               >
-                <img :src="$store.state.user.photoURL" alt="avatar">
+                <img v-if="$store.state.user.photoURL" :src="$store.state.user.photoURL" alt="avatar">
+                <v-icon v-else>mdi-account</v-icon>
+                <!-- <v-icon>mdi-home</v-icon> -->
               </v-avatar>
             </v-btn>
           </template>

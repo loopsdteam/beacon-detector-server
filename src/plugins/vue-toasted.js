@@ -7,6 +7,21 @@ Vue.use(Toasted, {
   router
 })
 
+Vue.toasted.register('notice', (payload) => {
+  return payload
+}, {
+  icon: 'mdi-notifications',
+  position: 'bottom-right',
+  duration: 5000,
+  className: 'subheading',
+  action: {
+    text: '닫기',
+    onClick: (e, toastObject) => {
+      toastObject.goAway(0)
+    }
+  }
+})
+
 Vue.toasted.register('error', (payload) => {
   return payload
 }, {

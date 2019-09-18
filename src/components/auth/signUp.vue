@@ -108,6 +108,8 @@ export default {
       await user.updateProfile({
         displayName: `${this.form.lastName} ${this.form.firstName}`
       })
+      await user.sendEmailVerification()
+      this.$toasted.global.notice('이메일 확인 후 로그인해주세요')
       await this.$firebase.auth().signOut()
       this.$emit('changeType')
     }

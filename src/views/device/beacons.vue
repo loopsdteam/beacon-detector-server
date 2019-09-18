@@ -94,7 +94,7 @@ export default {
         { text: 'txPower', value: 'txPower' },
         { text: 'major', value: 'major' },
         { text: 'minor', value: 'minor' },
-        { text: '_deviceId', value: '_deviceId' },
+        { text: '_scannerId', value: '_scannerId' },
         { text: 'name', value: 'name' }
       ],
       items: [],
