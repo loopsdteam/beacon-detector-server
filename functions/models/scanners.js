@@ -4,7 +4,8 @@ const fields = {
   version: { type: String, default: '0.0.0' },
   name: { type: String, default: '' },
   ota: { type: Boolean, defalut: true },
-  cycle: { type: Number, default: 60 }
+  cycle: { type: Number, default: 60 },
+  serialNo: { type: String, default: '' }
 }
 
 const options = {
@@ -12,6 +13,6 @@ const options = {
 }
 
 const schema = new mongoose.Schema(fields, options)
-const Device = mongoose.model('Device', schema)
+const Scanner = mongoose.model('Scanner', schema)
 
-module.exports = Device
+module.exports = Scanner

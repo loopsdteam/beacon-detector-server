@@ -42,7 +42,7 @@
     </v-navigation-drawer>
     <v-app-bar color="indigo" dark app>
       <v-app-bar-nav-icon @click="drawer = !drawer" v-if="$store.state.user"></v-app-bar-nav-icon>
-      <v-toolbar-title>LOOP Beacon management</v-toolbar-title>
+      <v-toolbar-title>LOOP Beacon Scanner management</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items v-if="$store.state.user">
         <v-menu offset-y>
@@ -135,14 +135,10 @@ export default {
           ]
         },
         {
-          icon: 'mdi-alert-box',
+          icon: 'mdi-account-multiple',
           title: 'Admin',
           active: false,
           subItems: [
-            {
-              title: 'devices',
-              to: '/admin/devices'
-            },
             {
               title: 'users',
               to: '/admin/users'
@@ -150,10 +146,29 @@ export default {
           ]
         },
         {
-          icon: 'mdi-alert-box',
-          title: 'Data',
+          icon: 'mdi-chip',
+          title: 'Device',
           active: false,
           subItems: [
+            {
+              title: 'Scanners',
+              to: '/device/scanners'
+            },
+            {
+              title: 'Beacons',
+              to: '/device/beacons'
+            }
+          ]
+        },
+        {
+          icon: 'mdi-database',
+          title: 'History',
+          active: false,
+          subItems: [
+            {
+              title: 'devices',
+              to: '/data/devices'
+            },
             {
               title: 'data',
               to: '/data/beacons'

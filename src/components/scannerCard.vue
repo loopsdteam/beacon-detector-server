@@ -61,7 +61,7 @@ export default {
   methods: {
     update () {
       this.loading = true
-      this.$axios.put(`/device/detector/${this.item._id}`, this.form)
+      this.$axios.put(`/device/scanner/${this.item._id}`, this.form)
         .catch(e => {
           this.$toasted.global.error(e.message)
         })

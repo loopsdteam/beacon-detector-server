@@ -5,19 +5,22 @@
         dark
         color="teal"
       >
-        <v-toolbar-title>Beacon management</v-toolbar-title>
+        <v-toolbar-title>Scanner list</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-autocomplete
-          v-model="address"
-          :loading="loadingSearch"
-          :items="addresses"
+          v-model="searchModel"
+          :loading="searchLoading"
+          :items="searchItems"
           :search-input.sync="search"
+          item-text="name"
+          item-value="name"
           cache-items
           class="mx-4"
           flat
           hide-no-data
           hide-details
-          label="Address"
+          label="Name"
+          placeholder="이름 검색"
           solo-inverted
           clearable
         ></v-autocomplete>
@@ -26,7 +29,7 @@
         </v-btn>
       </v-toolbar>
       <v-card-text>
-        <!-- <v-data-iterator
+        <v-data-iterator
           :items="items"
           :options.sync="options"
           :server-items-length="totalCount"
@@ -43,27 +46,17 @@
               <v-col cols="12"
                 v-else
                 v-for="item in props.items"
-                :key="item.name"
+                :key="item._id"
                 sm="6"
                 md="4"
                 lg="3"
               >
-                <device-card :item="item"></device-card>
+                <scanner-card :item="item"></scanner-card>
               </v-col>
             </v-row>
           </template>
 
-        </v-data-iterator> -->
-        <v-data-table
-          :headers="headers"
-          :items="items"
-          :items-per-page="5"
-          :options.sync="options"
-          class="elevation-1"
-        >
-          <!-- <template v-slot:item.createdAt="{ item }">
-          </template> -->
-        </v-data-table>
+        </v-data-iterator>
       </v-card-text>
     </v-card>
   </v-container>
@@ -71,39 +64,34 @@
 
 <script>
 import _ from 'lodash'
-// import DeviceCard from '@/components/deviceCard'
+import scannerCard from '@/components/scannerCard'
 
 export default {
-  // components: { DeviceCard },
+  components: { scannerCard },
   data () {
     return {
       headers: [
+        {
+          text: 'uid',
+          value: 'uid'
+        },
         // uid, email, displayName, emailVerified, photoURL, disabled, level
-        { text: 'createdAt', value: 'createdAt' },
-        { text: 'updatedAt', value: 'updatedAt' },
-        { text: 'address', value: 'address' },
-        { text: 'uuid', value: 'uuid' },
-        { text: 'startTime', value: 'startTime' },
-        { text: 'endTime', value: 'endTime' },
-        { text: 'count', value: 'count' },
-        { text: 'rssi', value: 'rssi' },
-        { text: 'txPower', value: 'txPower' },
-        { text: 'major', value: 'major' },
-        { text: 'minor', value: 'minor' },
-        { text: '_deviceId', value: '_deviceId' },
-        { text: 'name', value: 'name' }
+        { text: 'name', value: 'name' },
+        { text: 'displayName', value: 'displayName' },
+        { text: 'photoURL', value: 'photoURL' },
+        { text: 'level', value: 'level' }
       ],
       items: [],
       totalCount: 0,
       loading: false,
       options: {
-        sortBy: ['address'],
+        sortBy: ['name'],
         sortDesc: [false]
       },
       search: '',
-      addresses: [],
-      address: null,
-      loadingSearch: false
+      searchItems: [],
+      searchModel: null,
+      searchLoading: false
     }
   },
   watch: {
@@ -114,26 +102,25 @@ export default {
       deep: true
     },
     search (val) {
-      val && val !== this.address && this.searchAddresses(val)
+      val && val !== this.searchModel && this.searchList(val)
     },
-    name (n, o) {
+    searchModel (n, o) {
       if (n !== o) this.list()
     }
   },
   methods: {
     list () {
       this.loading = true
-      this.$axios.get('/device/beacons', {
+      this.$axios.get('/device/scanners', {
         params: {
           offset: this.options.page > 0 ? (this.options.page - 1) * this.options.itemsPerPage : 0,
           limit: this.options.itemsPerPage,
           order: this.options.sortBy[0],
           sort: this.options.sortDesc[0] ? '-1' : '1',
-          search: this.email
+          search: this.searchModel
         }
       })
         .then(({ data }) => {
-          console.log(data)
           this.totalCount = data.totalCount
           this.items = data.items
         })
@@ -144,21 +131,21 @@ export default {
           this.loading = false
         })
     },
-    searchAddresses: _.debounce(
+    searchList: _.debounce(
       function (val) {
-        this.loadingSearch = true
+        this.searchLoading = true
 
-        this.$axios.get('/data/beacons/search', {
+        this.$axios.get('/device/scanners/search', {
           params: { search: this.search }
         })
           .then(({ data }) => {
-            this.names = data
+            this.searchItems = data
           })
           .catch(e => {
             this.$toasted.global.error(e.message)
           })
           .finally(() => {
-            this.loadingSearch = false
+            this.searchLoading = false
           })
       },
       500
@@ -166,3 +153,7 @@ export default {
   }
 }
 </script>
+
+<style>
+
+</style>

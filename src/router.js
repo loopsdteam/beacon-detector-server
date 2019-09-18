@@ -58,13 +58,13 @@ const router = new Router({
       beforeEnter: adminCheck
     },
     {
-      path: '/admin/devices',
-      component: () => import('./views/admin/devices'),
+      path: '/device/scanners',
+      component: () => import('./views/device/scanners'),
       beforeEnter: adminCheck
     },
     {
-      path: '/data/beacons',
-      component: () => import('./views/data/beacons'),
+      path: '/device/beacons',
+      component: () => import('./views/device/beacons'),
       beforeEnter: userCheck
     },
     {

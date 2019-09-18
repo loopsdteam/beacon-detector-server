@@ -3,7 +3,7 @@ const cors = require('cors')
 // const admin = require('firebase-admin')
 require('express-async-errors')
 const db = require('../lib/db')
-const Device = require('../models/devices')
+const Scanner = require('../models/scanners')
 const Beacon = require('../models/beacons')
 
 db.connect(() => {
@@ -16,16 +16,16 @@ app.use(cors({ origin: true }))
 
 app.post('/', async (req, res) => {
   const data = req.body
-  if (!data.device) return res.status(400).end()
-  let result = { device: {} }
-  if (!data.device._id) {
-    result.device = await Device.create({ version: data.device.version, ota: true })
+  if (!data.scanner) return res.status(400).end()
+  let result = { scanner: {} }
+  if (!data.scanner._id) {
+    result.scanner = await Scanner.create({ version: data.scanner.version, ota: true })
   } else {
-    result.device = await Device.findByIdAndUpdate(data.device._id, { $set: data.device }, { new: true })
+    result.scanner = await Scanner.findByIdAndUpdate(data.scanner._id, { $set: data.scanner }, { new: true })
   }
   if (!data.beacons || !data.beacons.length) return res.send(result)
   data.beacons.forEach((v) => {
-    v._deviceId = result.device._id
+    v._scannerId = result.scanner._id
   })
   try {
     await Beacon.insertMany(data.beacons)
@@ -34,7 +34,7 @@ app.post('/', async (req, res) => {
   res.send(result)
 })
 
-app.get('/detectors', async (req, res) => {
+app.get('/scanners', async (req, res) => {
   let { offset, limit, order, sort, search } = req.query
   offset = Number(offset)
   limit = Number(limit)
@@ -47,10 +47,10 @@ app.get('/detectors', async (req, res) => {
   const s = {}
   s[order] = sort
 
-  result.totalCount = await Device.countDocuments()
+  result.totalCount = await Scanner.countDocuments()
     .where('name').regex(search)
 
-  result.items = await Device.find()
+  result.items = await Scanner.find()
     .where('name').regex(search)
     .sort(s)
     .skip(offset)
@@ -59,9 +59,9 @@ app.get('/detectors', async (req, res) => {
   res.send(result)
 })
 
-app.put('/detector/:_id', async (req, res) => {
+app.put('/scanner/:_id', async (req, res) => {
   // await db.collection('devices').doc(req.params.id).set(req.body)
-  await Device.updateOne({ _id: req.params._id }, { $set: req.body })
+  await Scanner.updateOne({ _id: req.params._id }, { $set: req.body })
   res.status(200).end()
 })
 
@@ -88,6 +88,16 @@ app.get('/beacons', async (req, res) => {
     .limit(limit)
 
   res.send(result)
+})
+
+app.get('/scanners/search', async (req, res) => {
+  const items = await Scanner.find().where('name').regex(req.query.search).limit(2)
+  res.send(items)
+})
+
+app.get('/beacons/search', async (req, res) => {
+  const items = await Beacon.find().where('address').regex(req.query.search).limit(2)
+  res.send(items)
 })
 
 // app.post('/', async (req, res) => {

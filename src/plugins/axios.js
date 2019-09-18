@@ -5,8 +5,7 @@ import firebaseConfig from '../../firebaseConfig'
 
 const firebaseAPI = axios.create({
   baseURL: process.env.NODE_ENV === 'production' ? `https://us-central1-${firebaseConfig.projectId}.cloudfunctions.net/` : `http://localhost:5000/${firebaseConfig.projectId}/us-central1/`,
-  timeout: 5000,
-  headers: { 'X-Custom-Header': 'foobar' }
+  timeout: 10000
 })
 
 firebaseAPI.interceptors.request.use(function (config) {
