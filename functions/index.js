@@ -5,14 +5,14 @@ admin.initializeApp({ credential: admin.credential.cert(require('./key.json')) }
 
 const db = admin.firestore()
 
-exports.helloWorld = functions.https.onRequest((request, response) => {
-  response.send('Hello from Firebase!')
-})
+// exports.helloWorld = functions.https.onRequest((request, response) => {
+//   response.send('Hello from Firebase!')
+// })
 
-exports.test = functions.https.onRequest(require('./test'))
+// exports.test = functions.https.onRequest(require('./test'))
 exports.admin = functions.https.onRequest(require('./admin'))
 exports.device = functions.https.onRequest(require('./device'))
-exports.data = functions.https.onRequest(require('./data'))
+// exports.data = functions.https.onRequest(require('./data'))
 exports.createUser = functions.auth.user().onCreate(async (user) => {
   const { uid, email, displayName, emailVerified, photoURL, disabled } = user
   const claims = { level: 2 }
@@ -43,51 +43,51 @@ exports.decrementUserCount = functions.firestore
       'counter', admin.firestore.FieldValue.increment(-1)
     )
   })
-exports.incrementDeviceCount = functions.firestore
-  .document('devices/{deviceId}')
-  .onCreate((snap, context) => {
-    snap.ref.update({ createdAt: new Date() })
-      .then(() => {
-        return db.collection('infos').doc('devices').update(
-          'counter', admin.firestore.FieldValue.increment(1)
-        )
-      })
-  })
+// exports.incrementDeviceCount = functions.firestore
+//   .document('devices/{deviceId}')
+//   .onCreate((snap, context) => {
+//     snap.ref.update({ createdAt: new Date() })
+//       .then(() => {
+//         return db.collection('infos').doc('devices').update(
+//           'counter', admin.firestore.FieldValue.increment(1)
+//         )
+//       })
+//   })
 
-exports.decrementDeviceCount = functions.firestore
-  .document('devices/{deviceId}')
-  .onDelete((snap, context) => {
-    return db.collection('infos').doc('devices').update(
-      'counter', admin.firestore.FieldValue.increment(-1)
-    )
-  })
-exports.incrementBeaconCount = functions.firestore
-  .document('beacons/{beaconId}')
-  .onCreate((snap, context) => {
-    snap.ref.update({ createdAt: new Date() })
-      .then(() => {
-        return db.collection('infos').doc('beacons').update(
-          'counter', admin.firestore.FieldValue.increment(1)
-        )
-      })
-  })
+// exports.decrementDeviceCount = functions.firestore
+//   .document('devices/{deviceId}')
+//   .onDelete((snap, context) => {
+//     return db.collection('infos').doc('devices').update(
+//       'counter', admin.firestore.FieldValue.increment(-1)
+//     )
+//   })
+// exports.incrementBeaconCount = functions.firestore
+//   .document('beacons/{beaconId}')
+//   .onCreate((snap, context) => {
+//     snap.ref.update({ createdAt: new Date() })
+//       .then(() => {
+//         return db.collection('infos').doc('beacons').update(
+//           'counter', admin.firestore.FieldValue.increment(1)
+//         )
+//       })
+//   })
 
-exports.decrementBeaconCount = functions.firestore
-  .document('beacons/{beaconId}')
-  .onDelete((snap, context) => {
-    return db.collection('infos').doc('beacons').update(
-      'counter', admin.firestore.FieldValue.increment(-1)
-    )
-  })
+// exports.decrementBeaconCount = functions.firestore
+//   .document('beacons/{beaconId}')
+//   .onDelete((snap, context) => {
+//     return db.collection('infos').doc('beacons').update(
+//       'counter', admin.firestore.FieldValue.increment(-1)
+//     )
+//   })
 db.collection('infos').doc('users').get()
   .then(s => {
     if (!s.exists) db.collection('infos').doc('users').set({ counter: 0 })
   })
-db.collection('infos').doc('devices').get()
-  .then(s => {
-    if (!s.exists) db.collection('infos').doc('devices').set({ counter: 0 })
-  })
-db.collection('infos').doc('beacons').get()
-  .then(s => {
-    if (!s.exists) db.collection('infos').doc('beacons').set({ counter: 0 })
-  })
+// db.collection('infos').doc('devices').get()
+//   .then(s => {
+//     if (!s.exists) db.collection('infos').doc('devices').set({ counter: 0 })
+//   })
+// db.collection('infos').doc('beacons').get()
+//   .then(s => {
+//     if (!s.exists) db.collection('infos').doc('beacons').set({ counter: 0 })
+//   })
