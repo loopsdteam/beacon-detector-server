@@ -11,7 +11,8 @@ const fields = {
   major: { type: Number, default: 0 },
   minor: { type: Number, default: 0 },
   _scannerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Scanner', index: true },
-  name: { type: String, default: '' }
+  _beaconId: { type: mongoose.Schema.Types.ObjectId, ref: 'Beacon', index: true },
+  name: { type: String, default: '', index: true }
 }
 
 const options = {

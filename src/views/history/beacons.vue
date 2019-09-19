@@ -63,6 +63,7 @@
           :items-per-page="5"
           :options.sync="options"
           :loading="loading"
+          :server-items-length="totalCount"
           class="elevation-1"
         >
           <!-- <template v-slot:item.createdAt="{ item }">
@@ -137,7 +138,14 @@ export default {
         }
       })
         .then(({ data }) => {
+          console.log(data)
           this.totalCount = data.totalCount
+          data.items.forEach(v => {
+            v.createdAt = new Date(v.createdAt).toLocaleString()
+            v.updatedAt = new Date(v.updatedAt).toLocaleString()
+            v.startTime = new Date(v.startTime).toLocaleString()
+            v.endTime = new Date(v.endTime).toLocaleString()
+          })
           this.items = data.items
         })
         .catch(e => {

@@ -71,22 +71,41 @@
             <v-edit-dialog
               :return-value.sync="props.item.name"
               @save="save(props.item)"
-            > <v-btn color="primary" text>{{ props.item.name }}</v-btn>
+              large
+            >
+              <v-btn color="primary" text>{{ props.item.name }}</v-btn>
               <template v-slot:input>
+                <v-text-field
+                  v-model="props.item.name"
+                  label="Edit name"
+                  single-line
+                  hide-details
+                ></v-text-field>
                 <!-- <v-card flat>
-                  <v-subheader>이름 수정</v-subheader>
-                  <v-card-text> -->
+                  <v-card-text>
                     <v-text-field
                       v-model="props.item.name"
                       label="Edit name"
                       single-line
-                      counter
+                      hide-details
                     ></v-text-field>
-                  <!-- </v-card-text>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="warning">변경</v-btn>
+                    <v-btn color="error">삭제</v-btn>
+                  </v-card-actions>
                 </v-card> -->
               </template>
             </v-edit-dialog>
           </template>
+          <template v-slot:item.address="props">
+            <v-chip close @click:close="del(props.item)">{{props.item.address}}</v-chip>
+            <!-- <v-icon color="error" icon><v-icon>mdi-delete</v-icon></v-btn> -->
+          </template>
+          <!-- <template v-slot:item.createdAt="props">
+            {{ new Date(props.item.createdAt).toLo }}
+          </template> -->
         </v-data-table>
       </v-card-text>
     </v-card>
@@ -103,9 +122,9 @@ export default {
     return {
       headers: [
         { text: 'name', value: 'name' },
+        { text: 'address', value: 'address' },
         { text: 'createdAt', value: 'createdAt' },
         { text: 'updatedAt', value: 'updatedAt' },
-        { text: 'address', value: 'address' },
         { text: 'uuid', value: 'uuid' },
         { text: 'startTime', value: 'startTime' },
         { text: 'endTime', value: 'endTime' },
@@ -157,6 +176,12 @@ export default {
       })
         .then(({ data }) => {
           this.totalCount = data.totalCount
+          data.items.forEach(v => {
+            v.createdAt = new Date(v.createdAt).toLocaleString()
+            v.updatedAt = new Date(v.updatedAt).toLocaleString()
+            v.startTime = new Date(v.startTime).toLocaleString()
+            v.endTime = new Date(v.endTime).toLocaleString()
+          })
           this.items = data.items
         })
         .catch(e => {
@@ -185,7 +210,7 @@ export default {
       },
       500
     ),
-    save (item, r2) {
+    save (item) {
       this.loading = true
       this.$axios.patch('/device/beacon/' + item._id, { name: item.name })
         .catch(e => {
@@ -193,6 +218,17 @@ export default {
         })
         .finally(() => {
           this.loading = false
+        })
+    },
+    del (item) {
+      this.loading = true
+      this.$axios.delete('/device/beacon/' + item._id)
+        .catch(e => {
+          this.$toasted.global.error(e.message)
+        })
+        .finally(() => {
+          this.loading = false
+          this.list()
         })
     }
   }

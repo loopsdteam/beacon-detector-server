@@ -99,7 +99,7 @@ export default {
         })
         .finally(() => {
           this.loading = false
-          this.$emit('refresh')
+          // this.$emit('refresh')
         })
     },
     del () {
