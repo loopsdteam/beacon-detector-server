@@ -51,7 +51,7 @@
                 md="4"
                 lg="3"
               >
-                <scanner-card :item="item"></scanner-card>
+                <scanner-card :item="item" @refresh="list"></scanner-card>
               </v-col>
             </v-row>
           </template>

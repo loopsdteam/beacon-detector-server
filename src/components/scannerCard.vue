@@ -68,6 +68,7 @@
     <v-card-actions>
       <v-spacer></v-spacer>
       <v-btn color="primary" @click="update" text>update</v-btn>
+      <v-btn color="error" @click="del" text>delete</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -98,6 +99,18 @@ export default {
         })
         .finally(() => {
           this.loading = false
+          this.$emit('refresh')
+        })
+    },
+    del () {
+      this.loading = true
+      this.$axios.delete(`/device/scanner/${this.item._id}`, this.form)
+        .catch(e => {
+          this.$toasted.global.error(e.message)
+        })
+        .finally(() => {
+          this.loading = false
+          this.$emit('refresh')
         })
     }
   }

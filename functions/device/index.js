@@ -17,11 +17,14 @@ app.post('/', async (req, res) => {
   if (!data.scanner) return res.status(400).end()
   let result = { scanner: {} }
   if (!data.scanner._id) {
+    if (data.scanner._id === '') delete data.scanner._id
     result.scanner = await Scanner.create({ version: data.scanner.version, ota: true })
   } else {
-    result.scanner = await Scanner.findByIdAndUpdate(data.scanner._id, { $set: data.scanner }, { new: true })
+    result.scanner = await Scanner.findByIdAndUpdate({ _id: data.scanner._id }, { $set: data.scanner }, { new: true })
+      .catch(e => { return null })
+    if (!result.scanner) return res.send(result)
   }
-  if (result.scanner.ota) await Scanner.updateOne({ _id: data.scanner._id }, { $set: { ota: false } })
+  if (result.scanner && result.scanner.ota) await Scanner.updateOne({ _id: data.scanner._id }, { $set: { ota: false } })
   if (!data.beacons || !data.beacons.length) return res.send(result)
   data.beacons.forEach(async (v) => {
     v._scannerId = result.scanner._id
@@ -29,9 +32,6 @@ app.post('/', async (req, res) => {
     const o = { upsert: true, new: true, setDefaultsOnInsert: true }
     await Beacon.findOneAndUpdate(f, { $set: v }, o)
   })
-  // try {
-  //   await Beacon.insertMany(data.beacons)
-  // } catch (e) {}
   try {
     await BeaconLog.insertMany(data.beacons)
   } catch (e) {}
@@ -135,6 +135,12 @@ app.get('/scanners', async (req, res) => {
 app.put('/scanner/:_id', async (req, res) => {
   // await db.collection('devices').doc(req.params.id).set(req.body)
   await Scanner.updateOne({ _id: req.params._id }, { $set: req.body })
+  res.status(200).end()
+})
+
+app.delete('/scanner/:_id', async (req, res) => {
+  // await db.collection('devices').doc(req.params.id).set(req.body)
+  await Scanner.deleteOne({ _id: req.params._id })
   res.status(200).end()
 })
 
