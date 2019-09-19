@@ -22,12 +22,15 @@ app.post('/', async (req, res) => {
     result.scanner = await Scanner.findByIdAndUpdate(data.scanner._id, { $set: data.scanner }, { new: true })
   }
   if (!data.beacons || !data.beacons.length) return res.send(result)
-  data.beacons.forEach((v) => {
+  data.beacons.forEach(async (v) => {
     v._scannerId = result.scanner._id
+    const f = { address: v.address }
+    const o = { upsert: true, new: true, setDefaultsOnInsert: true }
+    await Beacon.findOneAndUpdate(f, { $set: v }, o)
   })
-  try {
-    await Beacon.insertMany(data.beacons)
-  } catch (e) {}
+  // try {
+  //   await Beacon.insertMany(data.beacons)
+  // } catch (e) {}
   try {
     await BeaconLog.insertMany(data.beacons)
   } catch (e) {}
