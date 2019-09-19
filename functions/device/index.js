@@ -1,14 +1,17 @@
 const app = require('express')()
 const cors = require('cors')
+const admin = require('firebase-admin')
 require('express-async-errors')
-const db = require('../lib/db')
+const mdb = require('../lib/db')
 const Scanner = require('../models/scanners')
 const Beacon = require('../models/beacons')
 const BeaconLog = require('../models/beaconLogs')
 
-db.connect(() => {
+mdb.connect(() => {
   console.log('callback')
 })
+const db = admin.database()
+const refBeacons = db.ref('device').child('beacons')
 
 app.use(cors({ origin: true }))
 
@@ -26,7 +29,17 @@ app.post('/', async (req, res) => {
   }
   if (result.scanner && result.scanner.ota) await Scanner.updateOne({ _id: result.scanner._id }, { $set: { ota: false } })
   if (!data.beacons || !data.beacons.length) return res.send(result)
-  data.beacons.forEach(async (v) => {
+  // data.beacons.forEach(async (v) => {
+  //   v._scannerId = result.scanner._id
+  //   const f = { address: v.address }
+  //   const o = { upsert: true, new: true, setDefaultsOnInsert: true }
+  //   const r = await Beacon.findOneAndUpdate(f, { $set: v }, o)
+  //   v.name = r.name
+  //   v._beaconId = r._id
+  //   await BeaconLog.create(v)
+  // })
+  for (let i = 0; i < data.beacons.length; i++) {
+    const v = data.beacons[i]
     v._scannerId = result.scanner._id
     const f = { address: v.address }
     const o = { upsert: true, new: true, setDefaultsOnInsert: true }
@@ -34,7 +47,17 @@ app.post('/', async (req, res) => {
     v.name = r.name
     v._beaconId = r._id
     await BeaconLog.create(v)
+  }
+  const bs = await Beacon.find().limit(10).lean()
+  bs.forEach(v => {
+    v._id = v._id.toString()
+    v._scannerId = v._scannerId.toString()
+    v.createdAt = new Date(v.createdAt).toISOString()
+    v.updatedAt = new Date(v.updatedAt).toISOString()
+    v.startTime = new Date(v.startTime).toISOString()
+    v.endTime = new Date(v.endTime).toISOString()
   })
+  refBeacons.set(bs)
   // try {
   //   await BeaconLog.insertMany(data.beacons)
   // } catch (e) {}

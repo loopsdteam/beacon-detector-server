@@ -1,9 +1,18 @@
 <template>
   <v-container fluid>
     <v-card>
-      <v-subheader>메인페이지</v-subheader>
+      <!-- <v-subheader>메인페이지</v-subheader> -->
+      <v-toolbar dark
+        color="teal">
+        <v-toolbar-title>비콘 테스트</v-toolbar-title>
+      </v-toolbar>
       <v-card-text>
-        <v-alert type="warning">다른 페이지 방문시 관리자의 승인이 필요할 수 있습니다.</v-alert>
+        <v-alert color="warning" dark dismissible border="left">다른 페이지 방문시 관리자의 승인이 필요할 수 있습니다.</v-alert>
+        <v-row>
+          <v-col cols="12" sm="6" md="4" lg="3" v-for="item in items" :key="item._id">
+            <beacon-rdb-card :item="item"></beacon-rdb-card>
+          </v-col>
+        </v-row>
       </v-card-text>
     </v-card>
     <!-- <p>여기는 메인페이지</p>
@@ -12,11 +21,30 @@
 </template>
 
 <script>
+import beaconRdbCard from '@/components/beaconRdbCard'
 export default {
+  components: { beaconRdbCard },
   data () {
     return {
-      arras: [1, 2, 3, 4, 'www', 'xxxxx']
+      ref: null,
+      items: []
     }
+  },
+  created () {
+    this.initRdb()
+  },
+  destroyed () {
+    if (this.ref) this.ref.off()
+  },
+  methods: {
+    initRdb () {
+      this.ref = this.$firebase.database().ref('/device/beacons')
+      this.ref.on('value', (doc) => {
+        this.items = doc.val()
+        console.log(this.items)
+      })
+    }
+
   }
 }
 </script>

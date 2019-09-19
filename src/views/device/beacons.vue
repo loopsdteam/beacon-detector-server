@@ -145,7 +145,8 @@ export default {
       search: '',
       searchItems: [],
       searchModel: null,
-      searchLoading: false
+      searchLoading: false,
+      ref: null
     }
   },
   watch: {
@@ -162,6 +163,7 @@ export default {
       if (n !== o) this.list()
     }
   },
+
   methods: {
     list () {
       this.loading = true

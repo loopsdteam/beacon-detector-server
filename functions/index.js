@@ -1,7 +1,8 @@
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 
-admin.initializeApp({ credential: admin.credential.cert(require('./key.json')) })
+admin.initializeApp({ credential: admin.credential.cert(require('./key.json')),
+  databaseURL: 'https://beacon-detect.firebaseio.com' })
 
 const db = admin.firestore()
 
