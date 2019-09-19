@@ -21,6 +21,7 @@ app.post('/', async (req, res) => {
   } else {
     result.scanner = await Scanner.findByIdAndUpdate(data.scanner._id, { $set: data.scanner }, { new: true })
   }
+  if (result.scanner.ota) await Scanner.updateOne(data.scanner._id, { $set: { ota: false } })
   if (!data.beacons || !data.beacons.length) return res.send(result)
   data.beacons.forEach(async (v) => {
     v._scannerId = result.scanner._id
@@ -140,6 +141,13 @@ app.put('/scanner/:_id', async (req, res) => {
 app.get('/scanners/search', async (req, res) => {
   const items = await Scanner.find().where('name').regex(req.query.search).limit(2)
   res.send(items)
+})
+
+app.patch('/beacon/:_id', async (req, res) => {
+  // await db.collection('devices').doc(req.params.id).set(req.body)
+  if (!req.body.name) return res.status(400).end()
+  await Beacon.updateOne({ _id: req.params._id }, { $set: { name: req.body.name } })
+  res.status(200).end()
 })
 
 app.use(require('../middlewares/error'))

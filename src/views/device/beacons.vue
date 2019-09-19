@@ -67,6 +67,21 @@
         >
           <!-- <template v-slot:item.createdAt="{ item }">
           </template> -->
+          <template v-slot:item.name="props">
+            <v-edit-dialog
+              :return-value.sync="props.item.name"
+              @save="save(props.item)"
+            > {{ props.item.name }}
+              <template v-slot:input>
+                <v-text-field
+                  v-model="props.item.name"
+                  label="Edit name"
+                  single-line
+                  counter
+                ></v-text-field>
+              </template>
+            </v-edit-dialog>
+          </template>
         </v-data-table>
       </v-card-text>
     </v-card>
@@ -82,7 +97,7 @@ export default {
   data () {
     return {
       headers: [
-        // uid, email, displayName, emailVerified, photoURL, disabled, level
+        { text: 'name', value: 'name' },
         { text: 'createdAt', value: 'createdAt' },
         { text: 'updatedAt', value: 'updatedAt' },
         { text: 'address', value: 'address' },
@@ -94,8 +109,7 @@ export default {
         { text: 'txPower', value: 'txPower' },
         { text: 'major', value: 'major' },
         { text: 'minor', value: 'minor' },
-        { text: '_scannerId', value: '_scannerId' },
-        { text: 'name', value: 'name' }
+        { text: '_scannerId', value: '_scannerId' }
       ],
       items: [],
       totalCount: 0,
@@ -165,7 +179,17 @@ export default {
           })
       },
       500
-    )
+    ),
+    save (item, r2) {
+      this.loading = true
+      this.$axios.patch('/device/beacon/' + item._id, { name: item.name })
+        .catch(e => {
+          this.$toasted.global.error(e.message)
+        })
+        .finally(() => {
+          this.loading = false
+        })
+    }
   }
 }
 </script>
