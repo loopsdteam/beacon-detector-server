@@ -30,6 +30,33 @@
     <v-card-text>
       <v-form>
         <v-text-field label="Name" v-model="form.name"></v-text-field>
+        <v-text-field label="SerialNo" v-model="form.serialNo"></v-text-field>
+        <!-- <v-subheader>Min and max default slider</v-subheader>
+        <v-text-field label="Cycle" v-model="form.cycle" type="number" step="10"></v-text-field> -->
+        <v-slider
+          class="mt-5"
+          v-model="form.cycle"
+          thumb-label="always"
+          :min="10"
+          :max="3600"
+          step="10"
+          label="Cycle"
+          hide-details
+        >
+          <template v-slot:append>
+            <v-text-field
+              v-model="form.cycle"
+              class="mt-0 pt-0"
+              hide-details
+              single-line
+              type="number"
+              :min="10"
+              :max="3600"
+              step="10"
+              style="width: 60px"
+            ></v-text-field>
+          </template>
+        </v-slider>
         <v-switch
           v-model="form.ota"
           label="OTA"
@@ -51,7 +78,9 @@ export default {
       loading: false,
       form: {
         name: '',
-        ota: false
+        ota: false,
+        cycle: 60,
+        serialNo: ''
       }
     }
   },
