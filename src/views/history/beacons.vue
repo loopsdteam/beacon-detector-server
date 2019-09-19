@@ -96,6 +96,7 @@ export default {
         { text: 'major', value: 'major' },
         { text: 'minor', value: 'minor' },
         { text: '_scannerId', value: '_scannerId' },
+        { text: '_beaconId', value: '_beaconId' },
         { text: 'name', value: 'name' }
       ],
       items: [],
