@@ -1,7 +1,6 @@
 <template>
   <v-container fluid>
     <v-card>
-      <!-- <v-subheader>메인페이지</v-subheader> -->
       <v-toolbar dark
         color="teal">
         <v-toolbar-title>비콘 테스트</v-toolbar-title>
@@ -15,8 +14,6 @@
         </v-row>
       </v-card-text>
     </v-card>
-    <!-- <p>여기는 메인페이지</p>
-    {{ JSON.stringify($store.state.claims, null, 2) }} -->
   </v-container>
 </template>
 
@@ -41,7 +38,6 @@ export default {
       this.ref = this.$firebase.database().ref('/device/beacons')
       this.ref.on('value', (doc) => {
         this.items = doc.val()
-        console.log(this.items)
       })
     }
 

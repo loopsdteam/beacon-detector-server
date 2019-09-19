@@ -31,13 +31,17 @@ export default new Vuex.Store({
   actions: {
     async getUser ({ dispatch, commit }, user) {
       commit('setUser', user)
-      if (!user) return null
+      if (!user) {
+        commit('setFirebaseLoaded')
+        return null
+      }
       await dispatch('getToken')
       commit('setFirebaseLoaded')
       return true
     },
     async getToken ({ commit, state }) {
       const token = await state.user.getIdToken(true)
+      console.log(token)
       commit('setToken', token)
       const { claims } = await state.user.getIdTokenResult()
       commit('setClaims', claims)

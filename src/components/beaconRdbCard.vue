@@ -65,9 +65,6 @@ export default {
 
       return levels[level]
     }
-  },
-  mounted () {
-    // console.log(this.$moment())
   }
 }
 </script>
