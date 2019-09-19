@@ -102,8 +102,8 @@ export default {
       totalCount: 0,
       loading: false,
       options: {
-        sortBy: ['address'],
-        sortDesc: [false]
+        sortBy: ['createdAt'],
+        sortDesc: [true]
       },
       search: '',
       searchItems: [],

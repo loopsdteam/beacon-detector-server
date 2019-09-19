@@ -55,6 +55,7 @@
               :max="3600"
               step="10"
               style="width: 60px"
+
             ></v-text-field>
           </template>
         </v-slider>
