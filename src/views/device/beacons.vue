@@ -71,14 +71,19 @@
             <v-edit-dialog
               :return-value.sync="props.item.name"
               @save="save(props.item)"
-            > {{ props.item.name }}
+            > <v-btn color="primary" text>{{ props.item.name }}</v-btn>
               <template v-slot:input>
-                <v-text-field
-                  v-model="props.item.name"
-                  label="Edit name"
-                  single-line
-                  counter
-                ></v-text-field>
+                <!-- <v-card flat>
+                  <v-subheader>이름 수정</v-subheader>
+                  <v-card-text> -->
+                    <v-text-field
+                      v-model="props.item.name"
+                      label="Edit name"
+                      single-line
+                      counter
+                    ></v-text-field>
+                  <!-- </v-card-text>
+                </v-card> -->
               </template>
             </v-edit-dialog>
           </template>

@@ -31,6 +31,7 @@
       <v-form>
         <v-text-field label="Name" v-model="form.name"></v-text-field>
         <v-text-field label="SerialNo" v-model="form.serialNo"></v-text-field>
+        <v-text-field label="Target URL" v-model="form.targetURL"></v-text-field>
         <!-- <v-subheader>Min and max default slider</v-subheader>
         <v-text-field label="Cycle" v-model="form.cycle" type="number" step="10"></v-text-field> -->
         <v-slider
@@ -80,7 +81,8 @@ export default {
         name: '',
         ota: false,
         cycle: 60,
-        serialNo: ''
+        serialNo: '',
+        targetURL: ''
       }
     }
   },

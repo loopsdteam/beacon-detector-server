@@ -5,7 +5,8 @@ const fields = {
   name: { type: String, default: '' },
   ota: { type: Boolean, defalut: true },
   cycle: { type: Number, default: 60 },
-  serialNo: { type: String, default: '' }
+  serialNo: { type: String, default: '' },
+  targetURL: { type: String, default: '' }
 }
 
 const options = {

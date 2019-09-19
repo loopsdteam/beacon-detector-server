@@ -21,7 +21,7 @@ app.post('/', async (req, res) => {
   } else {
     result.scanner = await Scanner.findByIdAndUpdate(data.scanner._id, { $set: data.scanner }, { new: true })
   }
-  if (result.scanner.ota) await Scanner.updateOne(data.scanner._id, { $set: { ota: false } })
+  if (result.scanner.ota) await Scanner.updateOne({ _id: data.scanner._id }, { $set: { ota: false } })
   if (!data.beacons || !data.beacons.length) return res.send(result)
   data.beacons.forEach(async (v) => {
     v._scannerId = result.scanner._id
