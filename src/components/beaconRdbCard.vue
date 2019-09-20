@@ -5,6 +5,11 @@
         <v-list-item-title class="headline">{{item.name}}</v-list-item-title>
         <v-list-item-subtitle>{{ item.address }}</v-list-item-subtitle>
       </v-list-item-content>
+      <v-list-item-action>
+        <v-btn @click="showDetail = !showDetail" icon>
+          <v-icon>{{ showDetail ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+        </v-btn>
+      </v-list-item-action>
     </v-list-item>
     <v-card-text>
       <v-row align="center">
@@ -14,10 +19,54 @@
           </v-avatar>
         </v-col>
         <v-col class="display-2" cols="9">
-          <!-- {{ $moment(item.endTime).fromNow() }} -->
           {{ time2level.fromNow }}
         </v-col>
       </v-row>
+    </v-card-text>
+    <v-card-text v-if="showDetail">
+      <v-divider></v-divider>
+      <v-list-item two-line>
+        <v-list-item-content>
+          <v-list-item-title>처음 발견 시간</v-list-item-title>
+          <v-list-item-subtitle>{{ new Date(item.startTime).toLocaleString() }}</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item two-line>
+        <v-list-item-content>
+          <v-list-item-title>마지막 발견 시간</v-list-item-title>
+          <v-list-item-subtitle>{{ new Date(item.endTime).toLocaleString() }}</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item two-line>
+        <v-list-item-content>
+          <v-list-item-title>발견 횟수</v-list-item-title>
+          <v-list-item-subtitle>{{ item.count }}</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item two-line>
+        <v-list-item-content>
+          <v-list-item-title>RSSI</v-list-item-title>
+          <v-list-item-subtitle>{{ item.rssi }}</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item two-line>
+        <v-list-item-content>
+          <v-list-item-title>Tx power</v-list-item-title>
+          <v-list-item-subtitle>{{ item.txPower }}</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item two-line>
+        <v-list-item-content>
+          <v-list-item-title>Major</v-list-item-title>
+          <v-list-item-subtitle>{{ item.major }}</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item two-line>
+        <v-list-item-content>
+          <v-list-item-title>minor</v-list-item-title>
+          <v-list-item-subtitle>{{ item.minor }}</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
     </v-card-text>
 
   </v-card>
@@ -25,14 +74,10 @@
 <script>
 export default {
   props: ['item'],
-  // filters: {
-  //   fromNow (t) {
-  //     return this.$moment(t).fromNow()
-  //   }
-  // },
   data () {
     return {
-      level: 3
+      level: 3,
+      showDetail: false
     }
   },
   computed: {
