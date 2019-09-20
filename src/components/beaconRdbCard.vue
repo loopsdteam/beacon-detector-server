@@ -45,6 +45,12 @@
       </v-list-item>
       <v-list-item two-line>
         <v-list-item-content>
+          <v-list-item-title>UUID</v-list-item-title>
+          <v-list-item-subtitle>{{ item.uuid }}</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item two-line>
+        <v-list-item-content>
           <v-list-item-title>RSSI</v-list-item-title>
           <v-list-item-subtitle>{{ item.rssi }}</v-list-item-subtitle>
         </v-list-item-content>
