@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 
 const fields = {
   version: { type: String, default: '0.0.0' },
+  adapterStatus: { String, default: '' },
   name: { type: String, default: '' },
   ota: { type: Boolean, defalut: true },
   cycle: { type: Number, default: 60 },

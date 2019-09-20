@@ -139,7 +139,6 @@ export default {
         }
       })
         .then(({ data }) => {
-          console.log(data)
           this.totalCount = data.totalCount
           data.items.forEach(v => {
             v.createdAt = new Date(v.createdAt).toLocaleString()

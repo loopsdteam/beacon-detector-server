@@ -12,6 +12,14 @@
       </v-list-item>
       <v-list-item>
         <v-list-item-content>
+          동글 상태:
+        </v-list-item-content>
+        <v-list-item-content class="align-end">
+          {{ item.adapterStatus }}
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item>
+        <v-list-item-content>
           CreatedAt:
         </v-list-item-content>
         <v-list-item-content class="align-end">
@@ -68,8 +76,8 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn color="primary" @click="update" text>update</v-btn>
-      <v-btn color="error" @click="del" text>delete</v-btn>
+      <v-btn color="primary" @click="update" text :disabled="loading">변경</v-btn>
+      <v-btn color="error" @click="del" text :disabled="loading">삭제</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -92,27 +100,34 @@ export default {
     Object.assign(this.form, this.item)
   },
   methods: {
-    update () {
+    async update () {
+      const r = await this.$swal.fire({
+        title: '정말 변경하시겠습니까?',
+        text: '변경 후 되돌릴 수 없습니다.',
+        type: 'warning',
+        confirmButtonText: '확인',
+        cancelButtonText: '취소',
+        showCancelButton: true
+      })
+      if (!r.value) return
       this.loading = true
-      this.$axios.put(`/device/scanner/${this.item._id}`, this.form)
-        .catch(e => {
-          this.$toasted.global.error(e.message)
-        })
-        .finally(() => {
-          this.loading = false
-          // this.$emit('refresh')
-        })
+      await this.$axios.put(`/device/scanner/${this.item._id}`, this.form)
+      this.loading = false
     },
-    del () {
+    async del () {
+      const r = await this.$swal.fire({
+        title: '정말 삭제하시겠습니까?',
+        text: '삭제 후 되돌릴 수 없습니다.',
+        type: 'error',
+        confirmButtonText: '확인',
+        cancelButtonText: '취소',
+        showCancelButton: true
+      })
+      if (!r.value) return
       this.loading = true
-      this.$axios.delete(`/device/scanner/${this.item._id}`, this.form)
-        .catch(e => {
-          this.$toasted.global.error(e.message)
-        })
-        .finally(() => {
-          this.loading = false
-          this.$emit('refresh')
-        })
+      await this.$axios.delete(`/device/scanner/${this.item._id}`, this.form)
+      this.loading = false
+      this.$emit('refresh')
     }
   }
 }

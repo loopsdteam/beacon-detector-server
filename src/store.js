@@ -9,7 +9,11 @@ export default new Vuex.Store({
     user: null,
     token: '',
     claims: null,
-    firebaseLoaded: false
+    firebaseLoaded: false,
+    confirm: {
+      dialog: false,
+      message: ''
+    }
   },
   mutations: {
     setTitle (state, p) {

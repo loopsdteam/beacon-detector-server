@@ -8,6 +8,10 @@
       <v-card-text>
         <v-alert color="warning" dark dismissible border="left">다른 페이지 방문시 관리자의 승인이 필요할 수 있습니다.</v-alert>
         <v-row>
+          <v-col cols="12" v-if="loading" class="text-center">
+            <v-progress-circular indeterminate></v-progress-circular>
+            <p>데이터 로딩중</p>
+          </v-col>
           <v-col cols="12" sm="6" md="4" lg="3" v-for="item in items" :key="item._id">
             <beacon-rdb-card :item="item"></beacon-rdb-card>
           </v-col>
@@ -24,7 +28,8 @@ export default {
   data () {
     return {
       ref: null,
-      items: []
+      items: [],
+      loading: true
     }
   },
   created () {
@@ -38,6 +43,7 @@ export default {
       this.ref = this.$firebase.database().ref('/device/beacons')
       this.ref.on('value', (doc) => {
         this.items = doc.val()
+        if (this.loading) this.loading = false
       })
     }
 

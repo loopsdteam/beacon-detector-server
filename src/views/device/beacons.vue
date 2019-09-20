@@ -73,7 +73,7 @@
               @save="save(props.item)"
               large
             >
-              <v-btn color="primary" text>{{ props.item.name }}</v-btn>
+              <v-btn color="primary" text :disabled="loading">{{ props.item.name }}</v-btn>
               <template v-slot:input>
                 <v-text-field
                   v-model="props.item.name"
@@ -100,7 +100,7 @@
             </v-edit-dialog>
           </template>
           <template v-slot:item.address="props">
-            <v-chip close @click:close="del(props.item)">{{props.item.address}}</v-chip>
+            <v-chip :close="!loading" @click:close="del(props.item)">{{props.item.address}}</v-chip>
             <!-- <v-icon color="error" icon><v-icon>mdi-delete</v-icon></v-btn> -->
           </template>
           <!-- <template v-slot:item.createdAt="props">
@@ -222,16 +222,19 @@ export default {
           this.loading = false
         })
     },
-    del (item) {
+    async del (item) {
+      const r = await this.$swal.fire({
+        title: '정말 삭제하시겠습니까?',
+        text: '삭제 후 되돌릴 수 없습니다.',
+        type: 'error',
+        // confirmButtonText: 'Cool',
+        showCancelButton: true
+      })
+      if (!r.value) return
       this.loading = true
-      this.$axios.delete('/device/beacon/' + item._id)
-        .catch(e => {
-          this.$toasted.global.error(e.message)
-        })
-        .finally(() => {
-          this.loading = false
-          this.list()
-        })
+      await this.$axios.delete('/device/beacon/' + item._id)
+      this.loading = false
+      this.list()
     }
   }
 }

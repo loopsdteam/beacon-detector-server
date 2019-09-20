@@ -1,5 +1,6 @@
 import './axios'
 import './moment'
+import './swal'
 import './firebase'
 import './vue-toasted'
 import './vue-progressbar'

@@ -5,7 +5,7 @@
         dark
         color="teal"
       >
-        <v-toolbar-title>Scanner list</v-toolbar-title>
+        <v-toolbar-title>스캐너 목록</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-autocomplete
           v-model="searchModel"
@@ -41,7 +41,6 @@
               <v-col cols="12" v-if="loading" class="text-center">
                 <v-progress-circular indeterminate></v-progress-circular>
                 <p>데이터 로딩중</p>
-
               </v-col>
               <v-col cols="12"
                 v-else
