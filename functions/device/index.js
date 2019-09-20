@@ -29,17 +29,8 @@ app.post('/', async (req, res) => {
   }
   if (result.scanner && result.scanner.ota) await Scanner.updateOne({ _id: result.scanner._id }, { $set: { ota: false } })
   if (!data.beacons || !data.beacons.length) return res.send(result)
-  // data.beacons.forEach(async (v) => {
-  //   v._scannerId = result.scanner._id
-  //   const f = { address: v.address }
-  //   const o = { upsert: true, new: true, setDefaultsOnInsert: true }
-  //   const r = await Beacon.findOneAndUpdate(f, { $set: v }, o)
-  //   v.name = r.name
-  //   v._beaconId = r._id
-  //   await BeaconLog.create(v)
-  // })
-  for (let i = 0; i < data.beacons.length; i++) {
-    const v = data.beacons[i]
+
+  for (const v of data.beacons) {
     v._scannerId = result.scanner._id
     const f = { address: v.address }
     const o = { upsert: true, new: true, setDefaultsOnInsert: true }
@@ -58,9 +49,6 @@ app.post('/', async (req, res) => {
     v.endTime = new Date(v.endTime).toISOString()
   })
   refBeacons.set(bs)
-  // try {
-  //   await BeaconLog.insertMany(data.beacons)
-  // } catch (e) {}
 
   res.send(result)
 })
