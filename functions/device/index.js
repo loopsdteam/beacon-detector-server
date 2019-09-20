@@ -48,10 +48,10 @@ app.post('/', async (req, res) => {
     v._beaconId = r._id
     await BeaconLog.create(v)
   }
-  const bs = await Beacon.find().limit(10).lean()
+  const bs = await Beacon.find().populate({ path: '_scannerId', select: 'name' }).limit(10).lean()
   bs.forEach(v => {
     v._id = v._id.toString()
-    v._scannerId = v._scannerId.toString()
+    // v._scannerId = v._scannerId
     v.createdAt = new Date(v.createdAt).toISOString()
     v.updatedAt = new Date(v.updatedAt).toISOString()
     v.startTime = new Date(v.startTime).toISOString()
@@ -94,6 +94,7 @@ app.get('/beacons', async (req, res) => {
     .sort(s)
     .skip(offset)
     .limit(limit)
+    .populate({ path: '_scannerId', select: 'name' })
 
   res.send(result)
 })
@@ -124,6 +125,8 @@ app.get('/beacon-logs', async (req, res) => {
     .sort(s)
     .skip(offset)
     .limit(limit)
+    .populate({ path: '_scannerId', select: 'name' })
+    // .populate({ path: '_beaconId', select: 'name' })
 
   res.send(result)
 })

@@ -45,6 +45,12 @@
       </v-list-item>
       <v-list-item two-line>
         <v-list-item-content>
+          <v-list-item-title>스캐너 정보</v-list-item-title>
+          <v-list-item-subtitle>{{ item._scannerId.name }}</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item two-line>
+        <v-list-item-content>
           <v-list-item-title>UUID</v-list-item-title>
           <v-list-item-subtitle>{{ item.uuid }}</v-list-item-subtitle>
         </v-list-item-content>
@@ -111,7 +117,7 @@ export default {
       let level = 3
       if (dif < 2) level = 0
       else if (dif >= 2 && dif < 5) level = 1
-      else if (dif > 5 && dif < 10) level = 2
+      else if (dif >= 5 && dif < 10) level = 2
       levels[level].fromNow = t.fromNow()
 
       return levels[level]

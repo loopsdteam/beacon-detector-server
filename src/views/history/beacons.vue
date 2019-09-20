@@ -83,10 +83,11 @@ export default {
   data () {
     return {
       headers: [
-        // uid, email, displayName, emailVerified, photoURL, disabled, level
+        { text: 'name', value: 'name' },
+        { text: '_scannerId.name', value: '_scannerId.name', sortable: false },
+        { text: 'address', value: 'address' },
         { text: 'createdAt', value: 'createdAt' },
         { text: 'updatedAt', value: 'updatedAt' },
-        { text: 'address', value: 'address' },
         { text: 'uuid', value: 'uuid' },
         { text: 'startTime', value: 'startTime' },
         { text: 'endTime', value: 'endTime' },
@@ -95,9 +96,8 @@ export default {
         { text: 'txPower', value: 'txPower' },
         { text: 'major', value: 'major' },
         { text: 'minor', value: 'minor' },
-        { text: '_scannerId', value: '_scannerId' },
-        { text: '_beaconId', value: '_beaconId' },
-        { text: 'name', value: 'name' }
+        { text: '_beaconId', value: '_beaconId' }
+
       ],
       items: [],
       totalCount: 0,

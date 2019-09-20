@@ -122,6 +122,7 @@ export default {
     return {
       headers: [
         { text: 'name', value: 'name' },
+        { text: '_scannerId.name', value: '_scannerId.name', sortable: false },
         { text: 'address', value: 'address' },
         { text: 'createdAt', value: 'createdAt' },
         { text: 'updatedAt', value: 'updatedAt' },
@@ -132,8 +133,7 @@ export default {
         { text: 'rssi', value: 'rssi' },
         { text: 'txPower', value: 'txPower' },
         { text: 'major', value: 'major' },
-        { text: 'minor', value: 'minor' },
-        { text: '_scannerId', value: '_scannerId' }
+        { text: 'minor', value: 'minor' }
       ],
       items: [],
       totalCount: 0,
