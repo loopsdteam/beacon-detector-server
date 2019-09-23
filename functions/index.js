@@ -86,3 +86,8 @@ db.collection('infos').doc('users').get()
 //   .then(s => {
 //     if (!s.exists) db.collection('infos').doc('beacons').set({ counter: 0 })
 //   })
+
+// exports.test = functions.pubsub.schedule('every 10 seconds').onRun((context) => {
+//   console.log('This will be run every 5 seconds!')
+//   return null
+// })

@@ -62,6 +62,7 @@
           :items="items"
           :items-per-page="5"
           :options.sync="options"
+          :server-items-length="totalCount"
           class="elevation-1"
           :loading="loading"
         >
