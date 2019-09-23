@@ -6,8 +6,8 @@ admin.initializeApp({ credential: admin.credential.cert(require('./key.json')),
 
 const db = admin.firestore()
 
-exports.admin = functions.https.onRequest(require('./admin'))
-exports.device = functions.https.onRequest(require('./device'))
+exports.admin = functions.region('asia-northeast1').https.onRequest(require('./admin'))
+exports.device = functions.runWith({ timeoutSeconds: 300, memory: '512MB' }).region('asia-northeast1').https.onRequest(require('./device'))
 exports.createUser = functions.auth.user().onCreate(async (user) => {
   const { uid, email, displayName, emailVerified, photoURL, disabled } = user
   const claims = { level: 2 }

@@ -3,9 +3,10 @@ import axios from 'axios'
 import moment from 'moment'
 import store from '../store'
 import firebaseConfig from '../../firebaseConfig'
+const region = 'asia-northeast1'
 
 const firebaseAPI = axios.create({
-  baseURL: process.env.NODE_ENV === 'production' ? `https://us-central1-${firebaseConfig.projectId}.cloudfunctions.net/` : `http://localhost:5000/${firebaseConfig.projectId}/us-central1/`,
+  baseURL: process.env.NODE_ENV === 'production' ? `https://${region}-${firebaseConfig.projectId}.cloudfunctions.net/` : `http://localhost:5000/${firebaseConfig.projectId}/${region}/`,
   timeout: 10000
 })
 

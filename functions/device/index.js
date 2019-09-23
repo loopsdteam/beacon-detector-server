@@ -39,7 +39,7 @@ app.post('/', async (req, res) => {
     v._beaconId = r._id
     await BeaconLog.create(v)
   }
-  const bs = await Beacon.find().populate({ path: '_scannerId', select: 'name' }).limit(10).lean()
+  const bs = await Beacon.find().sort({ updatedAt: -1 }).populate({ path: '_scannerId', select: 'name' }).limit(10).lean()
   bs.forEach(v => {
     v._id = v._id.toString()
     // v._scannerId = v._scannerId

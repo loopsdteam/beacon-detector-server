@@ -60,11 +60,12 @@
         <v-data-table
           :headers="headers"
           :items="items"
-          :items-per-page="5"
+          :items-per-page="10"
           :options.sync="options"
           :server-items-length="totalCount"
           class="elevation-1"
           :loading="loading"
+          :footer-props="{'items-per-page-options':[10, 20, 30, 100]}"
         >
           <!-- <template v-slot:item.createdAt="{ item }">
           </template> -->
