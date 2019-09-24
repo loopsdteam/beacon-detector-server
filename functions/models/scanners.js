@@ -7,7 +7,9 @@ const fields = {
   ota: { type: Boolean, defalut: true },
   cycle: { type: Number, default: 60 },
   serialNo: { type: String, default: '' },
-  targetURL: { type: String, default: '' }
+  targetURL: { type: String, default: '' },
+  wifiSSID: { type: String, default: '' },
+  wifiPassword: { type: String, default: '' }
 }
 
 const options = {
