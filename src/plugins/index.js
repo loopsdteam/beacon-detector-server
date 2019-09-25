@@ -1,5 +1,6 @@
-import './axios'
+import './lodash'
 import './moment'
+import './axios'
 import './swal'
 import './firebase'
 import './vue-toasted'

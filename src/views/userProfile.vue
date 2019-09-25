@@ -1,35 +1,105 @@
 <template>
   <v-container fluid>
     <v-card>
-      <v-subheader>회원 정보</v-subheader>
+      <v-toolbar color="light-blue" dark dense flat>
+        <v-toolbar-title>회원 정보</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn icon :disabled="!valid" @click="changeName">
+          <v-icon>mdi-content-save</v-icon>
+        </v-btn>
+      </v-toolbar>
+      <v-alert type="error" border="left" v-if="!_.get(this.$store.state.user, 'emailVerified', null)">이메일을 확인해주세요</v-alert>
       <v-card-text>
-        <v-alert v-if="!$store.state.claims.email_verified" type="warning">
-          이메일 인증이 안되어 있습니다.
-        </v-alert>
-        <!-- <v-alert type="success"></v-alert> -->
-        <p v-if="$store.state.claims.level >= 0">현재 {{levels[$store.state.claims.level]}} 계정입니다.</p>
-        <p v-if="$store.state.claims.level > 0">페이지 접근을 위해 관리자에게 승인 요청을 하시기 바랍니다.</p>
-      </v-card-text>
-      <!-- <v-card-actions v-if="$store.state.claims.level === undefined">
-        <v-btn color="success" @click="tokenUpdate">사용자 확인</v-btn>
-      </v-card-actions> -->
-    </v-card>
+        <v-row>
+          <v-col cols="12" sm="5">
+            <v-img v-if="_.get($store.state.user, 'photoURL', null)" :src="this.$store.state.user.photoURL"></v-img>
+            <template v-else>
+              <v-row align="center" justify="center">
+                <v-avatar
+                  size="200"
+                  color="indigo"
+                >
+                  <v-img :src="require('@/assets/images/account-alert.png')" alt="avatar"></v-img>
+                </v-avatar>
+              </v-row>
+            </template>
+          </v-col>
+          <v-col cols="12" sm="7">
+            <v-form v-model="valid" ref="form" lazy-validation>
+              <v-row>
+                <v-col cols="12">
+                  <span class="title">계정 유형: {{levels[_.get($store.state.claims, 'level', 2)]}}</span>
+                </v-col>
+                <v-col cols="12">
+                  <v-alert type="warning" border="left" v-if="_.get($store.state.claims, 'level', 2) > 0">
+                    페이지 접근을 위해 관리자에게 승인 요청을 하시기 바랍니다.
+                  </v-alert>
+                </v-col>
+                <v-col cols="12">
+                  <v-file-input
+                    v-model="files"
+                    label="사진 변경"
+                    prepend-icon="mdi-camera"
+                    @change="upload"
+                    outlined
+                  ></v-file-input>
+                  <v-progress-linear v-if="progress > 0 && progress < 100" :value="progress"></v-progress-linear>
+                </v-col>
+                <v-col cols="4">
+                  <v-text-field
+                    label="성"
+                    v-model="form.lastName"
+                    :rules="[rule.required, rule.minLength(1), rule.maxLength(10)]"
+                    outlined
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="8">
+                  <v-text-field
+                    label="이름"
+                    v-model="form.firstName"
+                    :rules="[rule.required, rule.minLength(1), rule.maxLength(20)]"
+                    required
+                    outlined
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </v-form>
+          </v-col>
 
-    <!-- <p>user profile</p>
-    {{ JSON.stringify($store.state.claims, null, 2) }} -->
-    <!-- {{ JSON.stringify($store.state.user, null, 2)}} -->
+        </v-row>
+      </v-card-text>
+    </v-card>
   </v-container>
 </template>
 <script>
 export default {
   data () {
     return {
+      files: null,
+      loading: false,
+      form: {
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: ''
+      },
+      rule: {
+        required: v => !!v || '필수 항목입니다.',
+        minLength: length => v => v.length >= length || `${length}자리 이상으로 입력하세요.`,
+        maxLength: length => v => v.length <= length || `${length}자리 이하으로 입력하세요.`
+      },
+      valid: false,
+      progress: 0,
       levels: ['관리자', '사용자', '손님']
     }
   },
-  mounted () {
-    if (this.$store.state.claims.level === undefined) {
-      this.tokenUpdate()
+  async created () {
+    if (this.$store.state.claims.level === undefined) await this.tokenUpdate()
+    const ns = this.$store.state.user.displayName.split(' ')
+    if (ns.length === 1) this.form.lastName = ns[0]
+    else if (ns.length === 2) {
+      this.form.firstName = ns[1]
+      this.form.lastName = ns[0]
     }
   },
   methods: {
@@ -37,6 +107,62 @@ export default {
       const user = this.$firebase.auth().currentUser
       await user.getIdToken(true)
       await this.$store.dispatch('getUser', user)
+    },
+    async upload () {
+      const r = await this.$swal.fire({
+        title: '정말 변경하시겠습니까?',
+        type: 'warning',
+        confirmButtonText: '확인',
+        cancelButtonText: '취소',
+        showCancelButton: true
+      })
+      if (!r.value) {
+        this.file = null
+        return
+      }
+      const storageRef = this.$firebase.storage().ref()
+      this.loading = true
+      const user = this.$firebase.auth().currentUser
+      const uploadTask = storageRef.child(user.uid).put(this.files)
+
+      uploadTask.on(this.$firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+        (snapshot) => {
+          this.progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          switch (snapshot.state) {
+            case this.$firebase.storage.TaskState.PAUSED: // or 'paused'
+              this.$toasted.global.error('Upload is paused')
+              break
+            case this.$firebase.storage.TaskState.RUNNING: // or 'running'
+              // this.$toasted.global.notice('Upload is running')
+              break
+          }
+        }, (error) => {
+          this.$toasted.global.error(error.code)
+          this.loading = false
+        }, () => {
+          uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+            user.updateProfile({
+              photoURL: downloadURL
+            })
+          })
+          this.loading = false
+        })
+    },
+    async changeName () {
+      if (!this.$refs.form.validate()) return this.$toasted.global.error('입력 폼을 올바르게 작성해주세요.')
+      const r = await this.$swal.fire({
+        title: '정말 변경하시겠습니까?',
+        type: 'warning',
+        confirmButtonText: '확인',
+        cancelButtonText: '취소',
+        showCancelButton: true
+      })
+      if (!r.value) return
+      const user = this.$firebase.auth().currentUser
+      await user.updateProfile({
+        displayName: `${this.form.lastName} ${this.form.firstName}`
+      })
+      location.reload()
     }
   }
 }

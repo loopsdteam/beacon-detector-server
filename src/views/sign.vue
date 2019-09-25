@@ -8,11 +8,11 @@
             src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg"
             height="500"
           >
-            <v-row
-              align="center" justify="center"
-            >
-              <h1 class="display-1 font-weight-thin mb-3">beacon-detect.web.app</h1>
-              <h4 class="subheading">Beacon Scanner Detect System</h4>
+            <v-row align="center" justify="center">
+              <h1 class="display-1 font-weight-thin mb-3">{{location.host.split('.')[0]}}</h1>
+              </v-row>
+            <v-row align="center" justify="center">
+              <h4 class="subheading">{{pkg.description}}</h4>
             </v-row>
           </v-parallax>
         </v-card>
@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import pkg from '../../package'
 import SignIn from '@/components/auth/signIn'
 import SignUp from '@/components/auth/signUp'
 
@@ -37,6 +38,8 @@ export default {
   },
   data () {
     return {
+      pkg,
+      location,
       type: true,
       email: '',
       password: ''

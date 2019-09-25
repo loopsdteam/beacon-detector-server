@@ -16,7 +16,6 @@ firebaseAPI.interceptors.request.use(async (config) => {
   config.headers.authorization = store.state.token
   return config
 }, function (error) {
-  // Do something with request error
   return Promise.reject(error)
 })
 

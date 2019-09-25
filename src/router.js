@@ -23,15 +23,15 @@ const userCheck = (to, form, next) => {
   }
   next()
 }
-const guestCheck = (to, form, next) => {
-  if (!store.state.user) {
-    if (to.path !== '/sign') return next('/sign')
-  } else {
-    if (!store.state.user.emailVerified) return next('/userProfile')
-    if (store.state.claims.level > 2) throw Error('손님만 들어갈 수 있습니다')
-  }
-  next()
-}
+// const guestCheck = (to, form, next) => {
+//   if (!store.state.user) {
+//     if (to.path !== '/sign') return next('/sign')
+//   } else {
+//     if (!store.state.user.emailVerified) return next('/userProfile')
+//     if (store.state.claims.level > 2) throw Error('손님만 들어갈 수 있습니다')
+//   }
+//   next()
+// }
 
 const router = new Router({
   mode: 'history',
@@ -41,7 +41,7 @@ const router = new Router({
       path: '/',
       name: 'home',
       component: Home,
-      beforeEnter: guestCheck
+      beforeEnter: userCheck
     },
     {
       path: '/sign',
@@ -94,7 +94,7 @@ const waitFirebase = () => {
       if (store.state.firebaseLoaded) {
         clearInterval(tmr)
         resolve()
-      } else if (cnt++ > 200) reject(Error('제한 시간 초과, 인터넷 연결을 확인하세요'))
+      } else if (cnt++ > 500) reject(Error('제한 시간 초과, 인터넷 연결을 확인하세요'))
     }, 10)
   })
 }
