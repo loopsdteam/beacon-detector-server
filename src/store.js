@@ -9,11 +9,7 @@ export default new Vuex.Store({
     user: null,
     token: '',
     claims: null,
-    firebaseLoaded: false,
-    confirm: {
-      dialog: false,
-      message: ''
-    }
+    firebaseLoaded: false
   },
   mutations: {
     setTitle (state, p) {
@@ -39,8 +35,20 @@ export default new Vuex.Store({
         commit('setFirebaseLoaded')
         return null
       }
+      await dispatch('visitUser')
       await dispatch('getToken')
       commit('setFirebaseLoaded')
+      return true
+    },
+    async visitUser ({ state }) {
+      if (!state.user.displayName) return false
+      const increment = Vue.prototype.$firebase.firestore.FieldValue.increment(1)
+      await Vue.prototype.$firebase.firestore().collection('users').doc(state.user.uid)
+        .update({
+          displayName: state.user.displayName,
+          visitedAt: new Date(),
+          visitCount: increment
+        })
       return true
     },
     async getToken ({ commit, state }) {
