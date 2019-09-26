@@ -33,6 +33,11 @@
           :server-items-length="totalCount"
           :items-per-page="4"
           :loading="loading"
+          :footer-props="{
+            showFirstLastPage: true,
+            'items-per-page-options':[4, 8, 20],
+            'items-per-page-text': ''
+          }"
         >
           <template v-slot:loading>
             <v-card color="transparent" flat v-if="loading">
@@ -75,7 +80,6 @@
               </v-col>
             </v-row>
           </template>
-
         </v-data-iterator>
       </v-container>
     </v-card>
@@ -142,6 +146,11 @@ export default {
       })
         .then(({ data }) => {
           this.totalCount = data.totalCount
+          // const items = []
+          // data.items.forEach(v => {
+          //   v = v.createdAt.toDate()
+          //   items.push(v)
+          // })
           this.items = data.items
         })
         .catch(e => {

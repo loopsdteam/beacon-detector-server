@@ -64,7 +64,11 @@
           :options.sync="options"
           :loading="loading"
           :server-items-length="totalCount"
-          :footer-props="{'items-per-page-options':[10, 20, 30, 100]}"
+          :footer-props="{
+            showFirstLastPage: true,
+            'items-per-page-options':[10, 20, 30, 100],
+            'items-per-page-text': ''
+          }"
           class="elevation-1"
         >
           <!-- <template v-slot:item.createdAt="{ item }">

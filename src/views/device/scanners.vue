@@ -35,6 +35,11 @@
           :server-items-length="totalCount"
           :items-per-page="4"
           :loading="loading"
+          :footer-props="{
+            showFirstLastPage: true,
+            'items-per-page-options':[4, 8, 20, 100],
+            'items-per-page-text': ''
+          }"
         >
           <template v-slot:default="props">
             <v-row>

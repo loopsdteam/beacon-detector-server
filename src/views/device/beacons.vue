@@ -65,7 +65,11 @@
           :server-items-length="totalCount"
           class="elevation-1"
           :loading="loading"
-          :footer-props="{'items-per-page-options':[10, 20, 30, 100]}"
+          :footer-props="{
+            showFirstLastPage: true,
+            'items-per-page-options':[10, 20, 30, 100],
+            'items-per-page-text': ''
+          }"
         >
           <!-- <template v-slot:item.createdAt="{ item }">
           </template> -->
