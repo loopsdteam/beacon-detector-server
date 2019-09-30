@@ -176,6 +176,17 @@ export default {
               to: '/admin/users'
             }
           ]
+        },
+        {
+          icon: 'mdi-help',
+          title: 'help',
+          active: false,
+          subItems: [
+            {
+              title: 'Manual',
+              to: '/help/manual'
+            }
+          ]
         }
       ]
     }

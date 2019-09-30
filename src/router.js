@@ -71,6 +71,11 @@ const router = new Router({
       beforeEnter: adminCheck
     },
     {
+      path: '/help/manual',
+      component: () => import('./views/help/manual'),
+      beforeEnter: userCheck
+    },
+    {
       path: '/device/scanners',
       component: () => import('./views/device/scanners'),
       beforeEnter: adminCheck
