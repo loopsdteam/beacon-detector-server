@@ -7,6 +7,13 @@
       >
         <v-toolbar-title>Beacon history</v-toolbar-title>
         <v-spacer></v-spacer>
+        <date-picker
+          v-model="date"
+          label="날짜"
+          flat
+          hide-details
+          solo-inverted
+        ></date-picker>
         <v-autocomplete
           v-model="searchModel"
           :loading="searchLoading"
@@ -81,10 +88,14 @@
 
 <script>
 import _ from 'lodash'
+import datePicker from '@/components/date-picker'
 // import DeviceCard from '@/components/deviceCard'
 
 export default {
   // components: { DeviceCard },
+  components: {
+    datePicker
+  },
   data () {
     return {
       headers: [
@@ -112,6 +123,7 @@ export default {
         sortDesc: [true]
       },
       search: '',
+      date: this.$moment().format('YYYY-MM-DD'),
       searchItems: [],
       searchModel: null,
       searchLoading: false
@@ -140,7 +152,8 @@ export default {
           limit: this.options.itemsPerPage,
           order: this.options.sortBy[0],
           sort: this.options.sortDesc[0] ? '-1' : '1',
-          search: this.searchModel
+          search: this.searchModel,
+          date: this.date
         }
       })
         .then(({ data }) => {
@@ -165,7 +178,7 @@ export default {
         this.searchLoading = true
 
         this.$axios.get('/device/beacons/search', {
-          params: { search: this.search }
+          params: { search: this.search, date: this.date }
         })
           .then(({ data }) => {
             this.searchItems = data
