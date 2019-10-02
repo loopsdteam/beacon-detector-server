@@ -94,7 +94,9 @@ app.get('/beacons/search', async (req, res) => {
 })
 
 app.get('/beacon-logs', async (req, res) => {
-  let { offset, limit, order, sort, search } = req.query
+  const moment = require('../lib/moment')
+
+  let { offset, limit, order, sort, search, date = moment().format('YYYY-MM-DD') } = req.query
   offset = Number(offset)
   limit = Number(limit)
   if (limit < 0) limit = 0
@@ -112,6 +114,9 @@ app.get('/beacon-logs', async (req, res) => {
 
   result.items = await BeaconLog.find()
     .where('address').regex(search)
+    .where('createdAt')
+    .gte(moment(date, 'YYYY-MM-DD').startOf('day').toDate())
+    .lte(moment(date, 'YYYY-MM-DD').endOf('day').toDate())
     .sort(s)
     .skip(offset)
     .limit(limit)
