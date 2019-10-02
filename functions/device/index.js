@@ -94,7 +94,7 @@ app.get('/beacons/search', async (req, res) => {
 })
 
 app.get('/beacon-logs/download', async (req, res) => {
-  const moment = require('../lib/moment')
+  const moment = require('moment')
 
   let { search, date = moment().format('YYYY-MM-DD') } = req.query
   console.log(search, date)
@@ -103,16 +103,16 @@ app.get('/beacon-logs/download', async (req, res) => {
   const count = await BeaconLog.countDocuments()
     .where('address').regex(search)
     .where('createdAt')
-    .gte(moment(date, 'YYYY-MM-DD').startOf('day').toDate())
-    .lte(moment(date, 'YYYY-MM-DD').endOf('day').toDate())
+    .gte(moment(date, 'YYYY-MM-DD').startOf('day').add(-9, 'hour').toDate())
+    .lte(moment(date, 'YYYY-MM-DD').endOf('day').add(-9, 'hour').toDate())
 
   console.log(count)
 
   const rows = await BeaconLog.find()
     .where('address').regex(search)
     .where('createdAt')
-    .gte(moment(date, 'YYYY-MM-DD').startOf('day').toDate())
-    .lte(moment(date, 'YYYY-MM-DD').endOf('day').toDate())
+    .gte(moment(date, 'YYYY-MM-DD').startOf('day').add(-9, 'hour').toDate())
+    .lte(moment(date, 'YYYY-MM-DD').endOf('day').add(-9, 'hour').toDate())
     .populate({ path: '_scannerId', select: 'name' })
     .lean()
 
@@ -143,7 +143,7 @@ app.get('/beacon-logs/download', async (req, res) => {
 })
 
 app.get('/beacon-logs', async (req, res) => {
-  const moment = require('../lib/moment')
+  const moment = require('moment')
 
   let { offset, limit, order, sort, search, date = moment().format('YYYY-MM-DD') } = req.query
   offset = Number(offset)
@@ -161,14 +161,14 @@ app.get('/beacon-logs', async (req, res) => {
   result.totalCount = await BeaconLog.countDocuments()
     .where('address').regex(search)
     .where('createdAt')
-    .gte(moment(date, 'YYYY-MM-DD').startOf('day').toDate())
-    .lte(moment(date, 'YYYY-MM-DD').endOf('day').toDate())
+    .gte(moment(date, 'YYYY-MM-DD').startOf('day').add(-9, 'hour').toDate())
+    .lte(moment(date, 'YYYY-MM-DD').endOf('day').add(-9, 'hour').toDate())
 
   result.items = await BeaconLog.find()
     .where('address').regex(search)
     .where('createdAt')
-    .gte(moment(date, 'YYYY-MM-DD').startOf('day').toDate())
-    .lte(moment(date, 'YYYY-MM-DD').endOf('day').toDate())
+    .gte(moment(date, 'YYYY-MM-DD').startOf('day').add(-9, 'hour').toDate())
+    .lte(moment(date, 'YYYY-MM-DD').endOf('day').add(-9, 'hour').toDate())
     .sort(s)
     .skip(offset)
     .limit(limit)
