@@ -116,6 +116,11 @@ app.get('/beacon-logs/download', async (req, res) => {
     .populate({ path: '_scannerId', select: 'name' })
     .lean()
 
+  rows.forEach((el, index, array) => {
+    array[index].startTime = moment(el.startTime).add(9, 'hour').toDate()
+    array[index].endTime = moment(el.endTime).add(9, 'hour').toDate()
+  })
+
   const Json2csvParser = require('json2csv').Parser
   res.setHeader('Content-disposition', 'attachment; filename=' + 'Raw List.csv')
   res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
