@@ -93,6 +93,55 @@ app.get('/beacons/search', async (req, res) => {
   res.send(items)
 })
 
+app.get('/beacon-logs/download', async (req, res) => {
+  const moment = require('../lib/moment')
+
+  let { search, date = moment().format('YYYY-MM-DD') } = req.query
+  console.log(search, date)
+  if (!search) search = ''
+
+  const count = await BeaconLog.countDocuments()
+    .where('address').regex(search)
+    .where('createdAt')
+    .gte(moment(date, 'YYYY-MM-DD').startOf('day').toDate())
+    .lte(moment(date, 'YYYY-MM-DD').endOf('day').toDate())
+
+  console.log(count)
+
+  const rows = await BeaconLog.find()
+    .where('address').regex(search)
+    .where('createdAt')
+    .gte(moment(date, 'YYYY-MM-DD').startOf('day').toDate())
+    .lte(moment(date, 'YYYY-MM-DD').endOf('day').toDate())
+    .populate({ path: '_scannerId', select: 'name' })
+    .lean()
+
+  const Json2csvParser = require('json2csv').Parser
+  res.setHeader('Content-disposition', 'attachment; filename=' + 'Raw List.csv')
+  res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+  const options = {
+    withBOM: true,
+    fields: [
+      { label: 'name', value: 'name' },
+      { label: '_scannerId.name', value: '_scannerId.name' },
+      { label: 'address', value: 'address' },
+      { label: 'uuid', value: 'uuid' },
+      { label: 'startTime', value: 'startTime' },
+      { label: 'endTime', value: 'endTime' },
+      { label: 'count', value: 'count' },
+      { label: 'rssi', value: 'rssi' },
+      { label: 'txPower', value: 'txPower' },
+      { label: 'major', value: 'major' },
+      { label: 'minor', value: 'minor' },
+      { label: '_beaconId', value: '_beaconId' }
+    ]
+  }
+
+  const parser = new Json2csvParser(options)
+  const csv = parser.parse(rows)
+  res.send(csv)
+})
+
 app.get('/beacon-logs', async (req, res) => {
   const moment = require('../lib/moment')
 
@@ -111,6 +160,9 @@ app.get('/beacon-logs', async (req, res) => {
 
   result.totalCount = await BeaconLog.countDocuments()
     .where('address').regex(search)
+    .where('createdAt')
+    .gte(moment(date, 'YYYY-MM-DD').startOf('day').toDate())
+    .lte(moment(date, 'YYYY-MM-DD').endOf('day').toDate())
 
   result.items = await BeaconLog.find()
     .where('address').regex(search)

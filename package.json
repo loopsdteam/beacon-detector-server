@@ -19,6 +19,8 @@
     "browser-image-resizer": "^2.0.1",
     "core-js": "^2.6.5",
     "firebase": "^6.2.4",
+    "json2csv": "^4.5.3",
+    "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "sweetalert2": "^8.17.6",
     "vue": "^2.6.10",

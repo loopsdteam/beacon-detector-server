@@ -34,6 +34,9 @@
         <v-btn icon @click="list" :disabled="loading">
           <v-icon>mdi-refresh</v-icon>
         </v-btn>
+        <v-btn icon @click="exportToSpreadSheet" :loading="waitForDownload">
+          <v-icon>mdi-download</v-icon>
+        </v-btn>
       </v-toolbar>
       <v-card-text>
         <!-- <v-data-iterator
@@ -76,7 +79,7 @@
             'items-per-page-options':[10, 20, 30, 100],
             'items-per-page-text': ''
           }"
-          class="elevation-1"
+          class="elevation-1 text-no-wrap"
         >
           <!-- <template v-slot:item.createdAt="{ item }">
           </template> -->
@@ -103,7 +106,6 @@ export default {
         { text: '_scannerId.name', value: '_scannerId.name', sortable: false },
         { text: 'address', value: 'address' },
         { text: 'createdAt', value: 'createdAt' },
-        { text: 'updatedAt', value: 'updatedAt' },
         { text: 'uuid', value: 'uuid' },
         { text: 'startTime', value: 'startTime' },
         { text: 'endTime', value: 'endTime' },
@@ -113,7 +115,6 @@ export default {
         { text: 'major', value: 'major' },
         { text: 'minor', value: 'minor' },
         { text: '_beaconId', value: '_beaconId' }
-
       ],
       items: [],
       totalCount: 0,
@@ -126,7 +127,8 @@ export default {
       date: this.$moment().format('YYYY-MM-DD'),
       searchItems: [],
       searchModel: null,
-      searchLoading: false
+      searchLoading: false,
+      waitForDownload: false
     }
   },
   watch: {
@@ -136,6 +138,10 @@ export default {
       },
       deep: true
     },
+    date (val) {
+      this.search = ''
+      this.$nextTick(this.list)
+    },
     search (val) {
       val && val !== this.searchModel && this.searchList(val)
     },
@@ -144,6 +150,31 @@ export default {
     }
   },
   methods: {
+    async exportToSpreadSheet () {
+      if (this.waitForDownload) return
+      this.waitForDownload = true
+      const response = await this.$axios.get('/device/beacon-logs/download', {
+        responseType: 'blob',
+        params: {
+          search: this.searchModel,
+          date: this.date
+        }
+      })
+      console.log('done')
+      if (!window.navigator.msSaveOrOpenBlob) {
+      // BLOB NAVIGATOR
+        const url = window.URL.createObjectURL(new Blob([response.data]))
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute('download', `${this.date}.csv`)
+        document.body.appendChild(link)
+        link.click()
+      } else {
+      // BLOB FOR EXPLORER 11
+        window.navigator.msSaveOrOpenBlob(new Blob([response.data]), `${this.date}.csv`)
+      }
+      this.waitForDownload = false
+    },
     list () {
       this.loading = true
       this.$axios.get('/device/beacon-logs', {
