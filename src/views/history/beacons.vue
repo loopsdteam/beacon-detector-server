@@ -103,7 +103,8 @@ export default {
     return {
       headers: [
         { text: 'name', value: 'name' },
-        { text: '_scannerId.name', value: '_scannerId.name', sortable: false },
+        { text: 'scanner id', value: '_scannerId._id', sortable: false },
+        { text: 'scanner name', value: '_scannerId.name', sortable: false },
         { text: 'address', value: 'address' },
         { text: 'createdAt', value: 'createdAt' },
         { text: 'uuid', value: 'uuid' },
