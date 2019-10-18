@@ -1,5 +1,6 @@
 const app = require('express')()
 const cors = require('cors')
+const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 require('express-async-errors')
 
@@ -10,7 +11,6 @@ app.use(cors({ origin: true }))
 app.use(require('../middlewares/verifyToken'))
 
 app.use((req, res, next) => {
-  // return res.status(401).send({ message: 'not authorized' })
   if (req.claims.level === undefined) return res.status(403).send({ message: 'not authorized' })
   if (req.claims.level > 0) return res.status(403).send({ message: 'not authorized' })
   next()
@@ -44,7 +44,7 @@ app.get('/users', async (req, res) => {
   res.send(r)
 })
 
-app.get('/users/search', async (req, res) => {
+app.get('/search', async (req, res) => {
   const s = await db.collection('users').where('email', '>=', req.query.search).limit(3).get()
 
   const items = []
@@ -63,7 +63,18 @@ app.patch('/user/:uid/level', async (req, res) => {
   await admin.auth().setCustomUserClaims(uid, claims)
   await db.collection('users').doc(uid).update(claims)
 
-  res.status(200).end()
+  res.status(204).end()
+})
+
+app.delete('/user/:uid', async (req, res) => {
+  const uid = req.params.uid
+  if (!uid) return res.status(400).end()
+
+  const r = await admin.auth().getUser(uid)
+  if (r.email === functions.config().admin.email) return res.status(403).end()
+  await admin.auth().deleteUser(uid)
+
+  res.status(204).end()
 })
 
 app.use(require('../middlewares/error'))

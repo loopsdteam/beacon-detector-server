@@ -40,8 +40,8 @@
         <v-text-field label="Name" v-model="form.name"></v-text-field>
         <v-text-field label="SerialNo" v-model="form.serialNo"></v-text-field>
         <v-text-field label="Target URL" v-model="form.targetURL"></v-text-field>
-        <v-text-field label="WiFi SSID" v-model="form.wifiSSID"></v-text-field>
-        <v-text-field label="WiFi Password" v-model="form.wifiPassword" :append-icon="wifiPasswordView ? 'mdi-eye' : 'mdi-eye-off'" @click:append="wifiPasswordView = !wifiPasswordView" :type="wifiPasswordView ? '' : 'password'"></v-text-field>
+        <!-- <v-text-field label="WiFi SSID" v-model="form.wifiSSID"></v-text-field>
+        <v-text-field label="WiFi Password" v-model="form.wifiPassword" :append-icon="wifiPasswordView ? 'mdi-eye' : 'mdi-eye-off'" @click:append="wifiPasswordView = !wifiPasswordView" :type="wifiPasswordView ? '' : 'password'"></v-text-field> -->
         <!-- <v-subheader>Min and max default slider</v-subheader>
         <v-text-field label="Cycle" v-model="form.cycle" type="number" step="10"></v-text-field> -->
         <v-slider
@@ -94,9 +94,9 @@ export default {
         ota: false,
         cycle: 60,
         serialNo: '',
-        targetURL: '',
-        wifiSSID: '',
-        wifiPassword: ''
+        targetURL: ''
+        // wifiSSID: '',
+        // wifiPassword: ''
       },
       wifiPasswordView: false
     }
