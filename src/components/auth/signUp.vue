@@ -16,18 +16,18 @@
           Google 계정으로 가입
         </v-btn>
       </v-card-actions>
-      <v-container grid-list-md fluid>
-        <v-layout row wrap>
-          <v-flex xs5>
+      <v-container fluid>
+        <v-row>
+          <v-col cols="5">
             <v-divider class="mt-2"></v-divider>
-          </v-flex>
-          <v-flex xs2>
+          </v-col>
+          <v-col cols="2" class="text-center">
             또는
-          </v-flex>
-          <v-flex xs5>
+          </v-col>
+          <v-col cols="5">
             <v-divider class="mt-2"></v-divider>
-          </v-flex>
-        </v-layout>
+          </v-col>
+        </v-row>
       </v-container>
       <v-card-text>
         <v-text-field
@@ -96,13 +96,16 @@ export default {
   },
   methods: {
     async signInWithGoogle () {
+      this.loading = true
       const provider = new this.$firebase.auth.GoogleAuthProvider()
       this.$firebase.auth().languageCode = 'ko'
-      this.loading = true
       try {
         await this.$firebase.auth().signInWithPopup(provider)
-        await this.$firebase.auth().signOut()
-        this.$emit('changeType')
+        const user = this.$firebase.auth().currentUser
+        await user.getIdToken()
+        await this.$store.dispatch('getUser', user)
+        if (this.$store.state.claims.level === undefined || this.$store.state.claims.level > 1) this.$router.push('/userProfile')
+        else this.$router.push('/')
       } catch (e) {
         this.$toasted.global.error(e.message)
       } finally {

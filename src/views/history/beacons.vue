@@ -5,7 +5,7 @@
         dark
         color="teal"
       >
-        <v-toolbar-title>Beacon history</v-toolbar-title>
+        <v-toolbar-title v-if="$vuetify.breakpoint.smAndUp">Beacon history</v-toolbar-title>
         <v-spacer></v-spacer>
         <date-picker
           v-model="date"
@@ -31,42 +31,16 @@
           solo-inverted
           clearable
         ></v-autocomplete>
-        <v-btn icon @click="list" :disabled="loading">
+        <v-btn icon @click="list" :disabled="loading"
+          v-if="$vuetify.breakpoint.smAndUp">
           <v-icon>mdi-refresh</v-icon>
         </v-btn>
-        <v-btn icon @click="exportToSpreadSheet" :loading="waitForDownload">
+        <v-btn icon @click="exportToSpreadSheet" :loading="waitForDownload"
+          v-if="$vuetify.breakpoint.smAndUp">
           <v-icon>mdi-download</v-icon>
         </v-btn>
       </v-toolbar>
       <v-card-text>
-        <!-- <v-data-iterator
-          :items="items"
-          :options.sync="options"
-          :server-items-length="totalCount"
-          :items-per-page="4"
-          :loading="loading"
-        >
-          <template v-slot:default="props">
-            <v-row>
-              <v-col cols="12" v-if="loading" class="text-center">
-                <v-progress-circular indeterminate></v-progress-circular>
-                <p>데이터 로딩중</p>
-
-              </v-col>
-              <v-col cols="12"
-                v-else
-                v-for="item in props.items"
-                :key="item.name"
-                sm="6"
-                md="4"
-                lg="3"
-              >
-                <device-card :item="item"></device-card>
-              </v-col>
-            </v-row>
-          </template>
-
-        </v-data-iterator> -->
         <v-data-table
           :headers="headers"
           :items="items"
@@ -103,7 +77,8 @@ export default {
     return {
       headers: [
         { text: 'name', value: 'name' },
-        { text: '_scannerId.name', value: '_scannerId.name', sortable: false },
+        { text: 'scanner id', value: '_scannerId._id', sortable: false },
+        { text: 'scanner name', value: '_scannerId.name', sortable: false },
         { text: 'address', value: 'address' },
         { text: 'createdAt', value: 'createdAt' },
         { text: 'uuid', value: 'uuid' },
