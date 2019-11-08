@@ -28,5 +28,32 @@ service cloud.firestore {
       allow update: if false;
       allow delete: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.level < 1;
     }
+    match /pageLogs/{id} {
+      allow read: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.level < 1;
+      allow create: if request.auth.uid!= null;
+      allow update: if false;
+      allow delete: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.level < 1;
+    }
+    match /rfids/{id} {
+      allow read: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.level < 1;
+      // allow create: if false;
+      // allow update: if false;
+      // allow delete: if false;
+      allow write: if false
+    }
+    match /rfidLogs/{id} {
+      allow read: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.level < 1;
+      // allow create: if false;
+      // allow update: if false;
+      // allow delete: if false;
+      allow write: if false
+    }
+    match /beacons/{id} {
+      allow read: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.level < 1;
+      // allow create: if false;
+      // allow update: if false;
+      // allow delete: if false;
+      allow write: if false
+    }
   }
 }

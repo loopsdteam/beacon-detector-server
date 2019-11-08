@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from './store'
 import Home from './views/Home.vue'
+import RFID from './views/RFID.vue'
 
 Vue.use(Router)
 
@@ -53,7 +54,7 @@ const router = new Router({
     {
       path: '/',
       name: 'home',
-      component: Home,
+      component: RFID,
       beforeEnter: userCheck
     },
     {
