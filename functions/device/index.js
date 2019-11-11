@@ -27,7 +27,9 @@ app.post('/rfid', async (req, res) => {
   const { _id, version } = scanner
   const { id, time } = rfid
 
-  await db.collection('rfids').doc(id).set({ time: moment(time).toDate(), scanner: _id })
+  const increment = admin.firestore.FieldValue.increment(1)
+
+  await db.collection('rfids').doc(id).update({ time: moment(time).toDate(), scanner: _id, count: increment })
   await db.collection('rfidLogs').add({ id, time: moment(time).toDate() })
 
   return res.end('success')

@@ -137,6 +137,17 @@ export default {
           ]
         },
         {
+          icon: 'mdi-alert',
+          title: 'logs',
+          active: false,
+          subItems: [
+            {
+              title: 'logs',
+              to: '/logs'
+            }
+          ]
+        },
+        {
           icon: 'mdi-chip',
           title: 'Device',
           active: false,

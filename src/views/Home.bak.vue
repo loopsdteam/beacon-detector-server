@@ -17,32 +17,13 @@
         </v-row>
       </v-card-text>
     </v-card>
-
-    <firebase-subscriber collection="rfids" sort="time" order="desc">
-      <template v-slot="{ items, error }">
-        <div v-if="error">
-          <v-alert type="error">{{ error.message }}</v-alert>
-        </div>
-        <div v-else>
-          <v-row>
-            <v-col cols="12" sm="6" md="4" lg="3" v-for="item in items" :key="item._id">
-              <scanned-rfid-card :item="item.data">
-
-              </scanned-rfid-card>
-            </v-col>
-          </v-row>
-        </div>
-      </template>
-    </firebase-subscriber>
   </v-container>
 </template>
 
 <script>
-import scannedRfidCard from '@/components/scanned-rfid-card'
 import beaconRdbCard from '@/components/beaconRdbCard'
-import firebaseSubscriber from '@/components/firebase-subscriber'
 export default {
-  components: { beaconRdbCard, firebaseSubscriber, scannedRfidCard },
+  components: { beaconRdbCard },
   data () {
     return {
       ref: null,
@@ -64,6 +45,7 @@ export default {
         if (this.loading) this.loading = false
       })
     }
+
   }
 }
 </script>
