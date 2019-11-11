@@ -137,7 +137,7 @@ export default {
           ]
         },
         {
-          icon: 'mdi-alert',
+          icon: 'mdi-clipboard-list',
           title: 'logs',
           active: false,
           subItems: [
