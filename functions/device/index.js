@@ -61,11 +61,14 @@ app.post('/', async (req, res) => {
 
     if (v.address === '58:7a:62:02:9b:4f' || v.address === '30:45:11:f0:c2:5b') {
       try {
-        await db.collection('beacons').add({
+        await db.collection('beaconLogs').add({
           scanner: data.scanner._id,
           address: v.address,
           createdAt: new Date()
         })
+        const increment = admin.firestore.FieldValue.increment(1)
+        await db.collection('beacons').doc(v.address)
+          .update({ time: new Date(), scanner: data.scanner._id, count: increment })
       } catch (err) {
         return res.status(500).send({ message: err.message })
       }

@@ -28,7 +28,11 @@
       <v-row align="center">
         <v-col cols="3">
           <v-avatar size="60">
-            <v-icon x-large :color="item.count % 2 ? 'error': 'success'">mdi-emoticon-happy</v-icon>
+            <v-icon
+              x-large
+              :color="color">
+              {{ icon }}
+            </v-icon>
           </v-avatar>
         </v-col>
         <v-col class="body-1" cols="9">
@@ -99,10 +103,6 @@
 import random from 'random-name'
 import image1 from '@/assets/images/s1_img/adult_men.png'
 import image2 from '@/assets/images/s1_img/adult_women.png'
-import image3 from '@/assets/images/s1_img/child_boy_01.png'
-import image4 from '@/assets/images/s1_img/child_girl_01.png'
-import image5 from '@/assets/images/s1_img/child_boy_02.png'
-import image6 from '@/assets/images/s1_img/child_girl_02.png'
 export default {
   props: ['item', 'itemId'],
   data () {
@@ -116,14 +116,36 @@ export default {
     photo () {
       const symbol = {
         'adult_men.png': image1,
-        'adult_women.png': image2,
-        'child_boy_01.png': image3,
-        'child_girl_01.png': image4,
-        'child_boy_02.png': image5,
-        'child_girl_02.png': image6
+        'adult_women.png': image2
       }
 
       return symbol[this.item.photo]
+    },
+    icon () {
+      const diff = Math.abs(this.$moment(this.item.time.toDate()).diff(new Date(), 'minute'))
+
+      if (diff < 1) {
+        return 'mdi-emoticon-excited'
+      } else if (diff < 2) {
+        return 'mdi-emoticon-happy'
+      } else if (diff < 3) {
+        return 'mdi-emoticon-neutral'
+      } else {
+        return 'mdi-emoticon-dead'
+      }
+    },
+    color () {
+      const diff = Math.abs(this.$moment(this.item.time.toDate()).diff(new Date(), 'minute'))
+
+      if (diff < 1) {
+        return 'success'
+      } else if (diff < 2) {
+        return 'info'
+      } else if (diff < 3) {
+        return 'warning'
+      } else {
+        return 'error'
+      }
     }
   }
 }

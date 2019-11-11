@@ -3,46 +3,61 @@
     <v-card>
       <v-toolbar dark
         color="teal">
-        <v-toolbar-title>비콘 테스트</v-toolbar-title>
+        <v-toolbar-title>Beacon Scanned</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
-        <v-row>
-          <v-col cols="12" v-if="loading" class="text-center">
-            <v-progress-circular indeterminate></v-progress-circular>
-            <p>데이터 로딩중</p>
-          </v-col>
-          <v-col cols="12" sm="6" md="4" lg="3" v-for="item in items" :key="item._id">
-            <beacon-rdb-card :item="item"></beacon-rdb-card>
-          </v-col>
-        </v-row>
+        <firebase-subscriber collection="beacons" sort="time" order="desc">
+          <template v-slot="{ items, error }">
+            <div v-if="error">
+              <v-alert type="error">{{ error.message }}</v-alert>
+            </div>
+            <div v-else>
+              <v-row>
+                <v-col cols="12" sm="6" md="4" lg="3" v-for="item in items" :key="item._id">
+                  <scanned-beacon-card :item="item.data"></scanned-beacon-card>
+                </v-col>
+              </v-row>
+            </div>
+          </template>
+        </firebase-subscriber>
       </v-card-text>
     </v-card>
 
-    <firebase-subscriber collection="rfids" sort="time" order="desc">
-      <template v-slot="{ items, error }">
-        <div v-if="error">
-          <v-alert type="error">{{ error.message }}</v-alert>
-        </div>
-        <div v-else>
-          <v-row>
-            <v-col cols="12" sm="6" md="4" lg="3" v-for="item in items" :key="item._id">
-              <scanned-rfid-card :item="item.data">
-
-              </scanned-rfid-card>
-            </v-col>
-          </v-row>
-        </div>
-      </template>
-    </firebase-subscriber>
+    <v-card>
+      <v-toolbar dark
+        color="teal">
+        <v-toolbar-title>RFID Scanned</v-toolbar-title>
+      </v-toolbar>
+      <v-card-text>
+        <firebase-subscriber collection="rfids" sort="name" order="desc">
+          <template v-slot="{ items, error }">
+            <div v-if="error">
+              <v-alert type="error">{{ error.message }}</v-alert>
+            </div>
+            <div v-else>
+              <v-row>
+                <v-col cols="12" sm="6" md="4" lg="3" v-for="item in items" :key="item._id">
+                  <scanned-rfid-card :item="item.data" :item-id="item.id"></scanned-rfid-card>
+                </v-col>
+              </v-row>
+            </div>
+          </template>
+        </firebase-subscriber>
+      </v-card-text>
+    </v-card>
   </v-container>
 </template>
 
 <script>
 import scannedRfidCard from '@/components/scanned-rfid-card'
-import beaconRdbCard from '@/components/beaconRdbCard'
+import scannedBeaconCard from '@/components/scanned-beacon-card'
 import firebaseSubscriber from '@/components/firebase-subscriber'
 export default {
-  components: { beaconRdbCard, firebaseSubscriber, scannedRfidCard },
+  components: {
+    firebaseSubscriber,
+    scannedRfidCard,
+    scannedBeaconCard
+  },
   data () {
     return {
       ref: null,

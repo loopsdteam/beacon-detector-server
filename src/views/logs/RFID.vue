@@ -37,7 +37,7 @@
       <v-col cols="12">
         <div class="headline pb-3">Beacon Scanned</div>
         <v-card>
-          <firebase-subscriber collection="beacons" sort="createdAt" order="desc">
+          <firebase-subscriber collection="beaconLogs" sort="createdAt" order="desc">
             <template v-slot="{ items, error }">
               <template v-if="error">
                 <v-alert type="error">{{ error.message }}</v-alert>
