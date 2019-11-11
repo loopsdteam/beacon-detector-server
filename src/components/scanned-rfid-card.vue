@@ -2,7 +2,7 @@
   <v-card>
     <v-list-item two-line>
       <v-list-item-content>
-        <v-list-item-title class="headline">{{ name }}</v-list-item-title>
+        <v-list-item-title class="headline">{{ item.name || name }}</v-list-item-title>
       </v-list-item-content>
       <!-- <v-list-item-action>
         <v-btn @click="showDetail = !showDetail" icon>
