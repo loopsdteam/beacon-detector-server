@@ -13,8 +13,8 @@
             </div>
             <div v-else>
               <v-row>
-                <v-col cols="12" sm="6" md="4" lg="3" v-for="item in items" :key="item._id">
-                  <scanned-beacon-card :item="item.data"></scanned-beacon-card>
+                <v-col cols="12" sm="6" md="4" lg="3" v-for="item in items" :key="item.id">
+                  <scanned-beacon-card :item="item.data" :item-id="item.id"></scanned-beacon-card>
                 </v-col>
               </v-row>
             </div>
@@ -36,7 +36,7 @@
             </div>
             <div v-else>
               <v-row>
-                <v-col cols="12" sm="6" md="4" lg="3" v-for="item in items" :key="item._id">
+                <v-col cols="12" sm="6" md="4" lg="3" v-for="item in items" :key="item.id">
                   <scanned-rfid-card :item="item.data" :item-id="item.id"></scanned-rfid-card>
                 </v-col>
               </v-row>
