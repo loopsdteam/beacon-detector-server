@@ -222,11 +222,6 @@ app.get('/beacon-logs', async (req, res) => {
   res.send(result)
 })
 
-app.use((req, res, next) => {
-  if (req.claims.level > 0) return res.status(403).send({ message: 'not authorized' })
-  next()
-})
-
 app.get('/beacon-log/:_beaconId/:date', async (req, res) => {
   const f = {
     _beaconId: req.params._beaconId,
@@ -265,6 +260,21 @@ app.get('/scanners', async (req, res) => {
   res.send(result)
 })
 
+app.get('/scanners/search', async (req, res) => {
+  const items = await Scanner.find().where('name').regex(req.query.search).limit(2)
+  res.send(items)
+})
+
+app.get('/groups', async (req, res) => {
+  const items = await Beacon.distinct('group').exists('group', true)
+  res.send(items)
+})
+
+app.use((req, res, next) => {
+  if (req.claims.level > 0) return res.status(403).send({ message: 'not authorized' })
+  next()
+})
+
 app.put('/scanner/:_id', async (req, res) => {
   // await db.collection('devices').doc(req.params.id).set(req.body)
   await Scanner.updateOne({ _id: req.params._id }, { $set: req.body })
@@ -275,11 +285,6 @@ app.delete('/scanner/:_id', async (req, res) => {
   // await db.collection('devices').doc(req.params.id).set(req.body)
   await Scanner.deleteOne({ _id: req.params._id })
   res.status(204).end()
-})
-
-app.get('/scanners/search', async (req, res) => {
-  const items = await Scanner.find().where('name').regex(req.query.search).limit(2)
-  res.send(items)
 })
 
 app.patch('/beacon/:_id/name', async (req, res) => {
@@ -297,11 +302,6 @@ app.patch('/beacon/:_id/group', async (req, res) => {
 app.delete('/beacon/:_id', async (req, res) => {
   await Beacon.deleteOne({ _id: req.params._id })
   res.status(204).end()
-})
-
-app.get('/groups', async (req, res) => {
-  const items = await Beacon.distinct('group').exists('group', true)
-  res.send(items)
 })
 
 app.use(require('../middlewares/error'))
