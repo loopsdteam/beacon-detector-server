@@ -108,7 +108,7 @@
             </v-edit-dialog>
           </template>
           <template v-slot:item.address="props">
-            <v-chip :close="!loading" @click:close="del(props.item)">{{props.item.address}}</v-chip>
+            <v-chip :close="!loading" @click="openDialog(props.item)" @click:close="del(props.item)">{{props.item.address}}</v-chip>
             <!-- <v-icon color="error" icon><v-icon>mdi-delete</v-icon></v-btn> -->
           </template>
           <!-- <template v-slot:item.createdAt="props">
@@ -116,16 +116,19 @@
           </template> -->
         </v-data-table>
       </v-card-text>
+      <beacon-log-dialog :dialog="dialog" :_id="selectedId" @closeDialog="dialog = false"></beacon-log-dialog>
+
     </v-card>
   </v-container>
 </template>
 
 <script>
 import _ from 'lodash'
+import beaconLogDialog from '@/components/beaconLogDialog'
 // import DeviceCard from '@/components/deviceCard'
 
 export default {
-  // components: { DeviceCard },
+  components: { beaconLogDialog },
   data () {
     return {
       headers: [
@@ -160,7 +163,9 @@ export default {
       selectedGroup: '',
       groups: [],
       selectedScanner: '',
-      scanners: []
+      scanners: [],
+      selectedId: null,
+      dialog: false
     }
   },
   watch: {
@@ -301,6 +306,10 @@ export default {
       await this.$axios.delete('/device/beacon/' + item._id)
       this.loading = false
       this.list()
+    },
+    openDialog (item) {
+      this.selectedId = item._id
+      this.dialog = true
     }
   }
 }

@@ -227,6 +227,18 @@ app.use((req, res, next) => {
   next()
 })
 
+app.get('/beacon-log/:_beaconId/:date', async (req, res) => {
+  const f = {
+    _beaconId: req.params._beaconId,
+    startTime: {
+      $gte: moment(req.params.date).toDate(),
+      $lte: moment(req.params.date).endOf('day').toDate()
+    }
+  }
+  const items = await BeaconLog.find(f).select('-_id startTime endTime rssi count').sort({ startTime: 1 }).limit(2880)
+  res.send(items)
+})
+
 app.get('/scanners', async (req, res) => {
   let { offset, limit, order, sort, search } = req.query
   offset = Number(offset)
