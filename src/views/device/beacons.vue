@@ -1,5 +1,14 @@
 <template>
   <v-container fluid>
+    <v-alert border="left" prominent dismissible  outlined type="info">
+      V0.4(18.12.19) updated
+      <ul>
+        <li>Scanner로 검색 추가</li>
+        <li>Group으로 검색 추가</li>
+        <li>Group 지정: group 클릭</li>
+        <li>Data 확인: Address 클릭</li>
+      </ul>
+    </v-alert>
     <v-card>
       <v-toolbar
         dark
@@ -56,68 +65,66 @@
           <v-icon>mdi-refresh</v-icon>
         </v-btn>
       </v-toolbar>
-      <v-card-text>
-        <v-data-table
-          :headers="headers"
-          :items="items"
-          :items-per-page="10"
-          :options.sync="options"
-          :server-items-length="totalCount"
-          class="elevation-1"
-          :loading="loading"
-          :footer-props="{
-            showFirstLastPage: true,
-            'items-per-page-options':[10, 20, 30, 100],
-            'items-per-page-text': ''
-          }"
-        >
-          <!-- <template v-slot:item.createdAt="{ item }">
-          </template> -->
-          <template v-slot:item.name="props">
-            <v-edit-dialog
-              :return-value.sync="props.item.name"
-              @save="saveName(props.item)"
-              large
-            >
-              <a color="primary" text :disabled="loading">{{ props.item.name }}</a>
-              <template v-slot:input>
-                <v-text-field
-                  v-model="props.item.name"
-                  label="Edit name"
-                  single-line
-                  hide-details
-                ></v-text-field>
-              </template>
-            </v-edit-dialog>
-          </template>
-          <template v-slot:item.group="props">
-            <v-edit-dialog
-              :return-value.sync="props.item.group"
-              @save="saveGroup(props.item)"
-              large
-            >
-              <a color="primary" text :disabled="loading">{{ props.item.group ? props.item.group : 'None' }}</a>
-              <template v-slot:input>
-                <v-text-field
-                  v-model="props.item.group"
-                  label="Edit group"
-                  single-line
-                  hide-details
-                ></v-text-field>
-              </template>
-            </v-edit-dialog>
-          </template>
-          <template v-slot:item.address="props">
-            <v-chip :close="!loading" @click="openDialog(props.item)" @click:close="del(props.item)">{{props.item.address}}</v-chip>
-            <!-- <v-icon color="error" icon><v-icon>mdi-delete</v-icon></v-btn> -->
-          </template>
-          <!-- <template v-slot:item.createdAt="props">
-            {{ new Date(props.item.createdAt).toLo }}
-          </template> -->
-        </v-data-table>
-      </v-card-text>
-      <beacon-log-dialog :dialog="dialog" :_id="selectedId" @closeDialog="dialog = false"></beacon-log-dialog>
 
+      <v-data-table
+        :headers="headers"
+        :items="items"
+        :items-per-page="10"
+        :options.sync="options"
+        :server-items-length="totalCount"
+        class="elevation-1"
+        :loading="loading"
+        :footer-props="{
+          showFirstLastPage: true,
+          'items-per-page-options':[10, 20, 30, 100],
+          'items-per-page-text': ''
+        }"
+      >
+        <!-- <template v-slot:item.createdAt="{ item }">
+        </template> -->
+        <template v-slot:item.name="props">
+          <v-edit-dialog
+            :return-value.sync="props.item.name"
+            @save="saveName(props.item)"
+            large
+          >
+            <a color="primary" text :disabled="loading">{{ props.item.name }}</a>
+            <template v-slot:input>
+              <v-text-field
+                v-model="props.item.name"
+                label="Edit name"
+                single-line
+                hide-details
+              ></v-text-field>
+            </template>
+          </v-edit-dialog>
+        </template>
+        <template v-slot:item.group="props">
+          <v-edit-dialog
+            :return-value.sync="props.item.group"
+            @save="saveGroup(props.item)"
+            large
+          >
+            <a color="primary" text :disabled="loading">{{ props.item.group ? props.item.group : 'None' }}</a>
+            <template v-slot:input>
+              <v-text-field
+                v-model="props.item.group"
+                label="Edit group"
+                single-line
+                hide-details
+              ></v-text-field>
+            </template>
+          </v-edit-dialog>
+        </template>
+        <template v-slot:item.address="props">
+          <v-chip color="primary" :close="!loading" @click="openDialog(props.item)" @click:close="del(props.item)">{{props.item.address}}</v-chip>
+          <!-- <v-icon color="error" icon><v-icon>mdi-delete</v-icon></v-btn> -->
+        </template>
+        <!-- <template v-slot:item.createdAt="props">
+          {{ new Date(props.item.createdAt).toLo }}
+        </template> -->
+      </v-data-table>
+      <beacon-log-dialog :dialog="dialog" :item="selectedItem" @closeDialog="dialog = false"></beacon-log-dialog>
     </v-card>
   </v-container>
 </template>
@@ -164,7 +171,7 @@ export default {
       groups: [],
       selectedScanner: '',
       scanners: [],
-      selectedId: null,
+      selectedItem: null,
       dialog: false
     }
   },
@@ -308,7 +315,7 @@ export default {
       this.list()
     },
     openDialog (item) {
-      this.selectedId = item._id
+      this.selectedItem = item
       this.dialog = true
     }
   }

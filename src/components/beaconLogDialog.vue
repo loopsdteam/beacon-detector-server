@@ -2,7 +2,7 @@
   <v-dialog v-model="modal">
     <v-card :loading="loading">
       <v-card-title>
-        beacon history
+        {{ title }}
         <v-spacer></v-spacer>
         <v-btn @click="modal=false" icon>
           <v-icon>mdi-close</v-icon>
@@ -13,6 +13,9 @@
           indeterminate
           color="primary"
         ></v-progress-circular>
+        <v-card flat color="transparent" class="text-center">
+          데이터 로드 중입니다
+        </v-card>
       </v-card-text>
       <v-card-text v-else>
         <v-row>
@@ -53,9 +56,10 @@ import lineChart from '@/js/lineChart.js'
 
 export default {
   components: { lineChart },
-  props: ['dialog', '_id'],
+  props: ['dialog', 'item'],
   data () {
     return {
+      title: 'loading',
       modal: false,
       loading: false,
       items: [],
@@ -90,12 +94,18 @@ export default {
     },
     modal (n) {
       if (!n) this.$emit('closeDialog')
+    },
+    item: {
+      handler (n) {
+        this.title = n.name
+      },
+      deep: true
     }
   },
   methods: {
     fetch () {
       this.loading = true
-      this.$axios.get('/device/beacon-log/' + this._id + '/' + this.$moment().format('YYYY-MM-DD'))
+      this.$axios.get('/device/beacon-log/' + this.item._id + '/' + this.$moment().format('YYYY-MM-DD'))
         .then(({ data }) => {
           // this.items = data
           this.data2items(data)
