@@ -7,56 +7,56 @@
       >
         <v-toolbar-title>Beacon list</v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-autocomplete
-          v-model="searchModel"
-          :loading="searchLoading"
-          :items="searchItems"
-          :search-input.sync="search"
-          item-text="address"
-          item-value="address"
-          cache-items
-          class="mx-4"
-          flat
-          hide-no-data
-          hide-details
-          label="MAC Address"
-          placeholder="MAC Address 검색"
-          solo-inverted
-          clearable
-        ></v-autocomplete>
+        <v-card flat color="transparent" width="180">
+          <v-combobox
+            v-model="selectedScanner"
+            :items="scanners"
+            solo-inverted
+            hide-details
+            flat
+            label="Scanner"
+            class="mx-2"
+            item-text="name"
+            item-value="name"
+            clearable
+          ></v-combobox>
+        </v-card>
+        <v-card flat color="transparent" width="180">
+          <v-combobox
+            v-model="selectedGroup"
+            :items="groups"
+            solo-inverted
+            hide-details
+            flat
+            label="Group"
+            class="mx-2"
+            clearable
+          ></v-combobox>
+        </v-card>
+        <v-card flat color="transparent" width="180">
+          <v-autocomplete
+            v-model="searchModel"
+            :loading="searchLoading"
+            :items="searchItems"
+            :search-input.sync="search"
+            item-text="address"
+            item-value="address"
+            cache-items
+            class="mx-2"
+            flat
+            hide-no-data
+            hide-details
+            label="MAC Address"
+            placeholder="MAC Address 검색"
+            solo-inverted
+            clearable
+          ></v-autocomplete>
+        </v-card>
         <v-btn icon @click="list" :disabled="loading">
           <v-icon>mdi-refresh</v-icon>
         </v-btn>
       </v-toolbar>
       <v-card-text>
-        <!-- <v-data-iterator
-          :items="items"
-          :options.sync="options"
-          :server-items-length="totalCount"
-          :items-per-page="4"
-          :loading="loading"
-        >
-          <template v-slot:default="props">
-            <v-row>
-              <v-col cols="12" v-if="loading" class="text-center">
-                <v-progress-circular indeterminate></v-progress-circular>
-                <p>데이터 로딩중</p>
-
-              </v-col>
-              <v-col cols="12"
-                v-else
-                v-for="item in props.items"
-                :key="item.name"
-                sm="6"
-                md="4"
-                lg="3"
-              >
-                <device-card :item="item"></device-card>
-              </v-col>
-            </v-row>
-          </template>
-
-        </v-data-iterator> -->
         <v-data-table
           :headers="headers"
           :items="items"
@@ -76,10 +76,10 @@
           <template v-slot:item.name="props">
             <v-edit-dialog
               :return-value.sync="props.item.name"
-              @save="save(props.item)"
+              @save="saveName(props.item)"
               large
             >
-              <v-btn color="primary" text :disabled="loading">{{ props.item.name }}</v-btn>
+              <a color="primary" text :disabled="loading">{{ props.item.name }}</a>
               <template v-slot:input>
                 <v-text-field
                   v-model="props.item.name"
@@ -87,21 +87,23 @@
                   single-line
                   hide-details
                 ></v-text-field>
-                <!-- <v-card flat>
-                  <v-card-text>
-                    <v-text-field
-                      v-model="props.item.name"
-                      label="Edit name"
-                      single-line
-                      hide-details
-                    ></v-text-field>
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="warning">변경</v-btn>
-                    <v-btn color="error">삭제</v-btn>
-                  </v-card-actions>
-                </v-card> -->
+              </template>
+            </v-edit-dialog>
+          </template>
+          <template v-slot:item.group="props">
+            <v-edit-dialog
+              :return-value.sync="props.item.group"
+              @save="saveGroup(props.item)"
+              large
+            >
+              <a color="primary" text :disabled="loading">{{ props.item.group ? props.item.group : 'None' }}</a>
+              <template v-slot:input>
+                <v-text-field
+                  v-model="props.item.group"
+                  label="Edit group"
+                  single-line
+                  hide-details
+                ></v-text-field>
               </template>
             </v-edit-dialog>
           </template>
@@ -128,7 +130,9 @@ export default {
     return {
       headers: [
         { text: 'name', value: 'name' },
+        { text: 'group', value: 'group' },
         { text: '_scannerId.name', value: '_scannerId.name', sortable: false },
+        { text: 'dayCount', value: 'dayCount', sortable: false },
         { text: 'address', value: 'address' },
         { text: 'createdAt', value: 'createdAt' },
         { text: 'updatedAt', value: 'updatedAt' },
@@ -152,7 +156,11 @@ export default {
       searchItems: [],
       searchModel: null,
       searchLoading: false,
-      ref: null
+      ref: null,
+      selectedGroup: '',
+      groups: [],
+      selectedScanner: '',
+      scanners: []
     }
   },
   watch: {
@@ -167,9 +175,18 @@ export default {
     },
     searchModel (n, o) {
       if (n !== o) this.list()
+    },
+    selectedScanner (n, o) {
+      if (n !== o) this.list()
+    },
+    selectedGroup (n, o) {
+      if (n !== o) this.list()
     }
   },
-
+  mounted () {
+    this.listScanner()
+    this.listGroup()
+  },
   methods: {
     list () {
       this.loading = true
@@ -179,7 +196,9 @@ export default {
           limit: this.options.itemsPerPage,
           order: this.options.sortBy[0],
           sort: this.options.sortDesc[0] ? '-1' : '1',
-          search: this.searchModel
+          search: this.searchModel,
+          group: this.selectedGroup,
+          _scannerId: _.get(this.selectedScanner, '_id', '')
         }
       })
         .then(({ data }) => {
@@ -191,6 +210,9 @@ export default {
             v.endTime = new Date(v.endTime).toLocaleString()
           })
           this.items = data.items
+          // this.items.forEach(v => {
+          //   if (v.group && !this.groups.includes(v.group)) this.groups.push(v.group)
+          // })
         })
         .catch(e => {
           this.$toasted.global.error(e.message)
@@ -218,9 +240,47 @@ export default {
       },
       500
     ),
-    save (item) {
+    saveName (item) {
       this.loading = true
-      this.$axios.patch('/device/beacon/' + item._id, { name: item.name })
+      this.$axios.patch('/device/beacon/' + item._id + '/name', { name: item.name })
+        .catch(e => {
+          this.$toasted.global.error(e.message)
+        })
+        .finally(() => {
+          this.loading = false
+        })
+    },
+    saveGroup (item) {
+      this.loading = true
+      this.$axios.patch('/device/beacon/' + item._id + '/group', { group: item.group })
+        .catch(e => {
+          this.$toasted.global.error(e.message)
+        })
+        .finally(() => {
+          this.loading = false
+        })
+    },
+    listScanner () {
+      this.$axios.get('/device/scanners', {
+        params: {
+          offset: 0, limit: 100, order: 'name', sort: 1, search: ''
+        }
+      })
+        .then(({ data }) => {
+          this.scanners = data.items
+        })
+        .catch(e => {
+          this.$toasted.global.error(e.message)
+        })
+        .finally(() => {
+          this.loading = false
+        })
+    },
+    listGroup () {
+      this.$axios.get('/device/groups')
+        .then(({ data }) => {
+          this.groups = data
+        })
         .catch(e => {
           this.$toasted.global.error(e.message)
         })

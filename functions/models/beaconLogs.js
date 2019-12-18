@@ -22,6 +22,7 @@ const options = {
 const schema = new mongoose.Schema(fields, options)
 
 schema.index({ createdAt: -1, address: 1 })
+schema.index({ startTime: 1, _beaconId: 1 })
 const BeaconLog = mongoose.model('BeaconLog', schema)
 
 module.exports = BeaconLog
