@@ -24,20 +24,14 @@
               <template v-slot:default>
                 <thead>
                   <tr>
-                    <th class="text-left">no</th>
                     <th class="text-left">minutes</th>
-                    <!-- <th class="text-left">startTime</th>
-                    <th class="text-left">endTime</th> -->
                     <th class="text-left">count</th>
                     <th class="text-left">rssi</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(item, i) in items" :key="i">
-                    <td>{{ i }}</td>
+                  <tr v-for="item in items" :key="item.minute">
                     <td>{{ item.minute }}</td>
-                    <!-- <td>{{ item.startTime }}</td>
-                    <td>{{ item.endTime }}</td> -->
                     <td>{{ item.count }}</td>
                     <td>{{ item.rssi }}</td>
                   </tr>
@@ -45,7 +39,9 @@
               </template>
             </v-simple-table>
           </v-col>
-          <v-col cols="12" sm="7"></v-col>
+          <v-col cols="12" sm="7">
+            <line-chart :chartData="chartData" :chartOptions="chartOptions"></line-chart>
+          </v-col>
         </v-row>
       </v-card-text>
     </v-card>
@@ -53,14 +49,38 @@
 </template>
 <script>
 import { head, last } from 'lodash'
+import lineChart from '@/js/lineChart.js'
+
 export default {
+  components: { lineChart },
   props: ['dialog', '_id'],
   data () {
     return {
       modal: false,
       loading: false,
       items: [],
-      errItems: []
+      errItems: [],
+      chartData: {
+        labels: [],
+        datasets: [
+          {
+            type: 'line',
+            fill: false,
+            label: 'count',
+            backgroundColor: '#f87979',
+            data: []
+          },
+          {
+            type: 'line',
+            fill: false,
+            label: 'rssi',
+            backgroundColor: '#60bf5a',
+            data: []
+          }
+        ]
+      },
+      chartOptions: {
+      }
     }
   },
   watch: {
@@ -93,6 +113,9 @@ export default {
 
       this.items = []
       this.errItems = []
+      this.chartData.labels = []
+      this.chartData.datasets[0].data = []
+      this.chartData.datasets[1].data = []
       for (let i = 0; i < 1440; i++) {
         if (et.diff(st, 'minutes') < 0) break
         const item = {
@@ -115,7 +138,10 @@ export default {
           item.rssi = item.rssi / checks.length
         }
         this.items.push(item)
-        if (!item.count) this.errItems.push(item)
+        if (!item.count && i > 0) this.errItems.push(item)
+        this.chartData.labels.push(item.minute)
+        this.chartData.datasets[0].data.push(item.count)
+        this.chartData.datasets[1].data.push(item.rssi)
         st.add(1, 'minutes')
       }
     }
