@@ -189,7 +189,7 @@ app.get('/beacon-logs/download', async (req, res) => {
 app.get('/beacon-logs', async (req, res) => {
   const moment = require('moment')
 
-  let { offset, limit, order, sort, search, date = moment().format('YYYY-MM-DD') } = req.query
+  let { offset, limit, order, sort, search, date = moment().format('YYYY-MM-DD'), _scannerId } = req.query
   offset = Number(offset)
   limit = Number(limit)
   if (limit < 0) limit = 0
@@ -202,14 +202,39 @@ app.get('/beacon-logs', async (req, res) => {
   const s = {}
   s[order] = sort
 
-  result.totalCount = await BeaconLog.countDocuments()
-    .where('address').regex(search)
+  // result.totalCount = await BeaconLog.countDocuments()
+  //   .where('address').regex(search)
+  //   .where('createdAt')
+  //   .gte(moment(date, 'YYYY-MM-DD').startOf('day').add(-9, 'hour').toDate())
+  //   .lte(moment(date, 'YYYY-MM-DD').endOf('day').add(-9, 'hour').toDate())
+
+  // result.items = await BeaconLog.find()
+  //   .where('address').regex(search)
+  //   .where('createdAt')
+  //   .gte(moment(date, 'YYYY-MM-DD').startOf('day').add(-9, 'hour').toDate())
+  //   .lte(moment(date, 'YYYY-MM-DD').endOf('day').add(-9, 'hour').toDate())
+  //   .sort(s)
+  //   .skip(offset)
+  //   .limit(limit)
+  //   .populate({ path: '_scannerId', select: 'name' })
+  //   // .populate({ path: '_beaconId', select: 'name' })
+
+  const countQuery = BeaconLog.countDocuments()
+  const itemsQuery = BeaconLog.find()
+  if (_scannerId) {
+    countQuery.where('_scannerId').equals(_scannerId)
+    itemsQuery.where('_scannerId').equals(_scannerId)
+  }
+  if (search) {
+    countQuery.where('address').regex(search)
+    itemsQuery.where('address').regex(search)
+  }
+  result.totalCount = await countQuery
     .where('createdAt')
     .gte(moment(date, 'YYYY-MM-DD').startOf('day').add(-9, 'hour').toDate())
     .lte(moment(date, 'YYYY-MM-DD').endOf('day').add(-9, 'hour').toDate())
-
-  result.items = await BeaconLog.find()
-    .where('address').regex(search)
+    .exec()
+  result.items = await itemsQuery
     .where('createdAt')
     .gte(moment(date, 'YYYY-MM-DD').startOf('day').add(-9, 'hour').toDate())
     .lte(moment(date, 'YYYY-MM-DD').endOf('day').add(-9, 'hour').toDate())
@@ -217,20 +242,23 @@ app.get('/beacon-logs', async (req, res) => {
     .skip(offset)
     .limit(limit)
     .populate({ path: '_scannerId', select: 'name' })
-    // .populate({ path: '_beaconId', select: 'name' })
+    .exec()
 
   res.send(result)
 })
 
 app.get('/beacon-log/:_beaconId/:date', async (req, res) => {
-  const f = {
-    _beaconId: req.params._beaconId,
-    startTime: {
-      $gte: moment(req.params.date).toDate(),
-      $lte: moment(req.params.date).endOf('day').toDate()
-    }
-  }
-  const items = await BeaconLog.find(f).select('-_id startTime endTime rssi count').sort({ startTime: 1 }).limit(2880)
+  const { _beaconId, date } = req.params
+  const items = await BeaconLog
+    .find()
+    .where('_beaconId')
+    .equals(_beaconId)
+    .where('startTime')
+    .gte(moment(date).startOf('day').toDate())
+    .lte(moment(date).endOf('day').toDate())
+    .select('-_id startTime endTime rssi count')
+    .sort({ startTime: 1 })
+    .limit(2880)
   res.send(items)
 })
 

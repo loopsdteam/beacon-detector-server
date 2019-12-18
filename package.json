@@ -1,7 +1,7 @@
 {
   "name": "beacon-detector-server",
   "version": "0.4.0",
-  "description": "Beacon detector server",
+  "description": "LOOP Scanner Manager",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",

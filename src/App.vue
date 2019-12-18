@@ -36,7 +36,7 @@
         </v-list-group>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar color="indigo" dark app>
+    <v-app-bar color="#F26B1D" dark app>
       <v-app-bar-nav-icon @click="drawer = !drawer" v-if="$store.state.user"></v-app-bar-nav-icon>
       <v-toolbar-title>
         <span>{{ pkg.description }}</span>
@@ -109,8 +109,29 @@
           </v-card>
         </v-row>
       </v-container>
+      <template v-else>
+        <v-container fluid v-if="showNotice">
+          <v-alert border="left" prominent dismissible  outlined type="info">
+            V0.4(18.12.19) updated
+            <ul>
+              <li>Scanner로 검색 추가</li>
+              <li>Group으로 검색 추가</li>
+              <li>Group 지정: group 클릭</li>
+              <li>Data 확인: Address 클릭</li>
+            </ul>
+          </v-alert>
+        </v-container>
+      </template>
       <router-view/>
     </v-content>
+    <v-footer app color="#1D727F" dark absolute>
+      <v-spacer></v-spacer>
+      <span>
+        &copy;
+        2019 LOOP Solution Dev. Team
+        <!-- <a href="http://loopsystem.co.kr" target="_blank">LOOP</a> -->
+      </span>
+    </v-footer>
   </v-app>
 </template>
 
@@ -202,6 +223,12 @@ export default {
       ]
     }
   },
+  computed: {
+    showNotice () {
+      if (this.$moment().diff(this.$moment('2019-12-25'), 'days') > 0) return false
+      return true
+    }
+  },
   methods: {
     async signOut () {
       this.$firebase.auth().signOut()
@@ -213,5 +240,9 @@ export default {
 <style scoped>
 #app {
   font-family: 'Jua', Helvetica, Arial, sans-serif; /* this was it */
+}
+a {
+  color: white;
+  text-decoration: none;
 }
 </style>

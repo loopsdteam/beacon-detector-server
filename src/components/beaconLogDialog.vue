@@ -8,6 +8,7 @@
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-card-title>
+      <v-divider></v-divider>
       <v-card-text v-if="loading" class="text-center">
         <v-progress-circular
           indeterminate
@@ -47,6 +48,14 @@
           </v-col>
         </v-row>
       </v-card-text>
+      <v-divider></v-divider>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn @click="modal=false" color="primary">
+          <v-icon left>mdi-close</v-icon>
+          닫기
+        </v-btn>
+      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
@@ -105,9 +114,10 @@ export default {
   methods: {
     fetch () {
       this.loading = true
-      this.$axios.get('/device/beacon-log/' + this.item._id + '/' + this.$moment().format('YYYY-MM-DD'))
+      const _id = this.item._beaconId ? this.item._beaconId : this.item._id
+      this.$axios.get('/device/beacon-log/' + _id + '/' + this.$moment(this.item.startTime).format('YYYY-MM-DD'))
         .then(({ data }) => {
-          // this.items = data
+          if (!data.length) throw Error('데이터가 없습니다')
           this.data2items(data)
         })
         .catch(e => {
@@ -118,14 +128,14 @@ export default {
         })
     },
     data2items (data) {
-      const st = this.$moment(head(data).startTime)
-      const et = this.$moment(last(data).endTime)
-
       this.items = []
       this.errItems = []
       this.chartData.labels = []
       this.chartData.datasets[0].data = []
       this.chartData.datasets[1].data = []
+      const st = this.$moment(head(data).startTime)
+      const et = this.$moment(last(data).endTime)
+
       for (let i = 0; i < 1440; i++) {
         if (et.diff(st, 'minutes') < 0) break
         const item = {

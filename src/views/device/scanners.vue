@@ -3,7 +3,8 @@
     <v-card>
       <v-toolbar
         dark
-        color="teal"
+        color="#92856E"
+        flat
       >
         <v-toolbar-title>스캐너 목록</v-toolbar-title>
         <v-spacer></v-spacer>

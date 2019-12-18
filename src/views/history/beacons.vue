@@ -3,34 +3,53 @@
     <v-card>
       <v-toolbar
         dark
-        color="teal"
+        color="#92856E"
+        flat
       >
         <v-toolbar-title v-if="$vuetify.breakpoint.smAndUp">Beacon history</v-toolbar-title>
         <v-spacer></v-spacer>
-        <date-picker
-          v-model="date"
-          label="날짜"
-          flat
-          hide-details
-          solo-inverted
-        ></date-picker>
-        <v-autocomplete
-          v-model="searchModel"
-          :loading="searchLoading"
-          :items="searchItems"
-          :search-input.sync="search"
-          item-text="address"
-          item-value="address"
-          cache-items
-          class="mx-4"
-          flat
-          hide-no-data
-          hide-details
-          label="MAC Address"
-          placeholder="MAC Address 검색"
-          solo-inverted
-          clearable
-        ></v-autocomplete>
+        <v-card flat color="transparent" width="180">
+          <date-picker
+            v-model="date"
+            label="날짜"
+            flat
+            hide-details
+            solo-inverted
+          ></date-picker>
+        </v-card>
+        <v-card flat color="transparent" width="180">
+          <v-combobox
+            v-model="selectedScanner"
+            :items="scanners"
+            solo-inverted
+            hide-details
+            flat
+            label="Scanner"
+            class="mx-1"
+            item-text="name"
+            item-value="name"
+            clearable
+          ></v-combobox>
+        </v-card>
+        <v-card flat color="transparent" width="180">
+          <v-autocomplete
+            v-model="searchModel"
+            :loading="searchLoading"
+            :items="searchItems"
+            :search-input.sync="search"
+            item-text="address"
+            item-value="address"
+            cache-items
+            class="mx-1"
+            flat
+            hide-no-data
+            hide-details
+            label="MAC Address"
+            placeholder="MAC Address 검색"
+            solo-inverted
+            clearable
+          ></v-autocomplete>
+        </v-card>
         <v-btn icon @click="list" :disabled="loading"
           v-if="$vuetify.breakpoint.smAndUp">
           <v-icon>mdi-refresh</v-icon>
@@ -40,25 +59,37 @@
           <v-icon>mdi-download</v-icon>
         </v-btn>
       </v-toolbar>
-      <v-card-text>
-        <v-data-table
-          :headers="headers"
-          :items="items"
-          :items-per-page="10"
-          :options.sync="options"
-          :loading="loading"
-          :server-items-length="totalCount"
-          :footer-props="{
-            showFirstLastPage: true,
-            'items-per-page-options':[10, 20, 30, 100],
-            'items-per-page-text': ''
-          }"
-          class="elevation-1 text-no-wrap"
-        >
-          <!-- <template v-slot:item.createdAt="{ item }">
-          </template> -->
-        </v-data-table>
-      </v-card-text>
+      <v-data-table
+        :headers="headers"
+        :items="items"
+        :items-per-page="10"
+        :options.sync="options"
+        :loading="loading"
+        :server-items-length="totalCount"
+        :footer-props="{
+          showFirstLastPage: true,
+          'items-per-page-options':[10, 20, 30, 100],
+          'items-per-page-text': ''
+        }"
+        class="elevation-1 text-no-wrap"
+      >
+        <template v-slot:item.createdAt="{ item }">
+          {{ new Date(item.createdAt).toLocaleString() }}
+        </template>
+        <template v-slot:item.updatedAt="{ item }">
+          {{ new Date(item.updatedAt).toLocaleString() }}
+        </template>
+        <template v-slot:item.startTime="{ item }">
+          {{ new Date(item.startTime).toLocaleString() }}
+        </template>
+        <template v-slot:item.endTime="{ item }">
+          {{ new Date(item.endTime).toLocaleString() }}
+        </template>
+        <template v-slot:item.address="{ item }">
+          <v-chip color="primary" @click="openDialog(item)">{{item.address}}</v-chip>
+        </template>
+      </v-data-table>
+      <beacon-log-dialog :dialog="dialog" :item="selectedItem" @closeDialog="dialog = false"></beacon-log-dialog>
     </v-card>
   </v-container>
 </template>
@@ -66,20 +97,19 @@
 <script>
 import _ from 'lodash'
 import datePicker from '@/components/date-picker'
-// import DeviceCard from '@/components/deviceCard'
+import beaconLogDialog from '@/components/beaconLogDialog'
 
 export default {
-  // components: { DeviceCard },
   components: {
-    datePicker
+    datePicker, beaconLogDialog
   },
   data () {
     return {
       headers: [
         { text: 'name', value: 'name' },
+        { text: 'address', value: 'address' },
         { text: 'scanner id', value: '_scannerId._id', sortable: false },
         { text: 'scanner name', value: '_scannerId.name', sortable: false },
-        { text: 'address', value: 'address' },
         { text: 'createdAt', value: 'createdAt' },
         { text: 'uuid', value: 'uuid' },
         { text: 'startTime', value: 'startTime' },
@@ -103,7 +133,11 @@ export default {
       searchItems: [],
       searchModel: null,
       searchLoading: false,
-      waitForDownload: false
+      waitForDownload: false,
+      selectedScanner: '',
+      scanners: [],
+      selectedItem: null,
+      dialog: false
     }
   },
   watch: {
@@ -122,7 +156,13 @@ export default {
     },
     searchModel (n, o) {
       if (n !== o) this.list()
+    },
+    selectedScanner (n, o) {
+      if (n !== o) this.list()
     }
+  },
+  mounted () {
+    this.listScanner()
   },
   methods: {
     async exportToSpreadSheet () {
@@ -135,7 +175,6 @@ export default {
           date: this.date
         }
       })
-      console.log('done')
       if (!window.navigator.msSaveOrOpenBlob) {
       // BLOB NAVIGATOR
         const url = window.URL.createObjectURL(new Blob([response.data]))
@@ -159,17 +198,13 @@ export default {
           order: this.options.sortBy[0],
           sort: this.options.sortDesc[0] ? '-1' : '1',
           search: this.searchModel,
-          date: this.date
+          date: this.date,
+          _scannerId: _.get(this.selectedScanner, '_id', '')
         }
       })
         .then(({ data }) => {
           this.totalCount = data.totalCount
-          data.items.forEach(v => {
-            v.createdAt = new Date(v.createdAt).toLocaleString()
-            v.updatedAt = new Date(v.updatedAt).toLocaleString()
-            v.startTime = new Date(v.startTime).toLocaleString()
-            v.endTime = new Date(v.endTime).toLocaleString()
-          })
+          // console.log(data.items[0])
           this.items = data.items
         })
         .catch(e => {
@@ -197,7 +232,28 @@ export default {
           })
       },
       500
-    )
+    ),
+    listScanner () {
+      this.$axios.get('/device/scanners', {
+        params: {
+          offset: 0, limit: 100, order: 'name', sort: 1, search: ''
+        }
+      })
+        .then(({ data }) => {
+          this.scanners = data.items
+        })
+        .catch(e => {
+          this.$toasted.global.error(e.message)
+        })
+        .finally(() => {
+          this.loading = false
+        })
+    },
+    openDialog (item) {
+      this.selectedItem = item
+      // console.log(item)
+      this.dialog = true
+    }
   }
 }
 </script>

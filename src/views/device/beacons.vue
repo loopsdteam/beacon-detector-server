@@ -1,18 +1,10 @@
 <template>
   <v-container fluid>
-    <v-alert border="left" prominent dismissible  outlined type="info">
-      V0.4(18.12.19) updated
-      <ul>
-        <li>Scanner로 검색 추가</li>
-        <li>Group으로 검색 추가</li>
-        <li>Group 지정: group 클릭</li>
-        <li>Data 확인: Address 클릭</li>
-      </ul>
-    </v-alert>
     <v-card>
       <v-toolbar
         dark
-        color="teal"
+        color="#92856E"
+        flat
       >
         <v-toolbar-title>Beacon list</v-toolbar-title>
         <v-spacer></v-spacer>
@@ -116,13 +108,21 @@
             </template>
           </v-edit-dialog>
         </template>
-        <template v-slot:item.address="props">
-          <v-chip color="primary" :close="!loading" @click="openDialog(props.item)" @click:close="del(props.item)">{{props.item.address}}</v-chip>
-          <!-- <v-icon color="error" icon><v-icon>mdi-delete</v-icon></v-btn> -->
+        <template v-slot:item.createdAt="{ item }">
+          {{ new Date(item.createdAt).toLocaleString() }}
         </template>
-        <!-- <template v-slot:item.createdAt="props">
-          {{ new Date(props.item.createdAt).toLo }}
-        </template> -->
+        <template v-slot:item.updatedAt="{ item }">
+          {{ new Date(item.updatedAt).toLocaleString() }}
+        </template>
+        <template v-slot:item.startTime="{ item }">
+          {{ new Date(item.startTime).toLocaleString() }}
+        </template>
+        <template v-slot:item.endTime="{ item }">
+          {{ new Date(item.endTime).toLocaleString() }}
+        </template>
+        <template v-slot:item.address="{ item }">
+          <v-chip color="primary" :close="!loading" @click="openDialog(item)" @click:close="del(item)">{{item.address}}</v-chip>
+        </template>
       </v-data-table>
       <beacon-log-dialog :dialog="dialog" :item="selectedItem" @closeDialog="dialog = false"></beacon-log-dialog>
     </v-card>
@@ -132,7 +132,6 @@
 <script>
 import _ from 'lodash'
 import beaconLogDialog from '@/components/beaconLogDialog'
-// import DeviceCard from '@/components/deviceCard'
 
 export default {
   components: { beaconLogDialog },
@@ -141,9 +140,9 @@ export default {
       headers: [
         { text: 'name', value: 'name' },
         { text: 'group', value: 'group' },
+        { text: 'address', value: 'address' },
         { text: '_scannerId.name', value: '_scannerId.name', sortable: false },
         { text: 'dayCount', value: 'dayCount', sortable: false },
-        { text: 'address', value: 'address' },
         { text: 'createdAt', value: 'createdAt' },
         { text: 'updatedAt', value: 'updatedAt' },
         { text: 'uuid', value: 'uuid' },
@@ -215,16 +214,7 @@ export default {
       })
         .then(({ data }) => {
           this.totalCount = data.totalCount
-          data.items.forEach(v => {
-            v.createdAt = new Date(v.createdAt).toLocaleString()
-            v.updatedAt = new Date(v.updatedAt).toLocaleString()
-            v.startTime = new Date(v.startTime).toLocaleString()
-            v.endTime = new Date(v.endTime).toLocaleString()
-          })
           this.items = data.items
-          // this.items.forEach(v => {
-          //   if (v.group && !this.groups.includes(v.group)) this.groups.push(v.group)
-          // })
         })
         .catch(e => {
           this.$toasted.global.error(e.message)
