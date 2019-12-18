@@ -16,10 +16,11 @@
       </v-card-text>
       <v-card-text v-else>
         <v-row>
-          <v-col cols="5">
-            <v-simple-table
-              dense
-            >
+          <v-col cols="12">
+            <v-chip color="error" v-for="item in errItems" :key="item.minute" class="ma-1">{{ item.minute }}</v-chip>
+          </v-col>
+          <v-col cols="12" sm="5">
+            <v-simple-table dense>
               <template v-slot:default>
                 <thead>
                   <tr>
@@ -28,6 +29,7 @@
                     <!-- <th class="text-left">startTime</th>
                     <th class="text-left">endTime</th> -->
                     <th class="text-left">count</th>
+                    <th class="text-left">rssi</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -37,12 +39,13 @@
                     <!-- <td>{{ item.startTime }}</td>
                     <td>{{ item.endTime }}</td> -->
                     <td>{{ item.count }}</td>
+                    <td>{{ item.rssi }}</td>
                   </tr>
                 </tbody>
               </template>
             </v-simple-table>
           </v-col>
-          <v-col cols="7"></v-col>
+          <v-col cols="12" sm="7"></v-col>
         </v-row>
       </v-card-text>
     </v-card>
@@ -56,7 +59,8 @@ export default {
     return {
       modal: false,
       loading: false,
-      items: ''
+      items: [],
+      errItems: []
     }
   },
   watch: {
@@ -88,23 +92,30 @@ export default {
       const et = this.$moment(last(data).endTime)
 
       this.items = []
+      this.errItems = []
       for (let i = 0; i < 1440; i++) {
         if (et.diff(st, 'minutes') < 0) break
         const item = {
-          minute: st.toDate().toLocaleTimeString(),
-          count: 0
+          minute: st.format('HH:mm'),
+          count: 0,
+          rssi: 0
         }
         const checks = []
         for (let j = 0; j < data.length; j++) {
           const v = data[j]
           if (this.$moment(v.startTime).format('HHmm') === st.format('HHmm')) {
             item.count += v.count
+            item.rssi += v.rssi
             checks.push(j)
           }
           if (checks.length > 1) break
         }
-        if (checks.length) data.splice(checks[0], checks.length)
+        if (checks.length) {
+          data.splice(checks[0], checks.length)
+          item.rssi = item.rssi / checks.length
+        }
         this.items.push(item)
+        if (!item.count) this.errItems.push(item)
         st.add(1, 'minutes')
       }
     }
