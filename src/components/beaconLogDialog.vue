@@ -31,6 +31,7 @@
                     <th class="text-left">minutes</th>
                     <th class="text-left">count</th>
                     <th class="text-left">rssi</th>
+                    <th class="text-left">check</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -38,6 +39,7 @@
                     <td>{{ item.minute }}</td>
                     <td>{{ item.count }}</td>
                     <td>{{ item.rssi }}</td>
+                    <td>{{ item.check }}</td>
                   </tr>
                 </tbody>
               </template>
@@ -141,7 +143,8 @@ export default {
         const item = {
           minute: st.format('HH:mm'),
           count: 0,
-          rssi: 0
+          rssi: 0,
+          check: 0
         }
         const checks = []
         for (let j = 0; j < data.length; j++) {
@@ -157,6 +160,7 @@ export default {
           data.splice(checks[0], checks.length)
           item.rssi = item.rssi / checks.length
         }
+        item.check = checks.length
         this.items.push(item)
         if (!item.count && i > 0) this.errItems.push(item)
         this.chartData.labels.push(item.minute)

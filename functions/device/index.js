@@ -125,7 +125,7 @@ app.get('/beacons', async (req, res) => {
     .lean()
     .exec()
   for (let v of result.items) {
-    v.dayCount = await BeaconLog.countDocuments({ _beaconId: v._id, startTime: { $gte: moment().startOf('day') } })
+    v.dayCount = await BeaconLog.countDocuments({ _beaconId: v._id, startTime: { $gte: moment().startOf('day').add(15, 'hours') } })
   }
   res.send(result)
 })
@@ -254,8 +254,8 @@ app.get('/beacon-log/:_beaconId/:date', async (req, res) => {
     .where('_beaconId')
     .equals(_beaconId)
     .where('startTime')
-    .gte(moment(date).startOf('day').toDate())
-    .lte(moment(date).endOf('day').toDate())
+    .gte(moment(date).startOf('day').add(-9, 'hour').toDate())
+    .lte(moment(date).endOf('day').add(-9, 'hour').toDate())
     .select('-_id startTime endTime rssi count')
     .sort({ startTime: 1 })
     .limit(2880)

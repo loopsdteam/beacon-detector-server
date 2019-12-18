@@ -116,8 +116,13 @@ export default {
       })
       if (!r.value) return
       this.loading = true
-      await this.$axios.put(`/device/scanner/${this.item._id}`, this.form)
-      this.loading = false
+      try {
+        await this.$axios.put(`/device/scanner/${this.item._id}`, this.form)
+      } catch (e) {
+        this.$toasted.global.error(e.message)
+      } finally {
+        this.loading = false
+      }
     },
     async del () {
       const r = await this.$swal.fire({
@@ -130,8 +135,13 @@ export default {
       })
       if (!r.value) return
       this.loading = true
-      await this.$axios.delete(`/device/scanner/${this.item._id}`, this.form)
-      this.loading = false
+      try {
+        await this.$axios.delete(`/device/scanner/${this.item._id}`, this.form)
+      } catch (e) {
+        this.$toasted.global.error(e.message)
+      } finally {
+        this.loading = false
+      }
       this.$emit('refresh')
     }
   }
