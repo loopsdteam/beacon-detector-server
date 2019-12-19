@@ -122,11 +122,11 @@ app.get('/beacons', async (req, res) => {
     .skip(offset)
     .limit(limit)
     .populate({ path: '_scannerId', select: 'name' })
-    .lean()
+    // .lean()
     .exec()
-  for (let v of result.items) {
-    v.dayCount = await BeaconLog.countDocuments({ _beaconId: v._id, startTime: { $gte: moment().startOf('day').add(15, 'hours') } })
-  }
+  // for (let v of result.items) {
+  //   v.dayCount = await BeaconLog.countDocuments({ _beaconId: v._id, startTime: { $gte: moment(v.startTime).startOf('day').toDate() } })
+  // }
   res.send(result)
 })
 

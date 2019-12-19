@@ -149,7 +149,7 @@ export default {
         const checks = []
         for (let j = 0; j < data.length; j++) {
           const v = data[j]
-          if (this.$moment(v.startTime).format('HHmm') === st.format('HHmm')) {
+          if (this.$moment(v.endTime).format('HHmm') === st.format('HHmm')) {
             item.count += v.count
             item.rssi += v.rssi
             checks.push(j)

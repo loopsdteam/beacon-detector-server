@@ -142,7 +142,7 @@ export default {
         { text: 'group', value: 'group' },
         { text: 'address', value: 'address' },
         { text: '_scannerId.name', value: '_scannerId.name', sortable: false },
-        { text: 'dayCount', value: 'dayCount', sortable: false },
+        // { text: 'dayCount', value: 'dayCount', sortable: false },
         { text: 'createdAt', value: 'createdAt' },
         { text: 'updatedAt', value: 'updatedAt' },
         { text: 'uuid', value: 'uuid' },
