@@ -5,6 +5,7 @@ require('express-async-errors')
 const mdb = require('../lib/db')
 const Scanner = require('../models/scanners')
 const Beacon = require('../models/beacons')
+const Day = require('../models/days')
 const BeaconLog = require('../models/beaconLogs')
 const moment = require('moment')
 
@@ -57,6 +58,11 @@ app.post('/', async (req, res) => {
     const r = await Beacon.findOneAndUpdate(f, { $set: v }, o)
     v.name = r.name
     v._beaconId = r._id
+
+    const beacon = r._id
+    const createdAt = moment(v.endTime).startOf('day').toDate()
+
+    await Day.findOneAndUpdate({ createdAt, beacon }, { $set: { beacon, createdAt }, $inc: { count: v.count } }, { upsert: true, setDefaultsOnInsert: true })
     await BeaconLog.create(v)
 
     if (v.address === '58:7a:62:02:9b:4f' || v.address === '30:45:11:f0:c2:5b') {
