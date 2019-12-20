@@ -11,7 +11,8 @@ const fields = {
   txPower: { type: Number, default: 0 },
   major: { type: Number, default: 0 },
   minor: { type: Number, default: 0 },
-  _scannerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Scanner', index: true }
+  _scannerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Scanner', index: true },
+  group: { type: String, default: '' }
 }
 
 const options = {

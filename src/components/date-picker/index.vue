@@ -3,16 +3,16 @@
     ref="dialog"
     v-model="modal"
     persistent
-    full-width
     width="290px"
   >
     <template v-slot:activator="{ on }">
       <v-text-field
         v-model="date"
-        prepend-icon="mdi-calendar"
+        prepend-inner-icon="mdi-calendar"
         readonly
         v-on="on"
         v-bind="$attrs"
+        class="mx-1"
       ></v-text-field>
     </template>
     <v-date-picker v-model="date" ref="picker" locale="ko">

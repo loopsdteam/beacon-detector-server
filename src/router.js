@@ -74,7 +74,7 @@ const router = new Router({
     {
       path: '/device/scanners',
       component: () => import('./views/device/scanners'),
-      beforeEnter: levelCheck(0)
+      beforeEnter: levelCheck(1)
     },
     {
       path: '/device/beacons',

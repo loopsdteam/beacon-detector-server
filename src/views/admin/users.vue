@@ -3,7 +3,7 @@
     <v-card>
       <v-toolbar
         dark
-        color="teal"
+        color="#92856E"
         flat
       >
         <v-toolbar-title>회원 관리</v-toolbar-title>
