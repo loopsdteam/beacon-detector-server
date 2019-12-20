@@ -60,7 +60,7 @@ app.post('/', async (req, res) => {
     v._beaconId = r._id
 
     const beacon = r._id
-    const createdAt = moment(v.endTime).startOf('day').toDate()
+    const createdAt = moment(v.endTime).startOf('day').add(-9, 'hour').toDate()
 
     await Day.findOneAndUpdate({ createdAt, beacon }, { $set: { beacon, createdAt }, $inc: { count: v.count } }, { upsert: true, setDefaultsOnInsert: true })
     await BeaconLog.create(v)
