@@ -59,26 +59,28 @@ app.post('/', async (req, res) => {
     v.name = r.name
     v._beaconId = r._id
 
-    const beacon = r._id
+    const _beaconId = r._id
     const createdAt = moment(v.endTime).startOf('day').add(-9, 'hour').toDate()
+    const address = v.address
 
-    await Day.findOneAndUpdate({ createdAt, beacon }, { $set: { beacon, createdAt }, $inc: { count: v.count } }, { upsert: true, setDefaultsOnInsert: true })
+    await Day.findOneAndUpdate({ createdAt, _beaconId, address }, { $set: { _beaconId, createdAt, address }, $inc: { count: v.count } }, { upsert: true, setDefaultsOnInsert: true })
+      .catch(() => {})
     await BeaconLog.create(v)
 
-    if (v.address === '58:7a:62:02:9b:4f' || v.address === '30:45:11:f0:c2:5b') {
-      try {
-        await db.collection('beaconLogs').add({
-          scanner: data.scanner._id,
-          address: v.address,
-          createdAt: new Date()
-        })
-        const increment = admin.firestore.FieldValue.increment(1)
-        await db.collection('beacons').doc(v.address)
-          .update({ time: new Date(), scanner: data.scanner._id, count: increment })
-      } catch (err) {
-        return res.status(500).send({ message: err.message })
-      }
-    }
+    // if (v.address === '58:7a:62:02:9b:4f' || v.address === '30:45:11:f0:c2:5b') {
+    //   try {
+    //     await db.collection('beaconLogs').add({
+    //       scanner: data.scanner._id,
+    //       address: v.address,
+    //       createdAt: new Date()
+    //     })
+    //     const increment = admin.firestore.FieldValue.increment(1)
+    //     await db.collection('beacons').doc(v.address)
+    //       .update({ time: new Date(), scanner: data.scanner._id, count: increment })
+    //   } catch (err) {
+    //     return res.status(500).send({ message: err.message })
+    //   }
+    // }
   }
 
   res.send(result)
