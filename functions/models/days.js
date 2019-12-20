@@ -14,6 +14,9 @@ const options = {
 }
 
 const schema = new mongoose.Schema(fields, options)
+
+schema.index({ createdAt: -1, beacon: 1 })
+
 const Day = mongoose.model('Day', schema)
 
 module.exports = Day
