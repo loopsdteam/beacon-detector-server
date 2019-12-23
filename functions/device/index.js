@@ -62,8 +62,9 @@ app.post('/', async (req, res) => {
     const _beaconId = r._id
     const createdAt = moment(v.endTime).startOf('day').add(-9, 'hour').toDate()
     const address = v.address
+    const _scannerId = v._scannerId
 
-    await Day.findOneAndUpdate({ createdAt, _beaconId, address }, { $set: { _beaconId, createdAt, address }, $inc: { count: v.count } }, { upsert: true, setDefaultsOnInsert: true })
+    await Day.findOneAndUpdate({ createdAt, _beaconId, _scannerId }, { $set: { _beaconId, createdAt, address, _scannerId }, $inc: { count: v.count } }, { upsert: true, setDefaultsOnInsert: true })
       .catch(() => {})
     await BeaconLog.create(v)
 
@@ -250,6 +251,65 @@ app.get('/beacon-logs', async (req, res) => {
     .skip(offset)
     .limit(limit)
     .populate({ path: '_scannerId', select: 'name' })
+    .exec()
+
+  res.send(result)
+})
+
+app.get('/beacon-days', async (req, res) => {
+  const moment = require('moment')
+
+  let { offset, limit, order, sort, search, date = moment().format('YYYY-MM-DD'), _scannerId } = req.query
+  offset = Number(offset)
+  limit = Number(limit)
+  if (limit < 0) limit = 0
+  sort = Number(sort)
+  if (!search) search = ''
+  const result = {
+    items: [],
+    totalCount: 0
+  }
+  const s = {}
+  s[order] = sort
+
+  // result.totalCount = await BeaconLog.countDocuments()
+  //   .where('address').regex(search)
+  //   .where('createdAt')
+  //   .gte(moment(date, 'YYYY-MM-DD').startOf('day').add(-9, 'hour').toDate())
+  //   .lte(moment(date, 'YYYY-MM-DD').endOf('day').add(-9, 'hour').toDate())
+
+  // result.items = await BeaconLog.find()
+  //   .where('address').regex(search)
+  //   .where('createdAt')
+  //   .gte(moment(date, 'YYYY-MM-DD').startOf('day').add(-9, 'hour').toDate())
+  //   .lte(moment(date, 'YYYY-MM-DD').endOf('day').add(-9, 'hour').toDate())
+  //   .sort(s)
+  //   .skip(offset)
+  //   .limit(limit)
+  //   .populate({ path: '_scannerId', select: 'name' })
+  //   // .populate({ path: '_beaconId', select: 'name' })
+
+  const countQuery = Day.countDocuments()
+  const itemsQuery = Day.find()
+  if (_scannerId) {
+    countQuery.where('_scannerId').equals(_scannerId)
+    itemsQuery.where('_scannerId').equals(_scannerId)
+  }
+  if (search) {
+    countQuery.where('address').regex(search)
+    itemsQuery.where('address').regex(search)
+  }
+  result.totalCount = await countQuery
+    .where('createdAt')
+    .eq(moment(date, 'YYYY-MM-DD').startOf('day').add(-9, 'hour').toDate())
+    .exec()
+  result.items = await itemsQuery
+    .where('createdAt')
+    .eq(moment(date, 'YYYY-MM-DD').startOf('day').add(-9, 'hour').toDate())
+    .sort(s)
+    .skip(offset)
+    .limit(limit)
+    .populate({ path: '_scannerId _beaconId', select: 'name' })
     .exec()
 
   res.send(result)
