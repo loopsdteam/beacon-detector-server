@@ -255,10 +255,12 @@ app.get('/beacon-logs', async (req, res) => {
   res.send(result)
 })
 
-app.get('/beacon-log/:_beaconId/:date', async (req, res) => {
-  const { _beaconId, date } = req.params
+app.get('/beacon-log/:_scannerId/:_beaconId/:date', async (req, res) => {
+  const { _scannerId, _beaconId, date } = req.params
   const items = await BeaconLog
     .find()
+    .where('_scannerId')
+    .equals(_scannerId)
     .where('_beaconId')
     .equals(_beaconId)
     .where('startTime')

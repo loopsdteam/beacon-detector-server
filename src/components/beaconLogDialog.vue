@@ -116,8 +116,8 @@ export default {
   methods: {
     fetch () {
       this.loading = true
-      const _id = this.item._beaconId ? this.item._beaconId : this.item._id
-      this.$axios.get('/device/beacon-log/' + _id + '/' + this.$moment(this.item.startTime).format('YYYY-MM-DD'))
+      const _beaconId = this.item._beaconId ? this.item._beaconId : this.item._id
+      this.$axios.get('/device/beacon-log/' + this.item._scannerId + '/' + _beaconId + '/' + this.$moment(this.item.startTime).format('YYYY-MM-DD'))
         .then(({ data }) => {
           if (!data.length) throw Error('데이터가 없습니다')
           this.data2items(data)
