@@ -195,6 +195,10 @@ export default {
             {
               title: 'Beacons',
               to: '/history/beacons'
+            },
+            {
+              title: 'Days',
+              to: '/history/days'
             }
           ]
         },

@@ -87,6 +87,11 @@ const router = new Router({
       beforeEnter: levelCheck(1)
     },
     {
+      path: '/history/days',
+      component: () => import('./views/history/days'),
+      beforeEnter: levelCheck(1)
+    },
+    {
       path: '/userProfile',
       component: () => import('./views/userProfile.vue'),
       beforeEnter: (to, from, next) => {
