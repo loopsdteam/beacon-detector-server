@@ -117,7 +117,9 @@ export default {
     fetch () {
       this.loading = true
       const _id = this.item._beaconId._id
-      this.$axios.get('/device/beacon-log/' + _id + '/' + this.$moment(this.item.createdAt).format('YYYY-MM-DD'))
+      const _scannerId = this.item._scannerId._id
+
+      this.$axios.get('/device/beacon-log/' + _scannerId + '/' + _id + '/' + this.$moment(this.item.createdAt).format('YYYY-MM-DD'))
         .then(({ data }) => {
           if (!data.length) throw Error('데이터가 없습니다')
           this.data2items(data)
