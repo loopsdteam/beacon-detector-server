@@ -7,6 +7,7 @@ const Scanner = require('../models/scanners')
 const Beacon = require('../models/beacons')
 const Day = require('../models/days')
 const BeaconLog = require('../models/beaconLogs')
+const ScannerLog = require('../models/scannerLogs')
 const moment = require('moment')
 
 mdb.connect(() => {
@@ -49,6 +50,17 @@ app.post('/', async (req, res) => {
     if (!result.scanner) result.scanner = await Scanner.create({ version: data.scanner.version, ota: true })
   }
   if (result.scanner && result.scanner.ota) await Scanner.updateOne({ _id: result.scanner._id }, { $set: { ota: false } })
+
+  if (data.beacons) {
+    const before = await ScannerLog.findOne({ _scannerId: result.scanner._id }).sort({ createdAt: -1 })
+
+    if (!before) {
+      await ScannerLog.create({ _scannerId: result.scanner._id, beacons: data.beacons.length, diff: 0 })
+    } else {
+      await ScannerLog.create({ _scannerId: result.scanner._id, beacons: data.beacons.length, diff: moment().diff(before.createdAt, 'seconds') })
+    }
+  }
+
   if (!data.beacons || !data.beacons.length) return res.send(result)
 
   for (const v of data.beacons) {
