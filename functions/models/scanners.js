@@ -9,7 +9,8 @@ const fields = {
   serialNo: { type: String, default: '' },
   targetURL: { type: String, default: '' },
   wifiSSID: { type: String, default: '' },
-  wifiPassword: { type: String, default: '' }
+  wifiPassword: { type: String, default: '' },
+  active: { type: Boolean, default: false }
 }
 
 const options = {
