@@ -37,6 +37,13 @@ app.post('/rfid', async (req, res) => {
   return res.end('success')
 })
 
+app.put('/scanner/:_id/active', async (req, res) => {
+  // await db.collection('devices').doc(req.params.id).set(req.body)
+  const { active = false } = req.body
+  await Scanner.updateOne({ _id: req.params._id }, { $set: { active } })
+  res.status(204).end()
+})
+
 app.post('/', async (req, res) => {
   const data = req.body
   if (data.scanner._id === '') delete data.scanner._id
