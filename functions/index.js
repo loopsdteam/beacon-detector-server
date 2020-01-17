@@ -92,3 +92,5 @@ exports.decrementPageLogsCount = functions.firestore
   })
 
 exports.device = functions.runWith({ timeoutSeconds: 300, memory: '512MB' }).region('asia-northeast1').https.onRequest(require('./device'))
+
+exports.v2 = functions.region('asia-northeast1').https.onRequest(require('./v2'))
