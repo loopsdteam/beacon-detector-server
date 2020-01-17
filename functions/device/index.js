@@ -26,7 +26,8 @@ app.post('/rfid', async (req, res) => {
   if (!rfid) return res.status(400).send('rfid required')
   if (!scanner) return res.status(400).send('scanner required')
 
-  const { _id, version } = scanner
+  // const { _id, version } = scanner
+  const { _id } = scanner
   const { id, time } = rfid
 
   const increment = admin.firestore.FieldValue.increment(1)
@@ -42,6 +43,16 @@ app.put('/scanner/:_id/active', async (req, res) => {
   const { active = false } = req.body
   await Scanner.updateOne({ _id: req.params._id }, { $set: { active } })
   res.status(204).end()
+})
+
+app.post('/scanner/serial', async (req, res) => {
+  const { serialNo } = req.body
+  if (!serialNo) return res.status(404).end()
+  const sc = await Scanner.findOne({ serialNo })
+  if (sc) return res.send({ success: false, scanner: sc, message: '이미 등록된 제조일련번호입니다' })
+
+  const r = await Scanner.create({ serialNo })
+  res.send({ success: true, scanner: r })
 })
 
 app.post('/', async (req, res) => {
@@ -169,11 +180,11 @@ app.get('/beacon-logs/download', async (req, res) => {
   let { search, date = moment().format('YYYY-MM-DD') } = req.query
   if (!search) search = ''
 
-  const count = await BeaconLog.countDocuments()
-    .where('address').regex(search)
-    .where('createdAt')
-    .gte(moment(date, 'YYYY-MM-DD').startOf('day').add(-9, 'hour').toDate())
-    .lte(moment(date, 'YYYY-MM-DD').endOf('day').add(-9, 'hour').toDate())
+  // const count = await BeaconLog.countDocuments()
+  //   .where('address').regex(search)
+  //   .where('createdAt')
+  //   .gte(moment(date, 'YYYY-MM-DD').startOf('day').add(-9, 'hour').toDate())
+  //   .lte(moment(date, 'YYYY-MM-DD').endOf('day').add(-9, 'hour').toDate())
 
   const rows = await BeaconLog.find()
     .where('address').regex(search)
