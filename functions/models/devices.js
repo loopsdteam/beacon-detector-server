@@ -2,10 +2,9 @@ const mongoose = require('mongoose')
 
 const fields = {
   version: { type: String, default: '0.0.0' },
-  name: { type: String, default: '' },
   ota: { type: Boolean, defalut: true },
   cycle: { type: Number, default: 30 },
-  serialNo: { type: String, default: '' },
+  serialNo: { type: String, default: '', unique: true },
   targetURL: { type: String, default: '' },
   active: { type: Boolean, default: false },
   inspector: { type: String, default: '' },
