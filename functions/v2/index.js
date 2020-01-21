@@ -14,10 +14,50 @@ const db = admin.firestore()
 
 app.use(cors({ origin: true }))
 
+app.put('/scanner/:_id', async (req, res) => {
+  const _id = req.params._id
+  const body = req.body
+  const version = body.version
+
+  const device = await Device.findById(_id)
+
+  if (!device) res.status(404).end(`Scanner ${_id} not found.`)
+  else {
+    device.set('version', version)
+    await device.save()
+
+    res.send(device)
+  }
+})
+
+app.put('/scanner/:_id/ota', async (req, res) => {
+  const _id = req.params._id
+  const body = req.body
+  const ota = body.ota || false
+
+  const device = await Device.findById(_id)
+
+  if (!device) res.status(404).end(`Scanner ${_id} not found.`)
+  else {
+    device.set('ota', ota)
+    await device.save()
+    res.send(device)
+  }
+})
+
 app.put('/scanner/:_id/active', async (req, res) => {
-  const { active = false } = req.body
-  await Device.updateOne({ _id: req.params._id }, { $set: { active } })
-  res.status(204).end()
+  const _id = req.params._id
+  const body = req.body
+  const active = body.active
+
+  const device = await Device.findById(_id)
+
+  if (!device) res.status(404).end(`Scanner ${_id} not found.`)
+  else {
+    device.set('active', active)
+    await device.save()
+    res.send(device)
+  }
 })
 
 app.post('/scanner/serial', async (req, res) => {
