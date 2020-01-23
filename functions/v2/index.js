@@ -18,12 +18,14 @@ app.put('/scanner/:_id', async (req, res) => {
   const _id = req.params._id
   const body = req.body
   const version = body.version
+  const beaconLength = body.beaconLength
 
   const device = await Device.findById(_id)
 
   if (!device) res.status(404).end(`Scanner ${_id} not found.`)
   else {
     device.set('version', version)
+    device.set('beaconLength', beaconLength)
     await device.save()
 
     res.send(device)

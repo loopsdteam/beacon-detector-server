@@ -8,7 +8,7 @@ const fields = {
   targetURL: { type: String, default: '' },
   active: { type: Boolean, default: false },
   inspector: { type: String, default: '' },
-  mode: { type: String, default: 'BEACON', enum: ['BEACON', 'RFID'] },
+  mode: { type: String, default: 'BEACON', enum: ['BEACON', 'RFID', 'BOTH'] },
   beaconLength: { type: Number, default: 0 }
 }
 
