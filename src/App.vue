@@ -221,6 +221,10 @@ export default {
             {
               title: 'Manual',
               to: '/help/manual'
+            },
+            {
+              title: 'Download',
+              to: '/help/Download'
             }
           ]
         }

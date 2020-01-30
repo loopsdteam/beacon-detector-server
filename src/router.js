@@ -77,6 +77,11 @@ const router = new Router({
       // beforeEnter: levelCheck(1)
     },
     {
+      path: '/help/download',
+      component: () => import('./views/help/download')
+      // beforeEnter: levelCheck(1)
+    },
+    {
       path: '/device/scanners',
       component: () => import('./views/device/scanners'),
       beforeEnter: levelCheck(1)
