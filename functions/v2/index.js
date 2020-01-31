@@ -2,13 +2,12 @@ const app = require('express')()
 const cors = require('cors')
 // const admin = require('firebase-admin')
 require('express-async-errors')
-const mdb = require('../lib/db')
+// const mdb = require('../lib/db')
 const Device = require('../models/devices')
-// const moment = require('moment')
 
-mdb.connect(() => {
-  // console.log('callback')
-})
+// mdb.connect(() => {
+//   // console.log('callback')
+// })
 
 // const db = admin.firestore()
 
@@ -71,6 +70,75 @@ app.post('/scanner/serial', async (req, res) => {
 
   const r = await Device.create({ serialNo, inspector })
   res.send({ success: true, scanner: r })
+})
+
+app.use(require('../middlewares/verifyToken'))
+
+app.use((req, res, next) => {
+  if (req.claims.level === undefined) return res.status(403).send({ message: 'not authorized' })
+  if (req.claims.level > 0) return res.status(403).send({ message: 'not authorized' })
+  next()
+})
+
+app.get('/scanners', async (req, res) => {
+  let { offset, limit, order, sort, search } = req.query
+  offset = Number(offset)
+  limit = Number(limit)
+  if (limit < 0) limit = 0
+  sort = Number(sort)
+  if (!search) search = ''
+  const result = {
+    items: [],
+    totalCount: 0
+  }
+  const s = {}
+  s[order] = sort
+
+  result.totalCount = await Device.countDocuments()
+    .where('serialNo').regex(search)
+
+  result.items = await Device.find()
+    .where('serialNo').regex(search)
+    .sort(s)
+    .skip(offset)
+    .limit(limit)
+
+  res.send(result)
+})
+
+app.get('/scanners/search', async (req, res) => {
+  const items = await Device.find().where('serialNo').regex(req.query.search).limit(3)
+  res.send(items)
+})
+
+app.get('/groups', async (req, res) => {
+  const items = await Device.distinct('group').exists('group', true)
+  res.send(items)
+})
+
+app.put('/scanner/:_id', async (req, res) => {
+  // await db.collection('devices').doc(req.params.id).set(req.body)
+  await Device.updateOne({ _id: req.params._id }, { $set: req.body })
+  res.status(204).end()
+})
+
+app.patch('/scanner/:_id/ota', async (req, res) => {
+  // await db.collection('devices').doc(req.params.id).set(req.body)
+  console.log(req.body)
+  await Device.updateOne({ _id: req.params._id }, { $set: { ota: req.body.ota } })
+  res.status(204).end()
+})
+
+app.patch('/scanner/:_id/note', async (req, res) => {
+  // await db.collection('devices').doc(req.params.id).set(req.body)
+  await Device.updateOne({ _id: req.params._id }, { $set: { note: req.body.note } })
+  res.status(204).end()
+})
+
+app.delete('/scanner/:_id', async (req, res) => {
+  // await db.collection('devices').doc(req.params.id).set(req.body)
+  await Device.deleteOne({ _id: req.params._id })
+  res.status(204).end()
 })
 
 app.use(require('../middlewares/error'))

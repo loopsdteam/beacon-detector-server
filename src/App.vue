@@ -214,6 +214,17 @@ export default {
           ]
         },
         {
+          icon: 'mdi-raspberry-pi',
+          title: '관리',
+          active: false,
+          subItems: [
+            {
+              title: 'LBS 관리',
+              to: '/manage/scanners'
+            }
+          ]
+        },
+        {
           icon: 'mdi-help',
           title: 'help',
           active: false,

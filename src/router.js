@@ -67,6 +67,11 @@ const router = new Router({
       beforeEnter: levelCheck(0)
     },
     {
+      path: '/manage/scanners',
+      component: () => import('./views/manage/scanners'),
+      beforeEnter: levelCheck(0)
+    },
+    {
       path: '/help/manual',
       component: () => import('./views/help/manual')
       // beforeEnter: levelCheck(1)

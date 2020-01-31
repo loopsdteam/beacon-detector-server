@@ -5,6 +5,7 @@
         <v-toolbar-title class="text-capitalize">Android App download</v-toolbar-title>
         <v-spacer></v-spacer>
       </v-toolbar>
+      <v-alert type="info" border="left">iOS용 앱은 심사중입니다.</v-alert>
       <v-card-text>
         <v-list-item v-for="(item, i) in items" :key="i">
           <v-list-item-content>
@@ -29,18 +30,8 @@ export default {
       items: [
         {
           title: 'LBS Tool',
-          subtitle: 'Bundle release',
-          url: 'https://firebasestorage.googleapis.com/v0/b/beacon-detect.appspot.com/o/app-release.aab?alt=media&token=738050d0-db71-4aec-9089-55a139f33181'
-        },
-        {
-          title: 'LBS Tool',
-          subtitle: '32bit',
-          url: 'https://firebasestorage.googleapis.com/v0/b/beacon-detect.appspot.com/o/app-armeabi-v7a-release.apk?alt=media&token=392d575a-65eb-4000-bebb-472982e0c368'
-        },
-        {
-          title: 'LBS Tool',
-          subtitle: '64bit',
-          url: 'https://firebasestorage.googleapis.com/v0/b/beacon-detect.appspot.com/o/app-arm64-v8a-release.apk?alt=media&token=6558964b-8155-4038-9cb3-72bc17eb3971'
+          subtitle: '등하원 수집기 설정 앱',
+          url: 'https://play.google.com/store/apps/details?id=com.loopsdteam.lbs_app'
         }
       ]
     }
