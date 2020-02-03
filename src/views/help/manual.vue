@@ -40,6 +40,11 @@
               </v-list-item-content> -->
             </v-list-item-content>
           </v-list-item>
+          <v-card-actions>
+            <v-icon color="info">mdi-wifi-strength-4</v-icon> &nbsp; 인터넷 연결됨
+            &nbsp; &nbsp;
+            <v-icon color="secondary">mdi-wifi-strength-off-outline</v-icon> &nbsp; 인터넷 연결안됨
+          </v-card-actions>
         </v-card-text>
       </v-card>
     </v-card>
@@ -57,11 +62,11 @@ export default {
     return {
       docs: [
         '비콘 스캐너 전원 연결',
-        '모바일 와이파이로 LBSR1XXXXXXX를 찾아서 연결',
-        '모바일 브라우저로 http://192.168.4.1에 접속',
-        '설치할 장소의 AP 지정 후, 비밀번호 입력',
-        '설치할 장소의 AP 접속 확인',
-        '타겟 서버(웰티즌)에 전송되었는 지 확인'
+        '모바일 앱(LBS Tool) 실행',
+        '검색 후 해당 제조번호의 장치로 접속',
+        '와이파이 설정 버튼을 클릭',
+        '해당 장소의 와이파이 정보를 작성 후 저장',
+        '우측 상단에 새로고침을 클릭해서 와이파이가 정상인지 확인'
       ],
       playerOptions: {
         // videojs options
@@ -71,7 +76,7 @@ export default {
         playbackRates: [0.7, 1.0, 1.5, 2.0],
         sources: [{
           type: 'video/mp4',
-          src: 'https://firebasestorage.googleapis.com/v0/b/beacon-detect.appspot.com/o/beacon%20scanner%20setup.mp4?alt=media&token=5c205af8-dd9f-4ae8-9c80-09b2f43df54a'
+          src: 'https://firebasestorage.googleapis.com/v0/b/beacon-detect.appspot.com/o/LBS%20Tool%20play.mp4?alt=media&token=9e70eee3-8c72-4b48-8d38-39beee86d400'
         }],
         width: 480
         // poster: '/static/images/author.jpg'
