@@ -5,8 +5,8 @@
         <v-toolbar-title class="text-capitalize">Android App download</v-toolbar-title>
         <v-spacer></v-spacer>
       </v-toolbar>
-      <v-alert type="info" border="left">iOS용 앱은 심사중입니다.</v-alert>
       <v-card-text>
+        <v-alert type="warning" border="left">iOS용 앱은 심사중입니다.</v-alert>
         <v-list-item v-for="(item, i) in items" :key="i">
           <v-list-item-content>
             <v-list-item-title v-text="item.title"></v-list-item-title>
@@ -29,8 +29,8 @@ export default {
     return {
       items: [
         {
-          title: 'LBS Tool',
-          subtitle: '등하원 수집기 설정 앱',
+          title: 'LBS Tool 1.0.0',
+          subtitle: '등하원 수집기 설정 안드로이드앱 플레이스토어 링크',
           url: 'https://play.google.com/store/apps/details?id=com.loopsdteam.lbs_app'
         }
       ]
