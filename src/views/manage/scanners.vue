@@ -78,7 +78,7 @@
               </v-list-item>
               <v-list-item>
                 <v-list-item-content>
-                  제조일: {{item.createdAt}}
+                  제조일: {{new Date(item.createdAt).toLocaleString()}}
                 </v-list-item-content>
               </v-list-item>
               <v-list-item>
