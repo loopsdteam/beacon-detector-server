@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-card :loading="loading">
-      <v-toolbar color="#92856E" dark flat dense>
+      <v-toolbar color="#D4A162" dark flat dense>
         등하원 수집기 현황
         <v-spacer></v-spacer>
         <v-btn icon :to="'/admin/scanners'">

@@ -1,5 +1,5 @@
 <template>
-  <v-card height="100%">
+  <v-card height="100%" color="grey lighten-5">
     <v-subheader>
       양산 차트
       <v-spacer></v-spacer>
@@ -25,7 +25,7 @@
           {{item.date}}
         </v-list-item-content>
         <v-list-item-action-text>
-          <v-chip color="primary">{{item.count}}</v-chip>
+          <v-chip color="primary" small label>{{item.count}}</v-chip>
         </v-list-item-action-text>
       </v-list-item>
     </v-card-text>

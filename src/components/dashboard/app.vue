@@ -1,5 +1,5 @@
 <template>
-  <v-card height="100%">
+  <v-card height="100%" color="grey lighten-5">
     <v-subheader>
       앱 다운로드
       <v-spacer></v-spacer>

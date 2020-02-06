@@ -1,39 +1,59 @@
 <template>
-  <v-card height="100%">
+  <v-card height="100%" color="grey lighten-5">
     <v-subheader>장치 개수</v-subheader>
     <v-divider></v-divider>
     <v-card-text>
       <v-list-item two-line>
+        <v-list-item-avatar>
+          <v-icon class="info lighten-2 white--text">mdi-raspberry-pi</v-icon>
+        </v-list-item-avatar>
         <v-list-item-content>
-          전체:
+          <v-list-item-title>
+            전체:
+          </v-list-item-title>
         </v-list-item-content>
         <v-list-item-action-text>
-          <v-chip color="primary">{{count.total}}</v-chip>
+          <v-chip color="success" small>{{count.total}} 대</v-chip>
         </v-list-item-action-text>
       </v-list-item>
       <v-list-item two-line>
+        <v-list-item-avatar>
+          <v-icon class="info lighten-2 white--text">mdi-check</v-icon>
+        </v-list-item-avatar>
         <v-list-item-content>
-          활성화:
+          <v-list-item-title>
+            활성화:
+          </v-list-item-title>
         </v-list-item-content>
         <v-list-item-action-text>
-          <v-chip color="primary">{{count.active}}</v-chip>
+          <v-chip :color="count.total > count.active ? 'error' : 'success'" small>{{count.active}} 대</v-chip>
         </v-list-item-action-text>
       </v-list-item>
       <v-list-item two-line>
+        <v-list-item-avatar>
+          <v-icon class="info lighten-2 white--text">mdi-play</v-icon>
+        </v-list-item-avatar>
         <v-list-item-content>
-          동작중:
+          <v-list-item-title>
+            동작중:
+          </v-list-item-title>
         </v-list-item-content>
         <v-list-item-action-text>
-          <v-chip color="primary">{{count.health}}</v-chip>
+          <v-chip :color="count.total > count.health ? 'error' : 'success'" small>{{count.health}} 대</v-chip>
         </v-list-item-action-text>
       </v-list-item>
       <v-list-item two-line>
+        <v-list-item-avatar>
+          <v-icon class="info lighten-2 white--text">mdi-bluetooth-transfer</v-icon>
+        </v-list-item-avatar>
         <v-list-item-content>
-          총비콘개수:
+          <v-list-item-title>
+            총비콘개수:
+          </v-list-item-title>
         </v-list-item-content>
-        <v-list-item-action-text>
-          <v-chip color="primary">{{count.beaconLength}}</v-chip>
-        </v-list-item-action-text>
+        <v-list-item-action>
+          <v-chip color="primary" small>{{count.beaconLength}} 대</v-chip>
+        </v-list-item-action>
       </v-list-item>
     </v-card-text>
   </v-card>
