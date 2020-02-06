@@ -234,8 +234,8 @@ export default {
             //   to: '/help/manual'
             // },
             {
-              title: 'Download',
-              to: '/help/Download'
+              title: '설정앱 다운로드',
+              to: '/help/download'
             }
           ]
         }

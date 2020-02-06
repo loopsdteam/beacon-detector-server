@@ -17,7 +17,7 @@
                   <v-list-item-subtitle v-text="item.subtitle"></v-list-item-subtitle>
                 </v-list-item-content>
                 <v-list-item-action>
-                  <v-btn :href="item.url" target="_blank" icon>
+                  <v-btn :href="item.url" target="_blank" icon color="primary">
                     <v-icon>{{item.icon}}</v-icon>
                   </v-btn>
                 </v-list-item-action>
@@ -94,13 +94,14 @@ export default {
         playbackRates: [0.7, 1.0, 1.5, 2.0],
         sources: [{
           type: 'video/mp4',
-          src: 'https://firebasestorage.googleapis.com/v0/b/beacon-detect.appspot.com/o/LBS%20Tool%20play.mp4?alt=media&token=9e70eee3-8c72-4b48-8d38-39beee86d400'
+          src: 'https://firebasestorage.googleapis.com/v0/b/beacon-detect.appspot.com/o/LBS%20Tool%20setting(1).mp4?alt=media&token=03136340-f3cb-428a-bc0a-75ba9f84c342'
         }],
         width: 400 // this.autoWidth
         // poster: '/static/images/author.jpg'
       },
       docs: [
         '비콘 스캐너 전원 연결',
+        '앱스토어 다운로드',
         '모바일 앱(LBS Tool) 실행',
         '검색 후 해당 제조번호의 장치로 접속',
         '와이파이 설정 버튼을 클릭',
@@ -116,7 +117,7 @@ export default {
     }
   },
   mounted () {
-    this.playerOptions.width = this.$refs.video.clientWidth - 40
+    // this.playerOptions.width = this.$refs.video.clientWidth - 40
   },
   methods: {
   }
