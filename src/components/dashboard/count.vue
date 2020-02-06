@@ -56,6 +56,7 @@ export default {
   },
   methods: {
     items2value () {
+      this.count.total = this.items.length
       this.items.forEach(v => {
         if (v.active) this.count.active++
         if (v.beaconLength) {

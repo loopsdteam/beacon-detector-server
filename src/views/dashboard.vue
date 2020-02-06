@@ -4,6 +4,9 @@
       <v-toolbar color="#92856E" dark flat dense>
         등하원 수집기 현황
         <v-spacer></v-spacer>
+        <v-btn icon :to="'/admin/scanners'">
+          <v-icon>mdi-view-list</v-icon>
+        </v-btn>
         <v-btn icon @click="list" >
           <v-icon>mdi-refresh</v-icon>
         </v-btn>
@@ -72,7 +75,7 @@ export default {
       this.$axios.get('/v2/scanners', {
         params: {
           offset: 0,
-          limit: 100,
+          limit: 3000,
           order: 'serialNo',
           sort: '1'
         }
