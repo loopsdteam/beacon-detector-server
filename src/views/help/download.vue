@@ -94,9 +94,9 @@ export default {
         playbackRates: [0.7, 1.0, 1.5, 2.0],
         sources: [{
           type: 'video/mp4',
-          src: 'https://firebasestorage.googleapis.com/v0/b/beacon-detect.appspot.com/o/LBS%20Tool%20setting(1).mp4?alt=media&token=03136340-f3cb-428a-bc0a-75ba9f84c342'
+          src: 'https://firebasestorage.googleapis.com/v0/b/beacon-detect.appspot.com/o/LBS%20Tool%201.0.0(6).mov?alt=media&token=dd88a090-de47-4ee3-9ecf-9c55d7e2e6bc'
         }],
-        width: 400 // this.autoWidth
+        width: this.autoWidth
         // poster: '/static/images/author.jpg'
       },
       docs: [
@@ -113,11 +113,11 @@ export default {
   computed: {
     autoWidth () {
       // console.log(this.$refs.movie.clientWidth)
-      return this.$refs.video.clientWidth - 80
+      return this.$refs.video.clientWidth - 32
     }
   },
   mounted () {
-    // this.playerOptions.width = this.$refs.video.clientWidth - 40
+    this.playerOptions.width = this.$refs.video.clientWidth - 32
   },
   methods: {
   }
