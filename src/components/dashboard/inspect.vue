@@ -1,9 +1,15 @@
 <template>
   <v-card height="100%" color="grey lighten-5">
-    <v-subheader>검사 현황</v-subheader>
+    <v-subheader>
+      검사 현황
+      <v-spacer></v-spacer>
+      <v-btn icon v-if="inspectors.length > 3" @click="show = !show">
+        <v-icon v-text="show ? 'mdi-chevron-up' : 'mdi-chevron-down'"></v-icon>
+      </v-btn>
+    </v-subheader>
     <v-divider></v-divider>
     <v-card-text>
-      <v-list-item three-line v-for="item in inspectors" :key="item.inspector">
+      <v-list-item three-line v-for="item in activeInspectors" :key="item.inspector">
         <v-list-item-avatar>
           <v-icon :color="$moment().diff($moment(item.createdAt), 'days') > 1 ? 'warning' : 'success'">mdi-account</v-icon>
         </v-list-item-avatar>
@@ -36,7 +42,17 @@ export default {
   props: ['items'],
   data () {
     return {
-      inspectors: []
+      inspectors: [],
+      show: false
+    }
+  },
+  computed: {
+    activeInspectors () {
+      if (!this.inspectors.length) return []
+      if (this.show) return this.inspectors
+      const inspectors = []
+      for (let i = 0; i < 3; i++) inspectors.push(this.inspectors[i])
+      return inspectors
     }
   },
   mounted () {

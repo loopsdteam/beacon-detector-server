@@ -1,9 +1,15 @@
 <template>
   <v-card height="100%" color="grey lighten-5">
-    <v-subheader>버전 현황</v-subheader>
+    <v-subheader>
+      버전 현황
+      <v-spacer></v-spacer>
+      <v-btn icon v-if="versions.length > 3" @click="show = !show">
+        <v-icon v-text="show ? 'mdi-chevron-up' : 'mdi-chevron-down'"></v-icon>
+      </v-btn>
+    </v-subheader>
     <v-divider></v-divider>
     <v-card-text>
-      <v-list-item three-line v-for="item in versions" :key="item.version">
+      <v-list-item three-line v-for="item in activeVersions" :key="item.version">
         <v-list-item-content>
           <v-list-item-title>
             버전: {{item.version}}
@@ -34,7 +40,17 @@ export default {
   props: ['items'],
   data () {
     return {
-      versions: []
+      versions: [],
+      show: false
+    }
+  },
+  computed: {
+    activeVersions () {
+      if (!this.versions.length) return []
+      if (this.show) return this.versions
+      const versions = []
+      for (let i = 0; i < 3; i++) versions.push(this.versions[i])
+      return versions
     }
   },
   mounted () {

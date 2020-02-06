@@ -4,12 +4,22 @@
       <v-toolbar color="#D4A162" dark flat dense>
         등하원 수집기 현황
         <v-spacer></v-spacer>
-        <v-btn icon :to="'/admin/scanners'">
-          <v-icon>mdi-view-list</v-icon>
-        </v-btn>
-        <v-btn icon @click="list" >
-          <v-icon>mdi-refresh</v-icon>
-        </v-btn>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn icon :to="'/admin/scanners'" v-on="on">
+              <v-icon>mdi-view-list</v-icon>
+            </v-btn>
+          </template>
+          <span>장치관리 페이지로 이동</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn icon @click="list" v-on="on">
+              <v-icon>mdi-refresh</v-icon>
+            </v-btn>
+          </template>
+          새로고침
+        </v-tooltip>
       </v-toolbar>
       <v-card-text v-if="loading">
         <v-card color="transparent" flat>

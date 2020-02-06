@@ -9,7 +9,12 @@
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title>
-            전체:
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <span v-on="on">전체</span>
+              </template>
+              제조일련번호가 입력 된 장치 개수
+            </v-tooltip>
           </v-list-item-title>
         </v-list-item-content>
         <v-list-item-action-text>
@@ -22,7 +27,12 @@
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title>
-            활성화:
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <span v-on="on">활성화</span>
+              </template>
+              서버 인증이 된 장치 개수
+            </v-tooltip>
           </v-list-item-title>
         </v-list-item-content>
         <v-list-item-action-text>
@@ -35,7 +45,12 @@
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title>
-            동작중:
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <span v-on="on">동작중</span>
+              </template>
+              현장 동작중인 장치 개수(발견된 비콘이 있는 장치)
+            </v-tooltip>
           </v-list-item-title>
         </v-list-item-content>
         <v-list-item-action-text>
@@ -48,7 +63,12 @@
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title>
-            총비콘개수:
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <span v-on="on">총비콘개수</span>
+              </template>
+              모든 장치로 검색된 모든 비콘 개수
+            </v-tooltip>
           </v-list-item-title>
         </v-list-item-content>
         <v-list-item-action>
