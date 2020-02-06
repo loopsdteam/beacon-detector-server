@@ -5,7 +5,7 @@ const fields = {
   version: { type: String, default: '0.0.0' },
   inspector: { type: String, default: '' },
   active: { type: Boolean, default: false },
-  ota: { type: Boolean, defalut: true },
+  ota: { type: Boolean, default: true },
   cycle: { type: Number, default: 30 },
   targetURL: { type: String, default: 'http://beacon.welltizen.kr/Api/Loop' },
   mode: { type: String, default: 'BEACON', enum: ['BEACON', 'RFID', 'BOTH'] },
