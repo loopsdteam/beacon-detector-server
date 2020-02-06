@@ -44,8 +44,8 @@
             </v-card>
           </v-col>
           <v-col cols="12" sm="6">
-
             <v-card outlined ref="movie">
+              <v-subheader>영상 확인</v-subheader>
               <v-card-text ref="video" class="text-center">
                 <video-player  class="video-player-box"
                   ref="videoPlayer"
