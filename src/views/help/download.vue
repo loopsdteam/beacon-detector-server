@@ -74,13 +74,13 @@ export default {
     return {
       items: [
         {
-          title: 'LBS Tool 1.0.0 안드로이드앱',
-          subtitle: '출시일: 2020.2.5',
+          title: 'LBS Tool 1.0.2+6 안드로이드앱',
+          subtitle: '출시일: 2020.2.4',
           url: 'https://play.google.com/store/apps/details?id=com.loopsdteam.lbs_app',
           icon: 'mdi-google-play'
         },
         {
-          title: 'LBS Tool 1.0.0 iOS, iPadOS앱',
+          title: 'LBS Tool 1.0.2+6 iOS, iPadOS앱',
           subtitle: '출시일: 2020.2.6',
           url: 'https://apps.apple.com/kr/app/등하원수집기/id1496729216',
           icon: 'mdi-apple-ios'

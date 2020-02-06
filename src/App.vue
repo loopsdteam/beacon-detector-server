@@ -147,86 +147,79 @@ export default {
       drawer: false,
       items: [
         {
-          icon: 'mdi-alert',
-          title: 'home',
+          icon: 'mdi-poll',
+          title: '메인',
           active: true,
           subItems: [
             {
-              title: 'dashboard',
+              title: '현황',
               to: '/'
             }
           ]
         },
-        {
-          icon: 'mdi-clipboard-list',
-          title: 'logs',
-          active: false,
-          subItems: [
-            {
-              title: 'logs',
-              to: '/logs'
-            }
-          ]
-        },
-        {
-          icon: 'mdi-chip',
-          title: 'Device',
-          active: false,
-          subItems: [
-            {
-              title: 'Scanners',
-              to: '/device/scanners'
-            },
-            {
-              title: 'Beacons',
-              to: '/device/beacons'
-            }
-          ]
-        },
-        {
-          icon: 'mdi-database',
-          title: 'History',
-          active: false,
-          subItems: [
-            // {
-            //   title: 'devices',
-            //   to: '/history/devices'
-            // },
-            {
-              title: 'Beacons',
-              to: '/history/beacons'
-            },
-            {
-              title: 'Days',
-              to: '/history/days'
-            }
-          ]
-        },
+        // {
+        //   icon: 'mdi-clipboard-list',
+        //   title: 'logs',
+        //   active: false,
+        //   subItems: [
+        //     {
+        //       title: 'logs',
+        //       to: '/logs'
+        //     }
+        //   ]
+        // },
+        // {
+        //   icon: 'mdi-chip',
+        //   title: 'Device',
+        //   active: false,
+        //   subItems: [
+        //     {
+        //       title: 'Scanners',
+        //       to: '/device/scanners'
+        //     },
+        //     {
+        //       title: 'Beacons',
+        //       to: '/device/beacons'
+        //     }
+        //   ]
+        // },
+        // {
+        //   icon: 'mdi-database',
+        //   title: 'History',
+        //   active: false,
+        //   subItems: [
+        //     // {
+        //     //   title: 'devices',
+        //     //   to: '/history/devices'
+        //     // },
+        //     {
+        //       title: 'Beacons',
+        //       to: '/history/beacons'
+        //     },
+        //     {
+        //       title: 'Days',
+        //       to: '/history/days'
+        //     }
+        //   ]
+        // },
         {
           icon: 'mdi-account-multiple',
-          title: 'Admin',
+          title: '관리기능',
           active: false,
           subItems: [
             {
-              title: 'users',
+              title: '장치 관리',
+              to: '/admin/scanners'
+            },
+            {
+              title: '사용자관리',
               to: '/admin/users'
             }
           ]
         },
         {
-          icon: 'mdi-raspberry-pi',
-          title: '관리',
-          active: false,
-          subItems: [
-            {
-              title: 'LBS 관리',
-              to: '/manage/scanners'
-            }
-          ]
-        },
-        {
           icon: 'mdi-help',
-          title: 'help',
+          title: '도움말',
           active: false,
           subItems: [
             // {
