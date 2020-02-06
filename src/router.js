@@ -71,11 +71,11 @@ const router = new Router({
       component: () => import('./views/manage/scanners'),
       beforeEnter: levelCheck(0)
     },
-    {
-      path: '/help/manual',
-      component: () => import('./views/help/manual')
-      // beforeEnter: levelCheck(1)
-    },
+    // {
+    //   path: '/help/manual',
+    //   component: () => import('./views/help/manual')
+    //   // beforeEnter: levelCheck(1)
+    // },
     {
       path: '/help/terms',
       component: () => import('./views/help/terms')

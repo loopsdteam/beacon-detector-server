@@ -229,10 +229,10 @@ export default {
           title: 'help',
           active: false,
           subItems: [
-            {
-              title: 'Manual',
-              to: '/help/manual'
-            },
+            // {
+            //   title: 'Manual',
+            //   to: '/help/manual'
+            // },
             {
               title: 'Download',
               to: '/help/Download'
