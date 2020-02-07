@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from './store'
-import Home from './views/Home.vue'
+// import Home from './views/Home.vue'
 import RFID from './views/logs/RFID.vue'
 
 Vue.use(Router)
@@ -43,13 +43,8 @@ const router = new Router({
     {
       path: '/',
       name: 'home',
-      component: Home,
-      beforeEnter: levelCheck(1)
-    },
-    {
-      path: '/logs',
-      name: 'logs',
-      component: RFID,
+      // component: Home,
+      component: () => import('./views/dashboard.vue'),
       beforeEnter: levelCheck(1)
     },
     {
@@ -62,19 +57,23 @@ const router = new Router({
       }
     },
     {
+      path: '/userProfile',
+      component: () => import('./views/userProfile.vue'),
+      beforeEnter: (to, from, next) => {
+        if (!store.state.user) return next('/sign')
+        pageLogWrite(to)
+        next()
+      }
+    },
+    {
       path: '/admin/users',
       component: () => import('./views/admin/users'),
       beforeEnter: levelCheck(0)
     },
     {
-      path: '/manage/scanners',
-      component: () => import('./views/manage/scanners'),
+      path: '/admin/scanners',
+      component: () => import('./views/admin/scanners'),
       beforeEnter: levelCheck(0)
-    },
-    {
-      path: '/help/manual',
-      component: () => import('./views/help/manual')
-      // beforeEnter: levelCheck(1)
     },
     {
       path: '/help/terms',
@@ -107,13 +106,10 @@ const router = new Router({
       beforeEnter: levelCheck(1)
     },
     {
-      path: '/userProfile',
-      component: () => import('./views/userProfile.vue'),
-      beforeEnter: (to, from, next) => {
-        if (!store.state.user) return next('/sign')
-        pageLogWrite(to)
-        next()
-      }
+      path: '/logs',
+      name: 'logs',
+      component: RFID,
+      beforeEnter: levelCheck(1)
     },
     {
       path: '*',
