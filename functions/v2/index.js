@@ -50,12 +50,14 @@ app.put('/scanner/:_id/active', async (req, res) => {
   const _id = req.params._id
   const body = req.body
   const active = body.active
+  const version = body.version
 
   const device = await Device.findById(_id)
 
   if (!device) res.status(404).end(`Scanner ${_id} not found.`)
   else {
     device.set('active', active)
+    if (version) device.set('version', version)
     await device.save()
     res.send(device)
   }
