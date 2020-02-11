@@ -3,7 +3,8 @@ const mongoose = require('mongoose')
 const fields = {
   _scannerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Scanner', index: true },
   beacons: { type: Number },
-  diff: { type: Number }
+  diff: { type: Number },
+  sent: { type: Date }
 }
 
 const options = {

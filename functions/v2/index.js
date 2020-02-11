@@ -23,6 +23,7 @@ app.put('/scanner/:_id', async (req, res) => {
 
   if (!device) res.status(404).end(`Scanner ${_id} not found.`)
   else {
+    device.set('updatedAt', new Date())
     device.set('version', version)
     device.set('beaconLength', beaconLength)
     await device.save()

@@ -73,9 +73,9 @@ app.post('/', async (req, res) => {
     const before = await ScannerLog.findOne({ _scannerId: result.scanner._id }).sort({ createdAt: -1 })
 
     if (!before) {
-      await ScannerLog.create({ _scannerId: result.scanner._id, beacons: data.beacons.length, diff: 0 })
+      await ScannerLog.create({ _scannerId: result.scanner._id, beacons: data.beacons.length, diff: 0, sent: data.scanner.timestamp })
     } else {
-      await ScannerLog.create({ _scannerId: result.scanner._id, beacons: data.beacons.length, diff: moment().diff(before.createdAt, 'seconds') })
+      await ScannerLog.create({ _scannerId: result.scanner._id, beacons: data.beacons.length, diff: moment(data.scanner.timestamp).diff(before.sent, 'seconds'), sent: data.scanner.timestamp })
     }
   }
 
