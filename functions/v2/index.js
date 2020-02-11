@@ -23,6 +23,7 @@ app.put('/scanner/:_id', async (req, res) => {
 
   if (!device) res.status(404).end(`Scanner ${_id} not found.`)
   else {
+    device.set('updatedAt', new Date())
     device.set('version', version)
     device.set('beaconLength', beaconLength)
     await device.save()
@@ -50,12 +51,14 @@ app.put('/scanner/:_id/active', async (req, res) => {
   const _id = req.params._id
   const body = req.body
   const active = body.active
+  const version = body.version
 
   const device = await Device.findById(_id)
 
   if (!device) res.status(404).end(`Scanner ${_id} not found.`)
   else {
     device.set('active', active)
+    if (version) device.set('version', version)
     await device.save()
     res.send(device)
   }
