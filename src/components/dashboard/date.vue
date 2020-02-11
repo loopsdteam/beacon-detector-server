@@ -24,9 +24,9 @@
         <v-list-item-content>
           {{item.date}}
         </v-list-item-content>
-        <v-list-item-action-text>
+        <v-list-item-action>
           <v-chip color="primary" small label>{{item.count}}</v-chip>
-        </v-list-item-action-text>
+        </v-list-item-action>
       </v-list-item>
     </v-card-text>
   </v-card>
