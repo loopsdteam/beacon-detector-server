@@ -79,7 +79,7 @@ app.use(require('../middlewares/verifyToken'))
 
 app.use((req, res, next) => {
   if (req.claims.level === undefined) return res.status(403).send({ message: 'not authorized' })
-  if (req.claims.level > 0) return res.status(403).send({ message: 'not authorized' })
+  if (req.claims.level > 1) return res.status(403).send({ message: 'not authorized' })
   next()
 })
 
