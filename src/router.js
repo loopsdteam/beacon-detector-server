@@ -86,6 +86,11 @@ const router = new Router({
       // beforeEnter: levelCheck(1)
     },
     {
+      path: '/help/development',
+      component: () => import('./views/help/development'),
+      beforeEnter: levelCheck(1)
+    },
+    {
       path: '/device/scanners',
       component: () => import('./views/device/scanners'),
       beforeEnter: levelCheck(1)

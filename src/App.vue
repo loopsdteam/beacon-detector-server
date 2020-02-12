@@ -229,6 +229,10 @@ export default {
             {
               title: '설정앱 다운로드',
               to: '/help/download'
+            },
+            {
+              title: 'Development',
+              to: '/help/development'
             }
           ]
         }
