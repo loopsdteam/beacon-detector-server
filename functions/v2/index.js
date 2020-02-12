@@ -70,8 +70,10 @@ app.post('/scanner/serial', async (req, res) => {
   if (!inspector) return res.status(404).end()
   if (!targetURL) return res.status(404).end()
   const sc = await Device.findOne({ serialNo })
-  if (sc) return res.send({ success: false, scanner: sc, message: '이미 등록된 제조일련번호입니다' })
-
+  if (sc) {
+    const r = await Device.findByIdAndUpdate(sc._id, { $set: { inspector, targetURL } }, { new: true })
+    return res.send({ success: false, scanner: r, message: '이미 등록된 제조일련번호입니다' })
+  }
   const r = await Device.create({ serialNo, inspector, targetURL })
   res.send({ success: true, scanner: r })
 })
