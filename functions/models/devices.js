@@ -10,6 +10,7 @@ const fields = {
   targetURL: { type: String, default: 'http://beacon.welltizen.kr/Api/Loop' },
   mode: { type: String, default: 'BEACON', enum: ['BEACON', 'RFID', 'BOTH'] },
   beaconLength: { type: Number, default: 0 },
+  lastScanned: { type: Date },
   note: { type: String, default: '' }
 }
 
