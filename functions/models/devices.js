@@ -11,6 +11,7 @@ const fields = {
   mode: { type: String, default: 'BEACON', enum: ['BEACON', 'RFID', 'BOTH'] },
   beaconLength: { type: Number, default: 0 },
   lastScanned: { type: Date },
+  scannedLength: { type: Number },
   note: { type: String, default: '' }
 }
 

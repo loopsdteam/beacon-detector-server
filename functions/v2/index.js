@@ -19,6 +19,7 @@ app.put('/scanner/:_id', async (req, res) => {
   const version = body.version
   const beaconLength = body.beaconLength
   const lastScanned = body.lastScanned
+  const scannedLength = body.scannedLength
 
   const device = await Device.findById(_id)
 
@@ -28,6 +29,7 @@ app.put('/scanner/:_id', async (req, res) => {
     device.set('version', version)
     device.set('beaconLength', beaconLength)
     if (lastScanned) device.set('lastScanned', lastScanned)
+    if (scannedLength) device.set('scannedLength', scannedLength)
     await device.save()
 
     res.send(device)
