@@ -27,7 +27,7 @@ app.put('/scanner/:_id', async (req, res) => {
     device.set('updatedAt', new Date())
     device.set('version', version)
     device.set('beaconLength', beaconLength)
-    device.set('lastScanned', lastScanned)
+    if (lastScanned) device.set('lastScanned', lastScanned)
     await device.save()
 
     res.send(device)
