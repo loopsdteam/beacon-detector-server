@@ -12,7 +12,8 @@ const fields = {
   beaconLength: { type: Number, default: 0 },
   lastScanned: { type: Date },
   scannedLength: { type: Number },
-  note: { type: String, default: '' }
+  note: { type: String, default: '' },
+  cpuSerial: { type: String }
 }
 
 const options = {
