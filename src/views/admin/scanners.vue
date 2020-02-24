@@ -264,7 +264,7 @@ export default {
       500
     ),
     async changeOTA (item) {
-      if (item.tunnel) {
+      if (item.ota) {
         const r = await this.$swal.fire({
           title: '정말 변경하시겠습니까?',
           text: '해당 단말기의 원격 업데이트가 설정됩니다.',
