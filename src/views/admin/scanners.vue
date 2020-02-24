@@ -281,7 +281,7 @@ export default {
       this.loading = true
 
       try {
-        await this.$axios.patch(`/v2/scanner/${item._id}/ota`, { tunnel: item.ota })
+        await this.$axios.patch(`/v2/scanner/${item._id}/ota`, { ota: item.ota })
       } catch (e) {
         this.$toasted.global.error(e.message)
       } finally {
