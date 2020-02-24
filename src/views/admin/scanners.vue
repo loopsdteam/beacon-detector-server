@@ -263,6 +263,31 @@ export default {
       },
       500
     ),
+    async changeOTA (item) {
+      if (item.tunnel) {
+        const r = await this.$swal.fire({
+          title: '정말 변경하시겠습니까?',
+          text: '해당 단말기의 원격 업데이트가 설정됩니다.',
+          type: 'warning',
+          confirmButtonText: '확인',
+          cancelButtonText: '취소',
+          showCancelButton: true
+        })
+        if (!r.value) {
+          item.tunnel = false
+          return
+        }
+      }
+      this.loading = true
+
+      try {
+        await this.$axios.patch(`/v2/scanner/${item._id}/ota`, { tunnel: item.ota })
+      } catch (e) {
+        this.$toasted.global.error(e.message)
+      } finally {
+        this.loading = false
+      }
+    },
     async changeTunnel (item) {
       if (item.tunnel) {
         const r = await this.$swal.fire({
