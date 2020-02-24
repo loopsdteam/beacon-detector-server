@@ -53,6 +53,21 @@ app.put('/scanner/:_id/ota', async (req, res) => {
   }
 })
 
+app.put('/scanner/:_id/tunnel', async (req, res) => {
+  const _id = req.params._id
+  const body = req.body
+  const tunnel = body.tunnel || false
+
+  const device = await Device.findById(_id)
+
+  if (!device) res.status(404).end(`Scanner ${_id} not found.`)
+  else {
+    device.set('tunnel', tunnel)
+    await device.save()
+    res.send(device)
+  }
+})
+
 app.put('/scanner/:_id/active', async (req, res) => {
   const _id = req.params._id
   const body = req.body

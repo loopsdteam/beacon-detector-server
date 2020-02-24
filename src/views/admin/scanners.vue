@@ -105,16 +105,25 @@
                   ></v-switch>
                 </v-list-item-content>
               </v-list-item>
-                <v-card color="transparent" flat class="px-2">
-                  <v-subheader>
-                    비고
-                    <!-- <v-spacer></v-spacer> -->
-                    <v-btn @click="noteSave(item)" icon color="primary">
-                      <v-icon>mdi-content-save</v-icon>
-                    </v-btn>
-                  </v-subheader>
-                  <v-textarea v-model="item.note" rows="3" outlined></v-textarea>
-                </v-card>
+              <v-list-item>
+                <v-list-item-content>
+                  터널링: &nbsp;
+                  <v-switch
+                    v-model="item.tunnel"
+                    @change="changeTunnel(item)"
+                  ></v-switch>
+                </v-list-item-content>
+              </v-list-item>
+              <v-card color="transparent" flat class="px-2">
+                <v-subheader>
+                  비고
+                  <!-- <v-spacer></v-spacer> -->
+                  <v-btn @click="noteSave(item)" icon color="primary">
+                    <v-icon>mdi-content-save</v-icon>
+                  </v-btn>
+                </v-subheader>
+                <v-textarea v-model="item.note" rows="3" outlined></v-textarea>
+              </v-card>
             </v-card>
           </td>
         </template>
@@ -190,6 +199,7 @@ export default {
           { text: '제조일', value: 'createdAt' },
           { text: '전송주기', value: 'cycle' },
           { text: '업데이트', value: 'ota' },
+          { text: '터널링', value: 'tunnel' },
           { text: '전송주소', value: 'targetURL' },
           { text: '비고', value: 'note' }
         ]
@@ -253,25 +263,25 @@ export default {
       },
       500
     ),
-    async changeOTA (item) {
-      if (item.ota) {
+    async changeTunnel (item) {
+      if (item.tunnel) {
         const r = await this.$swal.fire({
           title: '정말 변경하시겠습니까?',
-          text: '해당 단말기가 원격으로 업데이트 됩니다.',
+          text: '해당 단말기 원격 터널링이 연결됩니다.',
           type: 'warning',
           confirmButtonText: '확인',
           cancelButtonText: '취소',
           showCancelButton: true
         })
         if (!r.value) {
-          item.ota = false
+          item.tunnel = false
           return
         }
       }
       this.loading = true
 
       try {
-        await this.$axios.patch(`/v2/scanner/${item._id}/ota`, { ota: item.ota })
+        await this.$axios.patch(`/v2/scanner/${item._id}/tunnel`, { tunnel: item.tunnel })
       } catch (e) {
         this.$toasted.global.error(e.message)
       } finally {
