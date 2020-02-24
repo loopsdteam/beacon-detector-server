@@ -200,6 +200,8 @@ export default {
           { text: '전송주기', value: 'cycle' },
           { text: '업데이트', value: 'ota' },
           { text: '터널링', value: 'tunnel' },
+          { text: '터널링 포트', value: 'tunnelPort' },
+          { text: '터널링 시간', value: 'tunnelTime' },
           { text: '전송주소', value: 'targetURL' },
           { text: '비고', value: 'note' }
         ]
