@@ -7,6 +7,8 @@ const fields = {
   active: { type: Boolean, default: false },
   ota: { type: Boolean, default: false },
   tunnel: { type: Boolean, default: false },
+  tunnelPort: { type: Number },
+  tunnelTime: { type: Date },
   cycle: { type: Number, default: 30 },
   targetURL: { type: String, default: 'http://beacon.welltizen.kr/Api/Loop' },
   mode: { type: String, default: 'BEACON', enum: ['BEACON', 'RFID', 'BOTH'] },

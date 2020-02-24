@@ -57,12 +57,16 @@ app.put('/scanner/:_id/tunnel', async (req, res) => {
   const _id = req.params._id
   const body = req.body
   const tunnel = body.tunnel || false
+  const tunnelPort = body.tunnelPort || null
+  const tunnelTime = body.tunnelTime || null
 
   const device = await Device.findById(_id)
 
   if (!device) res.status(404).end(`Scanner ${_id} not found.`)
   else {
     device.set('tunnel', tunnel)
+    device.set('tunnelPort', tunnelPort)
+    device.set('tunnelTime', tunnelTime)
     await device.save()
     res.send(device)
   }
