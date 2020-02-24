@@ -156,6 +156,13 @@ app.patch('/scanner/:_id/ota', async (req, res) => {
   res.status(204).end()
 })
 
+app.patch('/scanner/:_id/tunnel', async (req, res) => {
+  // await db.collection('devices').doc(req.params.id).set(req.body)
+  console.log(req.body)
+  await Device.updateOne({ _id: req.params._id }, { $set: { tunnel: req.body.tunnel } })
+  res.status(204).end()
+})
+
 app.patch('/scanner/:_id/note', async (req, res) => {
   // await db.collection('devices').doc(req.params.id).set(req.body)
   await Device.updateOne({ _id: req.params._id }, { $set: { note: req.body.note } })
