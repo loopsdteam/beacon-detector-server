@@ -274,7 +274,7 @@ export default {
           showCancelButton: true
         })
         if (!r.value) {
-          item.tunnel = false
+          item.ota = false
           return
         }
       }
