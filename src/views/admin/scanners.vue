@@ -114,6 +114,16 @@
                   ></v-switch>
                 </v-list-item-content>
               </v-list-item>
+              <v-list-item>
+                <v-list-item-content>
+                  터널링 포트: {{item.tunnelPort}}
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-content>
+                  터널링 시간: {{item.tunnelTime}}
+                </v-list-item-content>
+              </v-list-item>
               <v-card color="transparent" flat class="px-2">
                 <v-subheader>
                   비고
