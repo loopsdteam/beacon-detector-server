@@ -121,7 +121,7 @@
               </v-list-item>
               <v-list-item>
                 <v-list-item-content>
-                  터널링 시간: {{item.tunnelTime}}
+                  터널링 시간: {{ new Date(item.tunnelTime).toLocaleString() }}
                 </v-list-item-content>
               </v-list-item>
               <v-card color="transparent" flat class="px-2">
