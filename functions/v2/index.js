@@ -72,6 +72,21 @@ app.put('/scanner/:_id/tunnel', async (req, res) => {
   }
 })
 
+app.put('/scanner/:_id/rpiUpdate', async (req, res) => {
+  const _id = req.params._id
+  const body = req.body
+  const rpiUpdate = body.rpiUpdate || false
+
+  const device = await Device.findById(_id)
+
+  if (!device) res.status(404).end(`Scanner ${_id} not found.`)
+  else {
+    device.set('rpiUpdate', rpiUpdate)
+    await device.save()
+    res.send(device)
+  }
+})
+
 app.put('/scanner/:_id/active', async (req, res) => {
   const _id = req.params._id
   const body = req.body

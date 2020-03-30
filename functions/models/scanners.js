@@ -6,6 +6,7 @@ const fields = {
   name: { type: String, default: '' },
   ota: { type: Boolean, defalut: false },
   tunnel: { type: Boolean, defalut: false },
+  rpiUpdate: { type: Boolean, defalut: false },
   cycle: { type: Number, default: 60 },
   serialNo: { type: String, default: '' },
   targetURL: { type: String, default: '' },

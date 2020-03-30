@@ -9,6 +9,7 @@ const fields = {
   tunnel: { type: Boolean, default: false },
   tunnelPort: { type: Number },
   tunnelTime: { type: Date },
+  rpiUpdate: { type: Boolean, default: false },
   cycle: { type: Number, default: 30 },
   targetURL: { type: String, default: 'http://beacon.welltizen.kr/Api/Loop' },
   mode: { type: String, default: 'BEACON', enum: ['BEACON', 'RFID', 'BOTH'] },

@@ -124,6 +124,15 @@
                   터널링 시간: {{ new Date(item.tunnelTime).toLocaleString() }}
                 </v-list-item-content>
               </v-list-item>
+              <v-list-item>
+                <v-list-item-content>
+                  RPI-Update: &nbsp;
+                  <v-switch
+                    v-model="item.rpiUpdate"
+                    @change="changeRpiUpdate(item)"
+                  ></v-switch>
+                </v-list-item-content>
+              </v-list-item>
               <v-card color="transparent" flat class="px-2">
                 <v-subheader>
                   비고
@@ -312,6 +321,31 @@ export default {
         })
         if (!r.value) {
           item.tunnel = false
+          return
+        }
+      }
+      this.loading = true
+
+      try {
+        await this.$axios.patch(`/v2/scanner/${item._id}/tunnel`, { tunnel: item.tunnel })
+      } catch (e) {
+        this.$toasted.global.error(e.message)
+      } finally {
+        this.loading = false
+      }
+    },
+    async changeRpiUpdate (item) {
+      if (item.rpiUpdate) {
+        const r = await this.$swal.fire({
+          title: '정말 변경하시겠습니까?',
+          text: '해당 단말기 Rpi-Update가 실행됩니다.',
+          type: 'warning',
+          confirmButtonText: '확인',
+          cancelButtonText: '취소',
+          showCancelButton: true
+        })
+        if (!r.value) {
+          item.rpiUpdate = false
           return
         }
       }
