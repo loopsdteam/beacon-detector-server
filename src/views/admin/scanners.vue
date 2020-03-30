@@ -352,7 +352,7 @@ export default {
       this.loading = true
 
       try {
-        await this.$axios.patch(`/v2/scanner/${item._id}/rpiUpdate`, { rpiUpdate: item.rpiUpdate })
+        await this.$axios.patch(`/v2/scanner/${item._id}/rpiupdate`, { rpiUpdate: item.rpiUpdate })
       } catch (e) {
         this.$toasted.global.error(e.message)
       } finally {
