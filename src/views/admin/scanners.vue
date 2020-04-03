@@ -107,6 +107,15 @@
               </v-list-item>
               <v-list-item>
                 <v-list-item-content>
+                  RPI-Update: &nbsp;
+                  <v-switch
+                    v-model="item.rpiUpdate"
+                    @change="changeRpiUpdate(item)"
+                  ></v-switch>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-content>
                   터널링: &nbsp;
                   <v-switch
                     v-model="item.tunnel"
@@ -122,15 +131,6 @@
               <v-list-item>
                 <v-list-item-content>
                   터널링 시간: {{ new Date(item.tunnelTime).toLocaleString() }}
-                </v-list-item-content>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-content>
-                  RPI-Update: &nbsp;
-                  <v-switch
-                    v-model="item.rpiUpdate"
-                    @change="changeRpiUpdate(item)"
-                  ></v-switch>
                 </v-list-item-content>
               </v-list-item>
               <v-card color="transparent" flat class="px-2">
