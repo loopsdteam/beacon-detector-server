@@ -10,6 +10,8 @@ const fields = {
   tunnelPort: { type: Number },
   tunnelTime: { type: Date },
   rpiUpdate: { type: Boolean, default: false },
+  linuxVer: { type: String, default: '' },
+  reboot: { type: Boolean, default: false },
   cycle: { type: Number, default: 30 },
   targetURL: { type: String, default: 'http://beacon.welltizen.kr/Api/Loop' },
   mode: { type: String, default: 'BEACON', enum: ['BEACON', 'RFID', 'BOTH'] },
@@ -17,8 +19,7 @@ const fields = {
   lastScanned: { type: Date },
   scannedLength: { type: Number },
   note: { type: String, default: '' },
-  cpuSerial: { type: String },
-  linuxVer: { type: String, default: '' }
+  cpuSerial: { type: String }
 }
 
 const options = {

@@ -7,13 +7,14 @@ const fields = {
   ota: { type: Boolean, defalut: false },
   tunnel: { type: Boolean, defalut: false },
   rpiUpdate: { type: Boolean, defalut: false },
+  linuxVer: { type: String, default: '' },
+  reboot: { type: Boolean, defalut: false },
   cycle: { type: Number, default: 60 },
   serialNo: { type: String, default: '' },
   targetURL: { type: String, default: '' },
   wifiSSID: { type: String, default: '' },
   wifiPassword: { type: String, default: '' },
-  active: { type: Boolean, default: false },
-  linuxVer: { type: String, default: '' }
+  active: { type: Boolean, default: false }
 }
 
 const options = {

@@ -89,6 +89,21 @@ app.put('/scanner/:_id/rpiupdate', async (req, res) => {
   }
 })
 
+app.put('/scanner/:_id/reboot', async (req, res) => {
+  const _id = req.params._id
+  const body = req.body
+  const reboot = body.reboot || false
+
+  const device = await Device.findById(_id)
+
+  if (!device) res.status(404).end(`Scanner ${_id} not found.`)
+  else {
+    device.set('reboot', reboot)
+    await device.save()
+    res.send(device)
+  }
+})
+
 app.put('/scanner/:_id/active', async (req, res) => {
   const _id = req.params._id
   const body = req.body
@@ -188,6 +203,13 @@ app.patch('/scanner/:_id/rpiupdate', async (req, res) => {
   // await db.collection('devices').doc(req.params.id).set(req.body)
   console.log(req.body)
   await Device.updateOne({ _id: req.params._id }, { $set: { rpiUpdate: req.body.rpiUpdate } })
+  res.status(204).end()
+})
+
+app.patch('/scanner/:_id/reboot', async (req, res) => {
+  // await db.collection('devices').doc(req.params.id).set(req.body)
+  console.log(req.body)
+  await Device.updateOne({ _id: req.params._id }, { $set: { reboot: req.body.reboot } })
   res.status(204).end()
 })
 

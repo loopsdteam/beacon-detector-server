@@ -121,6 +121,15 @@
               </v-list-item>
               <v-list-item>
                 <v-list-item-content>
+                  재부팅: &nbsp;
+                  <v-switch
+                    v-model="item.reboot"
+                    @change="changeReboot(item)"
+                  ></v-switch>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-content>
                   터널링: &nbsp;
                   <v-switch
                     v-model="item.tunnel"
@@ -315,31 +324,6 @@ export default {
         this.loading = false
       }
     },
-    async changeTunnel (item) {
-      if (item.tunnel) {
-        const r = await this.$swal.fire({
-          title: '정말 변경하시겠습니까?',
-          text: '해당 단말기 원격 터널링이 연결됩니다.',
-          type: 'warning',
-          confirmButtonText: '확인',
-          cancelButtonText: '취소',
-          showCancelButton: true
-        })
-        if (!r.value) {
-          item.tunnel = false
-          return
-        }
-      }
-      this.loading = true
-
-      try {
-        await this.$axios.patch(`/v2/scanner/${item._id}/tunnel`, { tunnel: item.tunnel })
-      } catch (e) {
-        this.$toasted.global.error(e.message)
-      } finally {
-        this.loading = false
-      }
-    },
     async changeRpiUpdate (item) {
       if (item.rpiUpdate) {
         const r = await this.$swal.fire({
@@ -359,6 +343,56 @@ export default {
 
       try {
         await this.$axios.patch(`/v2/scanner/${item._id}/rpiupdate`, { rpiUpdate: item.rpiUpdate })
+      } catch (e) {
+        this.$toasted.global.error(e.message)
+      } finally {
+        this.loading = false
+      }
+    },
+    async changeReboot (item) {
+      if (item.tunnel) {
+        const r = await this.$swal.fire({
+          title: '정말 변경하시겠습니까?',
+          text: '해당 단말기 재부팅이 시작됩니다.',
+          type: 'warning',
+          confirmButtonText: '확인',
+          cancelButtonText: '취소',
+          showCancelButton: true
+        })
+        if (!r.value) {
+          item.reboot = false
+          return
+        }
+      }
+      this.loading = true
+
+      try {
+        await this.$axios.patch(`/v2/scanner/${item._id}/reboot`, { reboot: item.reboot })
+      } catch (e) {
+        this.$toasted.global.error(e.message)
+      } finally {
+        this.loading = false
+      }
+    },
+    async changeTunnel (item) {
+      if (item.tunnel) {
+        const r = await this.$swal.fire({
+          title: '정말 변경하시겠습니까?',
+          text: '해당 단말기 원격 터널링이 연결됩니다.',
+          type: 'warning',
+          confirmButtonText: '확인',
+          cancelButtonText: '취소',
+          showCancelButton: true
+        })
+        if (!r.value) {
+          item.tunnel = false
+          return
+        }
+      }
+      this.loading = true
+
+      try {
+        await this.$axios.patch(`/v2/scanner/${item._id}/tunnel`, { tunnel: item.tunnel })
       } catch (e) {
         this.$toasted.global.error(e.message)
       } finally {
