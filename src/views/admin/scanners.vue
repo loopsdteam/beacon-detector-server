@@ -116,6 +116,11 @@
               </v-list-item>
               <v-list-item>
                 <v-list-item-content>
+                  Linux Version: {{item.linuxVer}}
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-content>
                   터널링: &nbsp;
                   <v-switch
                     v-model="item.tunnel"
@@ -222,6 +227,7 @@ export default {
           { text: '터널링 포트', value: 'tunnelPort' },
           { text: '터널링 시간', value: 'tunnelTime' },
           { text: '전송주소', value: 'targetURL' },
+          { text: '리눅스버전', value: 'linuxVer' },
           { text: '비고', value: 'note' }
         ]
       } else {

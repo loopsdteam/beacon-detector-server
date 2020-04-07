@@ -12,7 +12,8 @@ const fields = {
   targetURL: { type: String, default: '' },
   wifiSSID: { type: String, default: '' },
   wifiPassword: { type: String, default: '' },
-  active: { type: Boolean, default: false }
+  active: { type: Boolean, default: false },
+  linuxVer: { type: String, default: '' }
 }
 
 const options = {
