@@ -17,7 +17,8 @@ const fields = {
   lastScanned: { type: Date },
   scannedLength: { type: Number },
   note: { type: String, default: '' },
-  cpuSerial: { type: String }
+  cpuSerial: { type: String },
+  linuxVer: { type: String, default: '' }
 }
 
 const options = {
