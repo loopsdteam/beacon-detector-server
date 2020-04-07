@@ -21,6 +21,7 @@ app.put('/scanner/:_id', async (req, res) => {
   const lastScanned = body.lastScanned
   const scannedLength = body.scannedLength
   const cpuSerial = body.cpuSerial
+  const linuxVer = body.linuxVer
 
   const device = await Device.findById(_id)
 
@@ -32,6 +33,7 @@ app.put('/scanner/:_id', async (req, res) => {
     if (lastScanned) device.set('lastScanned', lastScanned)
     if (scannedLength) device.set('scannedLength', scannedLength)
     if (cpuSerial) device.set('cpuSerial', cpuSerial)
+    if (linuxVer) device.set('linuxVer', linuxVer)
     await device.save()
 
     res.send(device)
