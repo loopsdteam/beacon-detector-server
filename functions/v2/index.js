@@ -22,6 +22,8 @@ app.put('/scanner/:_id', async (req, res) => {
   const scannedLength = body.scannedLength
   const cpuSerial = body.cpuSerial
   const linuxVer = body.linuxVer
+  const statusWlan0 = body.statusWlan0
+  const statusWlan1 = body.statusWlan1
 
   const device = await Device.findById(_id)
 
@@ -34,6 +36,8 @@ app.put('/scanner/:_id', async (req, res) => {
     if (scannedLength) device.set('scannedLength', scannedLength)
     if (cpuSerial) device.set('cpuSerial', cpuSerial)
     if (linuxVer) device.set('linuxVer', linuxVer)
+    if (statusWlan0) device.set('statusWlan0', statusWlan0)
+    if (statusWlan1) device.set('statusWlan1', statusWlan1)
     await device.save()
 
     res.send(device)
