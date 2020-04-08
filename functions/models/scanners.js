@@ -8,6 +8,8 @@ const fields = {
   tunnel: { type: Boolean, defalut: false },
   rpiUpdate: { type: Boolean, defalut: false },
   linuxVer: { type: String, default: '' },
+  statusWlan0: { type: String, default: '' },
+  statusWlan1: { type: String, default: '' },
   reboot: { type: Boolean, defalut: false },
   cycle: { type: Number, default: 60 },
   serialNo: { type: String, default: '' },

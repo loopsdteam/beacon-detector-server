@@ -11,6 +11,8 @@ const fields = {
   tunnelTime: { type: Date },
   rpiUpdate: { type: Boolean, default: false },
   linuxVer: { type: String, default: '' },
+  statusWlan0: { type: String, default: '' },
+  statusWlan1: { type: String, default: '' },
   reboot: { type: Boolean, default: false },
   cycle: { type: Number, default: 30 },
   targetURL: { type: String, default: 'http://beacon.welltizen.kr/Api/Loop' },
