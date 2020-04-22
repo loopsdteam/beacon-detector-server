@@ -158,7 +158,7 @@
                 </v-list-item-content>
               </v-list-item>
               <v-list-item>
-                <v-list-item-content>
+                <v-list-item-content style="white-space: pre">
                   wpa_supplicant: {{item.wpaSupplicant}}
                 </v-list-item-content>
               </v-list-item>
