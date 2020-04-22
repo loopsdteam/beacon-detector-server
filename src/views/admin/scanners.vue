@@ -157,6 +157,11 @@
                   터널링 시간: {{ new Date(item.tunnelTime).toLocaleString() }}
                 </v-list-item-content>
               </v-list-item>
+              <v-list-item>
+                <v-list-item-content>
+                  wpa_supplicant: {{item.wpaSupplicant}}
+                </v-list-item-content>
+              </v-list-item>
               <v-card color="transparent" flat class="px-2">
                 <v-subheader>
                   비고
@@ -249,6 +254,7 @@ export default {
           { text: '터널링 시간', value: 'tunnelTime' },
           { text: '전송주소', value: 'targetURL' },
           { text: '리눅스버전', value: 'linuxVer' },
+          { text: '와이파이 설정', value: 'wpaSupplicant' },
           { text: '비고', value: 'note' }
         ]
       } else {
