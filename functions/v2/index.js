@@ -141,6 +141,11 @@ app.post('/scanner/serial', async (req, res) => {
   res.send({ success: true, scanner: r })
 })
 
+app.get('/scanner/:serial', async (req, res) => {
+  const item = await Device.findOne().where('serialNo').equals(req.params.serial)
+  res.send(item)
+})
+
 app.use(require('../middlewares/verifyToken'))
 
 app.use((req, res, next) => {
