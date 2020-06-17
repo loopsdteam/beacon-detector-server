@@ -25,6 +25,8 @@ app.put('/scanner/:_id', async (req, res) => {
   const statusWlan0 = body.statusWlan0
   const statusWlan1 = body.statusWlan1
   const wpaSupplicant = body.wpaSupplicant
+  const freqMax = body.freqMax
+  const freqMin = body.freqMin
 
   const device = await Device.findById(_id)
 
@@ -40,6 +42,8 @@ app.put('/scanner/:_id', async (req, res) => {
     if (statusWlan0) device.set('statusWlan0', statusWlan0)
     if (statusWlan1) device.set('statusWlan1', statusWlan1)
     if (wpaSupplicant) device.set('wpaSupplicant', wpaSupplicant)
+    if (freqMax) device.set('freqMax', freqMax)
+    if (freqMin) device.set('freqMin', freqMin)
     await device.save()
 
     res.send(device)
