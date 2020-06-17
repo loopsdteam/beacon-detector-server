@@ -10,6 +10,8 @@ const fields = {
   linuxVer: { type: String, default: '' },
   statusWlan0: { type: String, default: '' },
   statusWlan1: { type: String, default: '' },
+  freqMax: { type: String, default: '' },
+  freqMin: { type: String, default: '' },
   wpaSupplicant: { type: String, default: '' },
   reboot: { type: Boolean, defalut: false },
   cycle: { type: Number, default: 60 },

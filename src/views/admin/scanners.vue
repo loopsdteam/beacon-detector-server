@@ -1,11 +1,7 @@
 <template>
   <v-container fluid>
     <v-card>
-      <v-toolbar
-        dark
-        color="#92856E"
-        flat
-      >
+      <v-toolbar dark color="#92856E" flat>
         <v-toolbar-title>스캐너 목록</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-autocomplete
@@ -49,12 +45,8 @@
         :expanded.sync="expanded"
         :show-expand="!viewDetail"
       >
-        <template v-slot:item.createdAt="{ item }">
-          {{ new Date(item.createdAt).toLocaleString() }}
-        </template>
-        <template v-slot:item.updatedAt="{ item }">
-          {{ new Date(item.updatedAt).toLocaleString() }}
-        </template>
+        <template v-slot:item.createdAt="{ item }">{{ new Date(item.createdAt).toLocaleString() }}</template>
+        <template v-slot:item.updatedAt="{ item }">{{ new Date(item.updatedAt).toLocaleString() }}</template>
         <template v-slot:item.active="{ item }">
           <v-chip v-if="item.active" color="success" small label>사용</v-chip>
           <v-chip v-else color="warning" small label>미사용</v-chip>
@@ -67,100 +59,72 @@
           <td :colspan="headers.length" class="pa-2">
             <v-card color="transparent" flat>
               <v-list-item>
-                <v-list-item-content>
-                  고유번호: {{item._id}}
-                </v-list-item-content>
+                <v-list-item-content>고유번호: {{item._id}}</v-list-item-content>
               </v-list-item>
               <v-list-item>
-                <v-list-item-content>
-                  검사자: {{item.inspector}}
-                </v-list-item-content>
+                <v-list-item-content>검사자: {{item.inspector}}</v-list-item-content>
               </v-list-item>
               <v-list-item>
-                <v-list-item-content>
-                  제조일: {{new Date(item.createdAt).toLocaleString()}}
-                </v-list-item-content>
+                <v-list-item-content>제조일: {{new Date(item.createdAt).toLocaleString()}}</v-list-item-content>
               </v-list-item>
               <v-list-item>
-                <v-list-item-content>
-                  전송주기: {{item.cycle}}
-                </v-list-item-content>
+                <v-list-item-content>전송주기: {{item.cycle}}</v-list-item-content>
               </v-list-item>
               <v-list-item>
-                <v-list-item-content>
-                  전송주소: {{item.targetURL}}
-                </v-list-item-content>
+                <v-list-item-content>전송주소: {{item.targetURL}}</v-list-item-content>
               </v-list-item>
               <v-list-item>
-                <v-list-item-content>
-                  모드: {{item.mode}}
-                </v-list-item-content>
+                <v-list-item-content>모드: {{item.mode}}</v-list-item-content>
               </v-list-item>
               <v-list-item>
-                <v-list-item-content>
-                  Status wlan0: {{item.statusWlan0}}
-                </v-list-item-content>
+                <v-list-item-content>Status wlan0: {{item.statusWlan0}}</v-list-item-content>
               </v-list-item>
               <v-list-item>
-                <v-list-item-content>
-                  Status wlan1: {{item.statusWlan1}}
-                </v-list-item-content>
+                <v-list-item-content>Status wlan1: {{item.statusWlan1}}</v-list-item-content>
               </v-list-item>
               <v-list-item>
                 <v-list-item-content>
                   업데이트: &nbsp;
-                  <v-switch
-                    v-model="item.ota"
-                    @change="changeOTA(item)"
-                  ></v-switch>
+                  <v-switch v-model="item.ota" @change="changeOTA(item)"></v-switch>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item>
                 <v-list-item-content>
                   RPI-Update: &nbsp;
-                  <v-switch
-                    v-model="item.rpiUpdate"
-                    @change="changeRpiUpdate(item)"
-                  ></v-switch>
+                  <v-switch v-model="item.rpiUpdate" @change="changeRpiUpdate(item)"></v-switch>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item>
-                <v-list-item-content>
-                  Linux Version: {{item.linuxVer}}
-                </v-list-item-content>
+                <v-list-item-content>Linux Version: {{item.linuxVer}}</v-list-item-content>
               </v-list-item>
               <v-list-item>
                 <v-list-item-content>
                   재부팅: &nbsp;
-                  <v-switch
-                    v-model="item.reboot"
-                    @change="changeReboot(item)"
-                  ></v-switch>
+                  <v-switch v-model="item.reboot" @change="changeReboot(item)"></v-switch>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item>
                 <v-list-item-content>
                   터널링: &nbsp;
-                  <v-switch
-                    v-model="item.tunnel"
-                    @change="changeTunnel(item)"
-                  ></v-switch>
+                  <v-switch v-model="item.tunnel" @change="changeTunnel(item)"></v-switch>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item>
-                <v-list-item-content>
-                  터널링 포트: {{item.tunnelPort}}
-                </v-list-item-content>
+                <v-list-item-content>터널링 포트: {{item.tunnelPort}}</v-list-item-content>
               </v-list-item>
               <v-list-item>
-                <v-list-item-content>
-                  터널링 시간: {{ new Date(item.tunnelTime).toLocaleString() }}
-                </v-list-item-content>
+                <v-list-item-content>터널링 시간: {{ new Date(item.tunnelTime).toLocaleString() }}</v-list-item-content>
               </v-list-item>
               <v-list-item>
                 <v-list-item-content style="white-space: pre-line">
                   wpa_supplicant:
                   {{item.wpaSupplicant}}
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-content style="white-space: pre-line">
+                  freq:
+                  {{item.freqMax}} + '/' + {{item.freqMin}}
                 </v-list-item-content>
               </v-list-item>
               <v-card color="transparent" flat class="px-2">
@@ -279,15 +243,19 @@ export default {
     },
     list () {
       this.loading = true
-      this.$axios.get('/v2/scanners', {
-        params: {
-          offset: this.options.page > 0 ? (this.options.page - 1) * this.options.itemsPerPage : 0,
-          limit: this.options.itemsPerPage,
-          order: this.options.sortBy[0],
-          sort: this.options.sortDesc[0] ? '-1' : '1',
-          search: this.searchModel
-        }
-      })
+      this.$axios
+        .get('/v2/scanners', {
+          params: {
+            offset:
+              this.options.page > 0
+                ? (this.options.page - 1) * this.options.itemsPerPage
+                : 0,
+            limit: this.options.itemsPerPage,
+            order: this.options.sortBy[0],
+            sort: this.options.sortDesc[0] ? '-1' : '1',
+            search: this.searchModel
+          }
+        })
         .then(({ data }) => {
           this.totalCount = data.totalCount
           this.items = data.items
@@ -299,25 +267,23 @@ export default {
           this.loading = false
         })
     },
-    searchList: _.debounce(
-      function (val) {
-        this.searchLoading = true
+    searchList: _.debounce(function (val) {
+      this.searchLoading = true
 
-        this.$axios.get('/v2/scanners/search', {
+      this.$axios
+        .get('/v2/scanners/search', {
           params: { search: this.search }
         })
-          .then(({ data }) => {
-            this.searchItems = data
-          })
-          .catch(e => {
-            this.$toasted.global.error(e.message)
-          })
-          .finally(() => {
-            this.searchLoading = false
-          })
-      },
-      500
-    ),
+        .then(({ data }) => {
+          this.searchItems = data
+        })
+        .catch(e => {
+          this.$toasted.global.error(e.message)
+        })
+        .finally(() => {
+          this.searchLoading = false
+        })
+    }, 500),
     async changeOTA (item) {
       if (item.ota) {
         const r = await this.$swal.fire({
@@ -336,7 +302,9 @@ export default {
       this.loading = true
 
       try {
-        await this.$axios.patch(`/v2/scanner/${item._id}/ota`, { ota: item.ota })
+        await this.$axios.patch(`/v2/scanner/${item._id}/ota`, {
+          ota: item.ota
+        })
       } catch (e) {
         this.$toasted.global.error(e.message)
       } finally {
@@ -361,7 +329,9 @@ export default {
       this.loading = true
 
       try {
-        await this.$axios.patch(`/v2/scanner/${item._id}/rpiupdate`, { rpiUpdate: item.rpiUpdate })
+        await this.$axios.patch(`/v2/scanner/${item._id}/rpiupdate`, {
+          rpiUpdate: item.rpiUpdate
+        })
       } catch (e) {
         this.$toasted.global.error(e.message)
       } finally {
@@ -386,7 +356,9 @@ export default {
       this.loading = true
 
       try {
-        await this.$axios.patch(`/v2/scanner/${item._id}/reboot`, { reboot: item.reboot })
+        await this.$axios.patch(`/v2/scanner/${item._id}/reboot`, {
+          reboot: item.reboot
+        })
       } catch (e) {
         this.$toasted.global.error(e.message)
       } finally {
@@ -411,7 +383,9 @@ export default {
       this.loading = true
 
       try {
-        await this.$axios.patch(`/v2/scanner/${item._id}/tunnel`, { tunnel: item.tunnel })
+        await this.$axios.patch(`/v2/scanner/${item._id}/tunnel`, {
+          tunnel: item.tunnel
+        })
       } catch (e) {
         this.$toasted.global.error(e.message)
       } finally {
@@ -422,7 +396,9 @@ export default {
       if (!item.note) return
       this.loading = true
       try {
-        await this.$axios.patch(`/v2/scanner/${item._id}/note`, { note: item.note })
+        await this.$axios.patch(`/v2/scanner/${item._id}/note`, {
+          note: item.note
+        })
       } catch (e) {
         this.$toasted.global.error(e.message)
       } finally {
@@ -434,5 +410,4 @@ export default {
 </script>
 
 <style>
-
 </style>
