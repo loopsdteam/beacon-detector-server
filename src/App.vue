@@ -183,25 +183,25 @@ export default {
         //     }
         //   ]
         // },
-        // {
-        //   icon: 'mdi-database',
-        //   title: 'History',
-        //   active: false,
-        //   subItems: [
-        //     // {
-        //     //   title: 'devices',
-        //     //   to: '/history/devices'
-        //     // },
-        //     {
-        //       title: 'Beacons',
-        //       to: '/history/beacons'
-        //     },
-        //     {
-        //       title: 'Days',
-        //       to: '/history/days'
-        //     }
-        //   ]
-        // },
+        {
+          icon: 'mdi-database',
+          title: 'History',
+          active: false,
+          subItems: [
+            // {
+            //   title: 'devices',
+            //   to: '/history/devices'
+            // },
+            {
+              title: 'Beacons',
+              to: '/history/beacons'
+            },
+            {
+              title: 'Days',
+              to: '/history/days'
+            }
+          ]
+        },
         {
           icon: 'mdi-account-multiple',
           title: '관리기능',
