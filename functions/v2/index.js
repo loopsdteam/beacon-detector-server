@@ -27,6 +27,7 @@ app.put('/scanner/:_id', async (req, res) => {
   const wpaSupplicant = body.wpaSupplicant
   const freqMax = body.freqMax
   const freqMin = body.freqMin
+  const revision = body.revision
 
   const device = await Device.findById(_id)
 
@@ -39,11 +40,12 @@ app.put('/scanner/:_id', async (req, res) => {
     if (scannedLength) device.set('scannedLength', scannedLength)
     if (cpuSerial) device.set('cpuSerial', cpuSerial)
     if (linuxVer) device.set('linuxVer', linuxVer)
-    if (statusWlan0) device.set('statusWlan0', statusWlan0)
-    if (statusWlan1) device.set('statusWlan1', statusWlan1)
+    device.set('statusWlan0', statusWlan0 || '')
+    device.set('statusWlan1', statusWlan1 || '')
     if (wpaSupplicant) device.set('wpaSupplicant', wpaSupplicant)
     if (freqMax) device.set('freqMax', freqMax)
     if (freqMin) device.set('freqMin', freqMin)
+    if (revision) device.set('revision', revision)
     await device.save()
 
     res.send(device)

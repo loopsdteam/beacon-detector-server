@@ -83,6 +83,9 @@
                 <v-list-item-content>Status wlan1: {{item.statusWlan1}}</v-list-item-content>
               </v-list-item>
               <v-list-item>
+                <v-list-item-content>Revision: {{item.revision}}</v-list-item-content>
+              </v-list-item>
+              <v-list-item>
                 <v-list-item-content>
                   업데이트: &nbsp;
                   <v-switch v-model="item.ota" @change="changeOTA(item)"></v-switch>
@@ -208,6 +211,7 @@ export default {
           { text: '상태', value: 'active' },
           { text: 'wlan0', value: 'statusWlan0' },
           { text: 'wlan1', value: 'statusWlan1' },
+          { text: 'revision', value: 'revision' },
           { text: '비콘개수', value: 'beaconLength' },
           { text: '고유번호', value: '_id' },
           { text: '검사자', value: 'inspector' },

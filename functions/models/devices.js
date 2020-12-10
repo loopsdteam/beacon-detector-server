@@ -15,6 +15,7 @@ const fields = {
   statusWlan1: { type: String, default: '' },
   freqMax: { type: String, default: '' },
   freqMin: { type: String, default: '' },
+  revision: { type: Number, default: 0 },
   wpaSupplicant: { type: String, default: '' },
   reboot: { type: Boolean, default: false },
   cycle: { type: Number, default: 30 },
